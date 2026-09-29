@@ -85,6 +85,7 @@ class CustomerController extends Controller
             $keranjang[$id] = [
                 'produk_id' => $id,
                 'nama_produk' => $produk->nama_produk,
+                'harga' => $produk->harga,
                 'jumlah' => $request->jumlah,
                 'catatan' => $request->catatan,
             ];

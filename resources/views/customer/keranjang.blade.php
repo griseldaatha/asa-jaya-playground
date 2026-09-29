@@ -24,7 +24,7 @@
             <div class="alert alert-danger p-2 small rounded"><i class="fa-solid fa-triangle-exclamation"></i> {{ session('error') }}</div>
         @endif
 
-        @if(empty($keranjang))
+        @if(empty($items))
             <div class="text-center mt-5 text-muted">
                 <i class="fa-solid fa-basket-shopping fs-1 opacity-25 mb-3"></i>
                 <p>Keranjang Anda masih kosong.<br>Yuk pilih tiket atau camilan dulu!</p>
@@ -32,15 +32,15 @@
             </div>
         @else
             @php $total_harga = 0; @endphp
-            @foreach($keranjang as $id => $item)
+            @foreach($items as $item)
                 @php $subtotal = $item['harga'] * $item['jumlah']; $total_harga += $subtotal; @endphp
                 <div class="item-card d-flex justify-content-between align-items-center">
                     <div>
-                        <h6 class="fw-bold mb-1">{{ $item['nama'] }}</h6>
+                        <h6 class="fw-bold mb-1">{{ $item['nama_produk'] }}</h6>
                         <div class="text-muted small">Rp {{ number_format($item['harga'], 0, ',', '.') }} &times; {{ $item['jumlah'] }}</div>
                         <div class="fw-bold text-primary">Rp {{ number_format($subtotal, 0, ',', '.') }}</div>
                     </div>
-                    <form action="{{ route('keranjang.hapus', $id) }}" method="POST">
+                    <form action="{{ route('keranjang.hapus', $item['produk_id']) }}" method="POST">
                         @csrf
                         <button class="btn btn-outline-danger btn-sm rounded-circle" style="width: 35px; height: 35px;"><i class="fa-solid fa-trash"></i></button>
                     </form>
@@ -65,7 +65,7 @@
         @endif
     </div>
 
-    @if(!empty($keranjang))
+    @if(!empty($items))
     <div class="bottom-bar">
         <div class="d-flex justify-content-between align-items-center mb-2">
             <span class="text-muted fw-bold">Total Pembayaran</span>
