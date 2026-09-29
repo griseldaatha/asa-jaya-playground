@@ -7,15 +7,18 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
     <style>
-        body { background-color: #f0f2f5; font-family: sans-serif; }
+        body { background-color: #F0E2D2; font-family: sans-serif; }
         .ticket { background: white; border-radius: 20px; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.1); margin-top: 40px; }
-        .ticket-header { background: #0d6efd; color: white; padding: 30px 20px; text-align: center; position: relative; }
-        .ticket-header::after { content: ''; position: absolute; bottom: -15px; left: 0; right: 0; border-bottom: 30px dotted #f0f2f5; }
+        .ticket-header { background: #5B6D92; color: white; padding: 30px 20px; text-align: center; position: relative; }
+        .ticket-header::after { content: ''; position: absolute; bottom: -15px; left: 0; right: 0; border-bottom: 30px dotted #F0E2D2; }
         .ticket-body { padding: 40px 30px 30px; }
         .status-badge { display: inline-block; padding: 8px 20px; border-radius: 30px; font-weight: bold; margin-bottom: 20px; }
         .bg-pending { background-color: #fff3cd; color: #856404; }
         .bg-lunas { background-color: #d4edda; color: #155724; }
-    </style>
+    
+        .btn-primary, .bg-primary { background-color: #5B6D92 !important; border-color: #5B6D92 !important; }
+        .fs-5 { color: #5B6D92 !important; }
+</style>
 </head>
 <body>
     <div class="container">
@@ -51,7 +54,7 @@
                             </ul>
                             <div class="d-flex justify-content-between mt-3">
                                 <span class="fw-bold text-muted">TOTAL</span>
-                                <span class="fw-bold fs-5 text-primary">Rp {{ number_format($transaksi->total_harga, 0, ',', '.') }}</span>
+                                <span class="fw-bold fs-5 ">Rp {{ number_format($transaksi->total_harga, 0, ',', '.') }}</span>
                             </div>
                         </div>
 

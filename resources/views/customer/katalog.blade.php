@@ -7,7 +7,7 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
     <style>
-        body { background-color: #f1ebd9; /* Warna beige seperti di foto */ font-family: 'Segoe UI', sans-serif; height: 100vh; overflow: hidden; }
+        body { background-color: #F0E2D2; /* Warna beige seperti di foto */ font-family: 'Segoe UI', sans-serif; height: 100vh; overflow: hidden; }
         
         .layout-container { display: flex; height: 100vh; }
         
@@ -18,16 +18,16 @@
         .category-scroll { display: flex; overflow-x: auto; gap: 10px; padding-bottom: 15px; scrollbar-width: none; }
         .category-scroll::-webkit-scrollbar { display: none; }
         .cat-pill { background: white; border: none; border-radius: 12px; padding: 10px 20px; font-weight: bold; color: #555; white-space: nowrap; display: flex; align-items: center; gap: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.05); text-decoration: none; transition: 0.2s; }
-        .cat-pill:hover, .cat-pill.active { background: white; color: #2e7d32; border: 2px solid #2e7d32; }
+        .cat-pill:hover, .cat-pill.active { background: white; color: #5B6D92; border: 2px solid #5B6D92; }
         
         /* Product Cards */
         .product-card { background: white; border-radius: 15px; overflow: hidden; padding: 12px; border: none; box-shadow: 0 4px 8px rgba(0,0,0,0.05); height: 100%; display: flex; flex-direction: column; position: relative; }
-        .badge-new { position: absolute; top: 12px; left: 12px; background: #2e7d32; color: white; padding: 2px 8px; border-radius: 4px; font-size: 0.7rem; font-weight: bold; z-index: 2; }
+        .badge-new { position: absolute; top: 12px; left: 12px; background: #5B6D92; color: white; padding: 2px 8px; border-radius: 4px; font-size: 0.7rem; font-weight: bold; z-index: 2; }
         .product-img { width: 100%; height: 140px; object-fit: cover; border-radius: 10px; margin-bottom: 12px; background-color: #eee; }
         .product-title { font-weight: bold; font-size: 0.95rem; line-height: 1.2; margin-bottom: 5px; color: #333; }
         .product-price { font-weight: bold; font-size: 0.85rem; color: #000; margin-bottom: 15px; }
-        .btn-tambah { background: #388e3c; color: white; border: none; width: 100%; padding: 8px; border-radius: 8px; font-size: 0.85rem; font-weight: bold; transition: 0.2s; }
-        .btn-tambah:hover { background: #2e7d32; }
+        .btn-tambah { background: #5B6D92; color: white; border: none; width: 100%; padding: 8px; border-radius: 8px; font-size: 0.85rem; font-weight: bold; transition: 0.2s; }
+        .btn-tambah:hover { background: #5B6D92; }
 
         /* RIGHT SIDE - CART */
         .right-side { width: 350px; background: white; box-shadow: -5px 0 15px rgba(0,0,0,0.05); border-radius: 20px 0 0 20px; display: flex; flex-direction: column; }
@@ -47,7 +47,12 @@
         .cart-item { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; padding-bottom: 15px; border-bottom: 1px dashed #eee; }
         .cart-item-info h6 { font-weight: bold; font-size: 0.9rem; margin-bottom: 2px; }
         .cart-item-info small { color: #888; font-size: 0.8rem; }
-    </style>
+    
+        .btn-primary, .bg-primary { background-color: #5B6D92 !important; border-color: #5B6D92 !important; }
+        .text-primary { color: #5B6D92 !important; }
+        .cart-header { background: #D5E3E6 !important; }
+        .cat-pill:hover, .cat-pill.active { background: #D5E3E6; color: #5B6D92; border: 2px solid #5B6D92; }
+</style>
 </head>
 <body>
     <div class="layout-container">
@@ -55,7 +60,7 @@
         <!-- BAGIAN KIRI: MENU & KATALOG -->
         <div class="left-side">
             <div class="d-flex justify-content-between align-items-center mb-3">
-                <h4 class="fw-bold m-0"><i class="fa-solid fa-shapes text-warning"></i> Asa Jaya Playground</h4>
+                <h4 class="fw-bold m-0"><i class="fa-solid fa-shapes text-light"></i> Asa Jaya Playground</h4>
                 <span class="badge bg-secondary">Meja/Spot: {{ $meja_id }}</span>
             </div>
 
@@ -77,7 +82,7 @@
                 @foreach($kategori_produk as $kat)
                     @if($kat->produk->where('is_active', true)->count() > 0)
                         <a href="#kat-{{ $kat->id }}" class="cat-pill">
-                            <i class="fa-solid fa-tag text-success"></i> {{ $kat->nama_kategori }}
+                            <i class="fa-solid fa-tag text-primary"></i> {{ $kat->nama_kategori }}
                         </a>
                     @endif
                 @endforeach
@@ -123,7 +128,7 @@
         <div class="right-side">
             <div class="cart-header">
                 <h5 class="fw-bold m-0">Pesanan Anda</h5>
-                <span class="badge bg-success rounded-pill">{{ count($items) }} Item</span>
+                <span class="badge bg-primary rounded-pill">{{ count($items) }} Item</span>
             </div>
             
             <div class="cart-body">
@@ -156,7 +161,7 @@
             <div class="cart-footer">
                 <div class="d-flex justify-content-between align-items-center mb-3">
                     <span class="text-muted fw-bold">Total Pembayaran</span>
-                    <span class="fs-4 fw-bold text-success">Rp {{ number_format($total, 0, ',', '.') }}</span>
+                    <span class="fs-4 fw-bold text-primary">Rp {{ number_format($total, 0, ',', '.') }}</span>
                 </div>
                 <form action="{{ route('checkout') }}" method="POST">
                     @csrf

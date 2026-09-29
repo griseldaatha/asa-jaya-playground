@@ -11,9 +11,9 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
     <style>
         :root {
-            --bs-primary: #0d6efd;
+            --bs-primary: #5B6D92;
             --bs-primary-rgb: 13, 110, 253;
-            --bs-body-bg: #f4f6f9;
+            --bs-body-bg: #F0E2D2;
             --bs-body-font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
             --card-border-radius: 14px;
             --card-box-shadow: 0 4px 16px rgba(0, 0, 0, 0.04), 0 1px 3px rgba(0, 0, 0, 0.02);
@@ -82,14 +82,7 @@
         }
 
         /* Card Components */
-        .card {
-            border: none;
-            border-radius: var(--card-border-radius);
-            box-shadow: var(--card-box-shadow);
-            background: #ffffff;
-            margin-bottom: 24px;
-            transition: transform 0.2s ease, box-shadow 0.2s ease;
-        }
+        .card { border-radius: var(--card-border-radius); border: none; box-shadow: var(--card-box-shadow); background-color: #fff; border-top: 4px solid #5B6D92; }
         .card-header {
             background-color: #ffffff;
             border-bottom: 1px solid #f0f3f8;
