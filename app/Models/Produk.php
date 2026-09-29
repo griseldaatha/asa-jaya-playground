@@ -14,7 +14,7 @@ class Produk extends Model
         'harga',
         'stok',
         'foto_produk',
-        'is_active'
+        'is_active',
     ];
 
     /**

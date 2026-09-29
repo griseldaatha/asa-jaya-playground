@@ -19,7 +19,7 @@ class Transaksi extends Model
         'total_harga',
         'status_pembayaran',
         'status_pesanan',
-        'waktu_transaksi'
+        'waktu_transaksi',
     ];
 
     /**

@@ -3,8 +3,8 @@
 namespace App\Http\Controllers\Owner;
 
 use App\Http\Controllers\Controller;
-use App\Models\User;
 use App\Models\Transaksi;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 
@@ -13,6 +13,7 @@ class KaryawanController extends Controller
     public function index()
     {
         $karyawan = User::where('role', 'kasir')->get();
+
         return view('owner.karyawan.index', compact('karyawan'));
     }
 
@@ -21,14 +22,14 @@ class KaryawanController extends Controller
         $request->validate([
             'nama' => 'required|string|max:100',
             'username' => 'required|string|unique:users,username|max:50',
-            'password' => 'required|string|min:4'
+            'password' => 'required|string|min:4',
         ]);
 
         User::create([
             'nama' => $request->nama,
             'username' => $request->username,
             'password' => Hash::make($request->password),
-            'role' => 'kasir'
+            'role' => 'kasir',
         ]);
 
         return back()->with('success', 'Akun Kasir berhasil ditambahkan.');
@@ -40,7 +41,7 @@ class KaryawanController extends Controller
 
         $request->validate([
             'nama' => 'required|string|max:100',
-            'username' => 'required|string|max:50|unique:users,username,'.$id
+            'username' => 'required|string|max:50|unique:users,username,'.$id,
         ]);
 
         $data = [
@@ -53,19 +54,21 @@ class KaryawanController extends Controller
         }
 
         $user->update($data);
+
         return back()->with('success', 'Akun Kasir berhasil diperbarui.');
     }
 
     public function destroy($id)
     {
         $user = User::where('role', 'kasir')->findOrFail($id);
-        
+
         $adaTransaksi = Transaksi::where('kasir_id', $id)->exists();
         if ($adaTransaksi) {
             return back()->with('error', 'Akun ini tidak dapat dihapus karena sudah memiliki riwayat memproses transaksi. Silakan ubah passwordnya agar tidak bisa diakses.');
         }
 
         $user->delete();
+
         return back()->with('success', 'Akun Kasir berhasil dihapus.');
     }
 }

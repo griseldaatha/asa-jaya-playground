@@ -13,6 +13,7 @@ class MejaController extends Controller
     public function index()
     {
         $meja = Meja::all();
+
         return view('owner.meja.index', compact('meja'));
     }
 
@@ -20,26 +21,27 @@ class MejaController extends Controller
     {
         // QR Token di-generate otomatis
         $token = strtoupper(Str::random(5));
-        
+
         Meja::create([
             'qr_token' => $token,
-            'is_active' => true
+            'is_active' => true,
         ]);
 
-        return back()->with('success', 'Meja baru berhasil ditambahkan dengan Token: ' . $token);
+        return back()->with('success', 'Meja baru berhasil ditambahkan dengan Token: '.$token);
     }
 
     public function update(Request $request, $id)
     {
         $meja = Meja::findOrFail($id);
         $meja->update(['is_active' => $request->is_active]);
+
         return back()->with('success', 'Status meja berhasil diperbarui.');
     }
 
     public function destroy($id)
     {
         $meja = Meja::findOrFail($id);
-        
+
         // Cek apakah meja sudah pernah dipakai transaksi
         $adaTransaksi = Transaksi::where('meja_id', $id)->exists();
         if ($adaTransaksi) {
@@ -47,6 +49,7 @@ class MejaController extends Controller
         }
 
         $meja->delete();
+
         return back()->with('success', 'Meja berhasil dihapus.');
     }
 }

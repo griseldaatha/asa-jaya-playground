@@ -14,7 +14,7 @@ class Pengeluaran extends Model
         'tanggal_pengeluaran',
         'nama_pengeluaran',
         'nominal',
-        'deskripsi'
+        'deskripsi',
     ];
 
     /**

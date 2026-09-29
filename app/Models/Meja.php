@@ -11,7 +11,7 @@ class Meja extends Model
     protected $fillable = [
         'qr_token',
         'qr_code_url',
-        'is_active'
+        'is_active',
     ];
 
     /**

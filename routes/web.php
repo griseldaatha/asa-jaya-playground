@@ -1,7 +1,7 @@
 <?php
 
-use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
+use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
     return view('welcome');
@@ -35,11 +35,11 @@ Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 // JALUR OWNER (Dilindungi Middleware Auth & Role:Owner)
 // ==========================================
 use App\Http\Controllers\Owner\DashboardController;
-use App\Http\Controllers\Owner\KategoriController;
-use App\Http\Controllers\Owner\ProdukController;
-use App\Http\Controllers\Owner\MejaController;
 use App\Http\Controllers\Owner\KaryawanController;
+use App\Http\Controllers\Owner\KategoriController;
+use App\Http\Controllers\Owner\MejaController;
 use App\Http\Controllers\Owner\PengeluaranController;
+use App\Http\Controllers\Owner\ProdukController;
 
 Route::middleware(['auth', 'role:owner'])->prefix('owner')->name('owner.')->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
@@ -60,7 +60,7 @@ Route::middleware(['auth', 'role:owner'])->prefix('owner')->name('owner.')->grou
 // ==========================================
 // JALUR ADMIN (BISA DIAKSES OWNER & KASIR)
 // ==========================================
-use App\Http\Controllers\Owner\TransaksiController;
+use App\Http\Controllers\KasirController;
 
 Route::middleware(['auth', 'role:owner,kasir'])->prefix('admin')->name('admin.')->group(function () {
     // CRUD Kategori
@@ -87,7 +87,6 @@ Route::middleware(['auth', 'role:owner,kasir'])->prefix('admin')->name('admin.')
 // ==========================================
 // JALUR KASIR (Dilindungi Middleware Auth & Role:Kasir)
 // ==========================================
-use App\Http\Controllers\KasirController;
 
 Route::middleware(['auth', 'role:kasir'])->prefix('kasir')->group(function () {
     Route::get('/dashboard', [KasirController::class, 'dashboard'])->name('kasir.dashboard');

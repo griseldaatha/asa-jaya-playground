@@ -3,8 +3,8 @@
 namespace App\Http\Controllers\Owner;
 
 use App\Http\Controllers\Controller;
-use App\Models\Transaksi;
 use App\Models\Pengeluaran;
+use App\Models\Transaksi;
 use Carbon\Carbon;
 
 class DashboardController extends Controller

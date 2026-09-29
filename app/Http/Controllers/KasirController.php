@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use App\Models\Transaksi;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 class KasirController extends Controller
@@ -37,6 +37,7 @@ class KasirController extends Controller
     {
         // Tampilkan semua transaksi, diurutkan dari yang terbaru
         $transaksi = Transaksi::with(['detailTransaksi.produk', 'kasir'])->orderBy('created_at', 'desc')->get();
+
         return view('admin.transaksi.index', compact('transaksi'));
     }
 
@@ -47,7 +48,7 @@ class KasirController extends Controller
     {
         $transaksi = Transaksi::findOrFail($id);
 
-        $action = $request->input('action');
+        $action = $request->input('action') ?? $request->input('value');
 
         // Kasir yang mengambil aksi ini akan dicatat ID-nya
         $transaksi->kasir_id = Auth::id();
@@ -58,10 +59,10 @@ class KasirController extends Controller
             $transaksi->status_pesanan = 'diproses';
         } elseif ($action === 'selesai') {
             $transaksi->status_pesanan = 'selesai';
-        } elseif ($action === 'batal') {
+        } elseif ($action === 'batal' || $action === 'dibatalkan') {
             $transaksi->status_pembayaran = 'batal';
             $transaksi->status_pesanan = 'dibatalkan';
-            
+
             // Kembalikan stok produk jika pesanan dibatalkan
             foreach ($transaksi->detailTransaksi as $detail) {
                 $produk = $detail->produk;

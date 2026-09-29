@@ -3,8 +3,8 @@
 namespace App\Http\Controllers\Owner;
 
 use App\Http\Controllers\Controller;
-use App\Models\Produk;
 use App\Models\KategoriProduk;
+use App\Models\Produk;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
@@ -14,6 +14,7 @@ class ProdukController extends Controller
     {
         $produk = Produk::with('kategori')->get();
         $kategori = KategoriProduk::all();
+
         return view('owner.produk.index', compact('produk', 'kategori'));
     }
 
@@ -35,6 +36,7 @@ class ProdukController extends Controller
         }
 
         Produk::create($data);
+
         return back()->with('success', 'Produk berhasil ditambahkan.');
     }
 
@@ -46,7 +48,7 @@ class ProdukController extends Controller
             'harga' => 'required|integer|min:0',
             'stok' => 'required|integer|min:0',
             'foto' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
-            'is_active' => 'required|boolean'
+            'is_active' => 'required|boolean',
         ]);
 
         $produk = Produk::findOrFail($id);
@@ -62,6 +64,7 @@ class ProdukController extends Controller
         }
 
         $produk->update($data);
+
         return back()->with('success', 'Produk berhasil diperbarui.');
     }
 
@@ -70,7 +73,7 @@ class ProdukController extends Controller
         $produk = Produk::findOrFail($id);
         // Soft disable, tidak dihapus permanen
         $produk->update(['is_active' => false]);
-        
+
         return back()->with('success', 'Produk berhasil dinonaktifkan (Tidak Dihapus Permanen).');
     }
 }

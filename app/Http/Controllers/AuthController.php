@@ -14,7 +14,7 @@ class AuthController extends Controller
         if (Auth::check()) {
             return $this->redirectBasedOnRole(Auth::user()->role);
         }
-        
+
         return view('auth.login');
     }
 
@@ -31,7 +31,7 @@ class AuthController extends Controller
         if (Auth::attempt($credentials)) {
             // Regenerasi session untuk keamanan (mencegah session fixation)
             $request->session()->regenerate();
-            
+
             // Arahkan sesuai jabatan
             return $this->redirectBasedOnRole(Auth::user()->role);
         }
@@ -46,10 +46,10 @@ class AuthController extends Controller
     public function logout(Request $request)
     {
         Auth::logout();
-        
+
         $request->session()->invalidate();
         $request->session()->regenerateToken();
-        
+
         return redirect('/login');
     }
 
@@ -61,7 +61,7 @@ class AuthController extends Controller
         } elseif ($role === 'kasir') {
             return redirect('/kasir/dashboard');
         }
-        
+
         return redirect('/');
     }
 }

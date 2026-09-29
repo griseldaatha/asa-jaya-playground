@@ -2,10 +2,13 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-use App\Models\Meja;
+use App\Models\DetailTransaksi;
 use App\Models\KategoriProduk;
+use App\Models\Meja;
 use App\Models\Produk;
+use App\Models\Transaksi;
+use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 
 class CustomerController extends Controller
 {
@@ -16,10 +19,10 @@ class CustomerController extends Controller
     {
         // Cari meja berdasarkan qr_token dan pastikan statusnya aktif
         $meja = Meja::where('qr_token', $qr_token)
-                    ->where('is_active', true)
-                    ->first();
+            ->where('is_active', true)
+            ->first();
 
-        if (!$meja) {
+        if (! $meja) {
             abort(404, 'Meja tidak ditemukan atau sedang tidak aktif.');
         }
 
@@ -35,16 +38,16 @@ class CustomerController extends Controller
     public function katalog(Request $request)
     {
         // Pastikan customer sudah scan meja (ada session meja_id)
-        if (!$request->session()->has('meja_id')) {
+        if (! $request->session()->has('meja_id')) {
             return response('Silakan scan QR Code di meja Anda terlebih dahulu untuk melihat menu.', 403);
         }
 
         $meja_id = $request->session()->get('meja_id');
 
         // Ambil kategori produk beserta produknya yang aktif dan stok > 0
-        $kategori_produk = KategoriProduk::with(['produk' => function($query) {
+        $kategori_produk = KategoriProduk::with(['produk' => function ($query) {
             $query->where('is_active', true)
-                  ->where('stok', '>', 0);
+                ->where('stok', '>', 0);
         }])->get();
 
         return view('customer.katalog', compact('kategori_produk', 'meja_id'));
@@ -58,16 +61,16 @@ class CustomerController extends Controller
         $request->validate([
             'produk_id' => 'required|exists:produk,id',
             'jumlah' => 'required|integer|min:1',
-            'catatan' => 'nullable|string|max:255'
+            'catatan' => 'nullable|string|max:255',
         ]);
 
         $produk = Produk::where('id', $request->produk_id)->where('is_active', true)->where('stok', '>=', $request->jumlah)->first();
-        if (!$produk) {
+        if (! $produk) {
             return back()->with('error', 'Produk tidak tersedia atau stok tidak mencukupi.');
         }
 
         $keranjang = session()->get('keranjang', []);
-        
+
         $id = $request->produk_id;
         if (isset($keranjang[$id])) {
             // Cek apakah total stok masih mencukupi jika ditambah
@@ -76,19 +79,20 @@ class CustomerController extends Controller
             }
             $keranjang[$id]['jumlah'] += $request->jumlah;
             if ($request->catatan) {
-                $keranjang[$id]['catatan'] .= ' | ' . $request->catatan;
+                $keranjang[$id]['catatan'] .= ' | '.$request->catatan;
             }
         } else {
             $keranjang[$id] = [
                 'produk_id' => $id,
                 'nama_produk' => $produk->nama_produk,
                 'jumlah' => $request->jumlah,
-                'catatan' => $request->catatan
+                'catatan' => $request->catatan,
             ];
         }
 
         session(['keranjang' => $keranjang]);
-        return back()->with('success', $produk->nama_produk . ' ditambahkan ke keranjang!');
+
+        return back()->with('success', $produk->nama_produk.' ditambahkan ke keranjang!');
     }
 
     /**
@@ -96,11 +100,11 @@ class CustomerController extends Controller
      */
     public function lihatKeranjang(Request $request)
     {
-        if (!$request->session()->has('meja_id')) {
+        if (! $request->session()->has('meja_id')) {
             return redirect('/');
         }
         $keranjang = session()->get('keranjang', []);
-        
+
         // Hitung ulang dari database untuk tampilan (opsional, tapi aman)
         $total = 0;
         $items = [];
@@ -124,10 +128,11 @@ class CustomerController extends Controller
     public function hapusKeranjang(Request $request, $id)
     {
         $keranjang = session()->get('keranjang', []);
-        if(isset($keranjang[$id])) {
+        if (isset($keranjang[$id])) {
             unset($keranjang[$id]);
             session(['keranjang' => $keranjang]);
         }
+
         return back();
     }
 
@@ -138,13 +143,13 @@ class CustomerController extends Controller
     {
         $request->validate([
             'nama_pemesan' => 'required|string|max:100',
-            'metode_pembayaran' => 'required|in:tunai,payment_gateway'
+            'metode_pembayaran' => 'required|in:tunai,payment_gateway',
         ]);
 
         $meja_id = $request->session()->get('meja_id');
         $keranjang = session()->get('keranjang', []);
 
-        if (empty($keranjang) || !$meja_id) {
+        if (empty($keranjang) || ! $meja_id) {
             return redirect()->route('katalog')->with('error', 'Keranjang kosong atau meja tidak valid.');
         }
 
@@ -159,7 +164,7 @@ class CustomerController extends Controller
             foreach ($keranjang as $id => $item) {
                 $produk = Produk::lockForUpdate()->find($id); // Kunci baris agar aman dari race condition
 
-                if (!$produk || !$produk->is_active) {
+                if (! $produk || ! $produk->is_active) {
                     throw new \Exception("Produk {$item['nama_produk']} sudah tidak aktif.");
                 }
 
@@ -182,15 +187,15 @@ class CustomerController extends Controller
 
                 $produk_updates[] = [
                     'produk' => $produk,
-                    'pengurangan' => $item['jumlah']
+                    'pengurangan' => $item['jumlah'],
                 ];
             }
 
             // 2. Buat Record Transaksi Utama
-            $kode_transaksi = 'TRX-' . strtoupper(uniqid());
-            $access_token = \Illuminate\Support\Str::random(32);
+            $kode_transaksi = 'TRX-'.strtoupper(uniqid());
+            $access_token = Str::random(32);
 
-            $transaksi = \App\Models\Transaksi::create([
+            $transaksi = Transaksi::create([
                 'kode_transaksi' => $kode_transaksi,
                 'access_token' => $access_token,
                 'kasir_id' => null,
@@ -201,14 +206,14 @@ class CustomerController extends Controller
                 'total_harga' => $total_harga,
                 'status_pembayaran' => 'pending',
                 'status_pesanan' => 'menunggu',
-                'waktu_transaksi' => now()
+                'waktu_transaksi' => now(),
             ]);
 
             // 3. Simpan Detail & Kurangi Stok
             foreach ($detail_inserts as &$detail) {
                 $detail['transaksi_id'] = $transaksi->id;
             }
-            \App\Models\DetailTransaksi::insert($detail_inserts);
+            DetailTransaksi::insert($detail_inserts);
 
             foreach ($produk_updates as $update) {
                 $update['produk']->stok -= $update['pengurangan'];
@@ -223,12 +228,13 @@ class CustomerController extends Controller
             // Redirect ke halaman status
             return redirect()->route('status.pesanan', [
                 'kode_transaksi' => $kode_transaksi,
-                'token' => $access_token
+                'token' => $access_token,
             ]);
 
         } catch (\Exception $e) {
             \DB::rollBack();
-            return back()->with('error', 'Checkout gagal: ' . $e->getMessage());
+
+            return back()->with('error', 'Checkout gagal: '.$e->getMessage());
         }
     }
 
@@ -239,12 +245,12 @@ class CustomerController extends Controller
     {
         $token = $request->query('token');
 
-        $transaksi = \App\Models\Transaksi::with(['detailTransaksi.produk', 'meja'])
+        $transaksi = Transaksi::with(['detailTransaksi.produk', 'meja'])
             ->where('kode_transaksi', $kode_transaksi)
             ->where('access_token', $token)
             ->first();
 
-        if (!$transaksi) {
+        if (! $transaksi) {
             abort(404, 'Pesanan tidak ditemukan atau akses ditolak.');
         }
 

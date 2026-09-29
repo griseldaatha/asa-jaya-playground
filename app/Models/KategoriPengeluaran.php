@@ -10,7 +10,7 @@ class KategoriPengeluaran extends Model
 
     protected $fillable = [
         'nama_kategori',
-        'deskripsi'
+        'deskripsi',
     ];
 
     /**
