@@ -35,22 +35,33 @@ class CustomerController extends Controller
     /**
      * Menampilkan halaman katalog produk
      */
-    public function katalog(Request $request)
+        public function katalog(Request $request)
     {
-        // Pastikan customer sudah scan meja (ada session meja_id)
         if (! $request->session()->has('meja_id')) {
             return response('Silakan scan QR Code di meja Anda terlebih dahulu untuk melihat menu.', 403);
         }
 
         $meja_id = $request->session()->get('meja_id');
-
-        // Ambil kategori produk beserta produknya yang aktif dan stok > 0
         $kategori_produk = KategoriProduk::with(['produk' => function ($query) {
-            $query->where('is_active', true)
-                ->where('stok', '>', 0);
+            $query->where('is_active', true)->where('stok', '>', 0);
         }])->get();
 
-        return view('customer.katalog', compact('kategori_produk', 'meja_id'));
+        // Ambil data keranjang untuk ditampilkan di sidebar kanan
+        $keranjang_session = session()->get('keranjang', []);
+        $total = 0;
+        $items = [];
+        foreach ($keranjang_session as $id => $item) {
+            $produk = Produk::find($id);
+            if ($produk && $produk->is_active) {
+                $subtotal = $produk->harga * $item['jumlah'];
+                $total += $subtotal;
+                $item['harga'] = $produk->harga;
+                $item['subtotal'] = $subtotal;
+                $items[] = $item;
+            }
+        }
+
+        return view('customer.katalog', compact('kategori_produk', 'meja_id', 'items', 'total'));
     }
 
     /**

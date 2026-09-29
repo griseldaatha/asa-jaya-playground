@@ -1,3 +1,49 @@
+<?php
+
+$dir = __DIR__;
+$controller_file = $dir . '/app/Http/Controllers/CustomerController.php';
+$controller_content = file_get_contents($controller_file);
+
+// 1. Modify CustomerController@katalog
+$new_katalog_method = <<<PHP
+    public function katalog(Request \$request)
+    {
+        if (! \$request->session()->has('meja_id')) {
+            return response('Silakan scan QR Code di meja Anda terlebih dahulu untuk melihat menu.', 403);
+        }
+
+        \$meja_id = \$request->session()->get('meja_id');
+        \$kategori_produk = KategoriProduk::with(['produk' => function (\$query) {
+            \$query->where('is_active', true)->where('stok', '>', 0);
+        }])->get();
+
+        // Ambil data keranjang untuk ditampilkan di sidebar kanan
+        \$keranjang_session = session()->get('keranjang', []);
+        \$total = 0;
+        \$items = [];
+        foreach (\$keranjang_session as \$id => \$item) {
+            \$produk = Produk::find(\$id);
+            if (\$produk && \$produk->is_active) {
+                \$subtotal = \$produk->harga * \$item['jumlah'];
+                \$total += \$subtotal;
+                \$item['harga'] = \$produk->harga;
+                \$item['subtotal'] = \$subtotal;
+                \$items[] = \$item;
+            }
+        }
+
+        return view('customer.katalog', compact('kategori_produk', 'meja_id', 'items', 'total'));
+    }
+PHP;
+
+// Find and replace the katalog method
+$pattern = '/public function katalog\(Request \$request\).*?return view\(\'customer\.katalog\', compact\(\'kategori_produk\', \'meja_id\'\)\);\s*}/s';
+$controller_content = preg_replace($pattern, $new_katalog_method, $controller_content);
+file_put_contents($controller_file, $controller_content);
+
+
+// 2. Rewrite customer/katalog.blade.php
+$katalog_view = <<<HTML
 <!DOCTYPE html>
 <html lang="id">
 <head>
@@ -56,7 +102,7 @@
         <div class="left-side">
             <div class="d-flex justify-content-between align-items-center mb-3">
                 <h4 class="fw-bold m-0"><i class="fa-solid fa-shapes text-warning"></i> Asa Jaya Playground</h4>
-                <span class="badge bg-secondary">Meja/Spot: {{ $meja_id }}</span>
+                <span class="badge bg-secondary">Meja/Spot: {{ \$meja_id }}</span>
             </div>
 
             @if(session('success'))
@@ -74,10 +120,10 @@
 
             <!-- Kategori Horizontal Pills -->
             <div class="category-scroll">
-                @foreach($kategori_produk as $kat)
-                    @if($kat->produk->where('is_active', true)->count() > 0)
-                        <a href="#kat-{{ $kat->id }}" class="cat-pill">
-                            <i class="fa-solid fa-tag text-success"></i> {{ $kat->nama_kategori }}
+                @foreach(\$kategori_produk as \$kat)
+                    @if(\$kat->produk->where('is_active', true)->count() > 0)
+                        <a href="#kat-{{ \$kat->id }}" class="cat-pill">
+                            <i class="fa-solid fa-tag text-success"></i> {{ \$kat->nama_kategori }}
                         </a>
                     @endif
                 @endforeach
@@ -85,27 +131,27 @@
 
             <!-- Daftar Produk -->
             <div class="mt-3 pb-5">
-                @foreach($kategori_produk as $kat)
-                    @if($kat->produk->where('is_active', true)->count() > 0)
-                        <h5 id="kat-{{ $kat->id }}" class="fw-bold mb-3 mt-4" style="color: #444;">{{ $kat->nama_kategori }}</h5>
+                @foreach(\$kategori_produk as \$kat)
+                    @if(\$kat->produk->where('is_active', true)->count() > 0)
+                        <h5 id="kat-{{ \$kat->id }}" class="fw-bold mb-3 mt-4" style="color: #444;">{{ \$kat->nama_kategori }}</h5>
                         <div class="row g-3">
-                            @foreach($kat->produk->where('is_active', true) as $p)
+                            @foreach(\$kat->produk->where('is_active', true) as \$p)
                             <div class="col-6 col-md-4 col-xl-3">
                                 <div class="product-card">
                                     <span class="badge-new">Tersedia</span>
-                                    @if($p->foto_produk)
-                                        <img src="{{ asset('storage/'.$p->foto_produk) }}" class="product-img" alt="{{ $p->nama_produk }}">
+                                    @if(\$p->foto_produk)
+                                        <img src="{{ asset('storage/'.\$p->foto_produk) }}" class="product-img" alt="{{ \$p->nama_produk }}">
                                     @else
                                         <div class="product-img d-flex align-items-center justify-content-center text-muted fs-3"><i class="fa-solid fa-image opacity-25"></i></div>
                                     @endif
                                     
-                                    <div class="product-title">{{ $p->nama_produk }}</div>
-                                    <div class="product-price">Rp {{ number_format($p->harga, 0, ',', '.') }}</div>
+                                    <div class="product-title">{{ \$p->nama_produk }}</div>
+                                    <div class="product-price">Rp {{ number_format(\$p->harga, 0, ',', '.') }}</div>
                                     
                                     <div class="mt-auto">
                                         <form action="{{ route('keranjang.tambah') }}" method="POST">
                                             @csrf
-                                            <input type="hidden" name="produk_id" value="{{ $p->id }}">
+                                            <input type="hidden" name="produk_id" value="{{ \$p->id }}">
                                             <input type="hidden" name="jumlah" value="1">
                                             <button type="submit" class="btn-tambah">Tambah</button>
                                         </form>
@@ -123,26 +169,26 @@
         <div class="right-side">
             <div class="cart-header">
                 <h5 class="fw-bold m-0">Pesanan Anda</h5>
-                <span class="badge bg-success rounded-pill">{{ count($items) }} Item</span>
+                <span class="badge bg-success rounded-pill">{{ count(\$items) }} Item</span>
             </div>
             
             <div class="cart-body">
-                @if(empty($items))
+                @if(empty(\$items))
                     <div class="empty-cart">
                         <i class="fa-solid fa-bell-concierge"></i>
                         <h6 class="fw-bold text-dark mt-3">Belum ada menu yang dipilih</h6>
                         <p class="small">Silakan tambahkan menu dari katalog di sebelah kiri.</p>
                     </div>
                 @else
-                    @foreach($items as $item)
+                    @foreach(\$items as \$item)
                         <div class="cart-item">
                             <div class="cart-item-info">
-                                <h6>{{ $item['nama_produk'] }}</h6>
-                                <small>Rp {{ number_format($item['harga'], 0, ',', '.') }} &times; {{ $item['jumlah'] }}</small>
+                                <h6>{{ \$item['nama_produk'] }}</h6>
+                                <small>Rp {{ number_format(\$item['harga'], 0, ',', '.') }} &times; {{ \$item['jumlah'] }}</small>
                             </div>
                             <div class="text-end">
-                                <div class="fw-bold mb-1">Rp {{ number_format($item['subtotal'], 0, ',', '.') }}</div>
-                                <form action="{{ route('keranjang.hapus', $item['produk_id']) }}" method="POST" style="display:inline;">
+                                <div class="fw-bold mb-1">Rp {{ number_format(\$item['subtotal'], 0, ',', '.') }}</div>
+                                <form action="{{ route('keranjang.hapus', \$item['produk_id']) }}" method="POST" style="display:inline;">
                                     @csrf
                                     <button class="btn btn-sm text-danger p-0"><i class="fa-solid fa-trash"></i> Hapus</button>
                                 </form>
@@ -152,11 +198,11 @@
                 @endif
             </div>
 
-            @if(!empty($items))
+            @if(!empty(\$items))
             <div class="cart-footer">
                 <div class="d-flex justify-content-between align-items-center mb-3">
                     <span class="text-muted fw-bold">Total Pembayaran</span>
-                    <span class="fs-4 fw-bold text-success">Rp {{ number_format($total, 0, ',', '.') }}</span>
+                    <span class="fs-4 fw-bold text-success">Rp {{ number_format(\$total, 0, ',', '.') }}</span>
                 </div>
                 <form action="{{ route('checkout') }}" method="POST">
                     @csrf
@@ -173,3 +219,7 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
+HTML;
+file_put_contents($dir.'/resources/views/customer/katalog.blade.php', $katalog_view);
+
+echo "Layout split screen (Katalog + Keranjang) berhasil dibuat!";
