@@ -37,7 +37,7 @@
             </div>
         @endif
 
-        @foreach($kategori as $kat)
+        @foreach($kategori_produk as $kat)
             @if($kat->produk->where('is_active', true)->count() > 0)
                 <h5 class="fw-bold mb-3 mt-4 text-dark border-bottom pb-2">{{ $kat->nama_kategori }}</h5>
                 <div class="row g-3">
