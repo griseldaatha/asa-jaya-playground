@@ -11,9 +11,9 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
     <style>
         :root {
-            --bs-primary: #0d6efd;
+            --bs-primary: #5B6D92;
             --bs-primary-rgb: 13, 110, 253;
-            --bs-body-bg: #f4f6f9;
+            --bs-body-bg: #F0E2D2;
             --bs-body-font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
             --card-border-radius: 14px;
             --card-box-shadow: 0 4px 16px rgba(0, 0, 0, 0.04), 0 1px 3px rgba(0, 0, 0, 0.02);
@@ -82,14 +82,7 @@
         }
 
         /* Card Components */
-        .card {
-            border: none;
-            border-radius: var(--card-border-radius);
-            box-shadow: var(--card-box-shadow);
-            background: #ffffff;
-            margin-bottom: 24px;
-            transition: transform 0.2s ease, box-shadow 0.2s ease;
-        }
+        .card { border-radius: var(--card-border-radius); border: none; box-shadow: var(--card-box-shadow); background-color: #fff; border-top: 4px solid #5B6D92; }
         .card-header {
             background-color: #ffffff;
             border-bottom: 1px solid #f0f3f8;
@@ -208,6 +201,40 @@
             color: #64748b;
             font-size: 0.85rem;
         }
+            /* --- GLOBAL THEME FIXES --- */
+        body { background-color: #F0E2D2 !important; }
+        
+        /* Sidebar Recolor */
+        #sidebar { background: #5B6D92 !important; }
+        #sidebar .sidebar-header { background: #4A5978 !important; border-bottom: 1px solid #4A5978 !important; }
+        #sidebar a { color: #D5E3E6 !important; }
+        #sidebar a:hover, #sidebar a.active {
+            background: #D5E3E6 !important;
+            color: #5B6D92 !important;
+            border-left: 4px solid #F0E2D2 !important;
+        }
+
+        /* Enforce White Backgrounds on Tables and Forms */
+        .table { background-color: #ffffff !important; border-collapse: collapse; }
+        .table tbody tr, .table td, .table th { background-color: #ffffff !important; }
+        .table thead th { background-color: #D5E3E6 !important; color: #5B6D92 !important; border-bottom: 2px solid #5B6D92 !important; }
+        
+        .form-control, .form-select { background-color: #ffffff !important; border: 1px solid #D5E3E6 !important; }
+        .form-control:focus, .form-select:focus { border-color: #5B6D92 !important; box-shadow: 0 0 0 0.25rem rgba(91, 109, 146, 0.25) !important; }
+        
+        /* Ensure responsive table containers also have white background */
+        .table-responsive { background-color: #ffffff !important; border-radius: var(--card-border-radius); padding: 10px; box-shadow: var(--card-box-shadow); }
+        
+        /* Wrap empty states in a white box */
+        .text-center.py-5 { background-color: #ffffff !important; border-radius: var(--card-border-radius); padding: 2rem !important; box-shadow: var(--card-box-shadow); }
+
+        /* Buttons & Badges */
+        .btn-primary, .bg-primary, .text-bg-primary { background-color: #5B6D92 !important; border-color: #5B6D92 !important; color: white !important; }
+        .btn-primary:hover { background-color: #4A5978 !important; border-color: #4A5978 !important; }
+        .text-primary { color: #5B6D92 !important; }
+        
+        /* Fix the purple gradient header in Produk */
+        .bg-gradient { background: linear-gradient(135deg, #5B6D92 0%, #4A5978 100%) !important; }
     </style>
 </head>
 <body>

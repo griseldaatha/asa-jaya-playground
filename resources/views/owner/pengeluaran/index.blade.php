@@ -17,7 +17,7 @@
 <div class="row g-4 mb-4">
     <div class="col-md-4 col-12">
         <div class="card border-0 shadow-sm border-start border-danger border-5 h-100">
-            <div class="card-body p-3.5">
+            <div class="card-body p-4">
                 <div class="d-flex justify-content-between align-items-center">
                     <div>
                         <p class="text-muted mb-1 text-uppercase fw-semibold" style="font-size: 11px; letter-spacing: 0.5px;">Total Pengeluaran Recorded</p>

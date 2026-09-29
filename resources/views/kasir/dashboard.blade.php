@@ -225,7 +225,7 @@
                     let html = `
                         <div class="col-xl-3 col-lg-4 col-md-6 col-12">
                             <div class="card h-100 kasir-card ${bgBorder}">
-                                <div class="card-body p-3.5 d-flex flex-column justify-content-between">
+                                <div class="card-body p-4 d-flex flex-column justify-content-between">
                                     <div>
                                         <div class="d-flex justify-content-between align-items-start mb-2">
                                             <div>
