@@ -4,66 +4,74 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Status Pesanan</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
     <style>
-        body { font-family: sans-serif; background-color: #f8f9fa; margin: 0; padding: 0; }
-        .header { background-color: #ff9800; color: white; padding: 15px; text-align: center; }
-        .container { max-width: 600px; margin: 0 auto; padding: 15px; }
-        .card { background: white; border-radius: 8px; padding: 20px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); margin-bottom: 20px; }
-        .badge { display: inline-block; padding: 5px 10px; border-radius: 15px; color: white; font-size: 14px; font-weight: bold; }
-        .badge-pending { background-color: #ff9800; }
-        .badge-lunas { background-color: #4CAF50; }
-        .badge-menunggu { background-color: #9e9e9e; }
-        .badge-diproses { background-color: #2196F3; }
-        .badge-selesai { background-color: #4CAF50; }
-        .list-item { display: flex; justify-content: space-between; border-bottom: 1px solid #eee; padding: 10px 0; }
-        .list-item:last-child { border-bottom: none; }
+        body { background-color: #f0f2f5; font-family: sans-serif; }
+        .ticket { background: white; border-radius: 20px; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.1); margin-top: 40px; }
+        .ticket-header { background: #0d6efd; color: white; padding: 30px 20px; text-align: center; position: relative; }
+        .ticket-header::after { content: ''; position: absolute; bottom: -15px; left: 0; right: 0; border-bottom: 30px dotted #f0f2f5; }
+        .ticket-body { padding: 40px 30px 30px; }
+        .status-badge { display: inline-block; padding: 8px 20px; border-radius: 30px; font-weight: bold; margin-bottom: 20px; }
+        .bg-pending { background-color: #fff3cd; color: #856404; }
+        .bg-lunas { background-color: #d4edda; color: #155724; }
     </style>
 </head>
 <body>
-
-    <div class="header">
-        <h2>Detail Pesanan Anda</h2>
-    </div>
-
     <div class="container">
-        <div class="card" style="text-align: center;">
-            <p style="color: #777; margin: 0;">Kode Transaksi</p>
-            <h2 style="margin: 5px 0;">{{ $transaksi->kode_transaksi }}</h2>
-            <p><strong>Pemesan:</strong> {{ $transaksi->nama_pemesan }} | <strong>Meja:</strong> {{ $transaksi->meja->id ?? '-' }}</p>
-        </div>
+        <div class="row justify-content-center">
+            <div class="col-md-6 col-lg-5">
+                
+                @if(session('success'))
+                    <div class="alert alert-success mt-4 mb-0 text-center rounded-pill"><i class="fa-solid fa-circle-check"></i> {{ session('success') }}</div>
+                @endif
 
-        <div class="card">
-            <h3>Status Saat Ini</h3>
-            <p>
-                Status Pembayaran: 
-                <span class="badge badge-{{ $transaksi->status_pembayaran }}">{{ strtoupper($transaksi->status_pembayaran) }}</span>
-            </p>
-            <p>
-                Status Pesanan: 
-                <span class="badge badge-{{ $transaksi->status_pesanan }}">{{ strtoupper($transaksi->status_pesanan) }}</span>
-            </p>
-            <hr>
-            <p style="font-size: 14px; color: #555;">
-                *Jika pembayaran Tunai, silakan menuju ke Kasir dan sebutkan Kode Transaksi Anda.<br>
-                *Simpan halaman ini (jangan ditutup) untuk memantau status pesanan Anda.
-            </p>
-        </div>
+                <div class="ticket">
+                    <div class="ticket-header">
+                        <p class="mb-1 opacity-75 small text-uppercase tracking-wider">Kode Pesanan</p>
+                        <h1 class="fw-bold mb-0 tracking-widest">{{ $transaksi->kode_transaksi }}</h1>
+                    </div>
+                    <div class="ticket-body text-center">
+                        <h5 class="fw-bold mb-1">{{ $transaksi->nama_pemesan }}</h5>
+                        <p class="text-muted small mb-4"><i class="fa-solid fa-chair"></i> Meja/Spot: {{ $transaksi->meja_id ?? '-' }}</p>
+                        
+                        <div class="status-badge {{ $transaksi->status_pembayaran == 'lunas' ? 'bg-lunas' : 'bg-pending' }}">
+                            <i class="fa-solid {{ $transaksi->status_pembayaran == 'lunas' ? 'fa-check-circle' : 'fa-clock' }}"></i>
+                            Pembayaran: {{ strtoupper($transaksi->status_pembayaran) }}
+                        </div>
 
-        <div class="card">
-            <h3>Rincian Pesanan</h3>
-            @foreach($transaksi->detailTransaksi as $detail)
-                <div class="list-item">
-                    <span>{{ $detail->jumlah }}x {{ $detail->produk->nama_produk ?? 'Produk' }}</span>
-                    <span>Rp {{ number_format($detail->subtotal, 0, ',', '.') }}</span>
+                        <div class="text-start bg-light p-3 rounded mb-4">
+                            <ul class="list-unstyled mb-0 small">
+                                @foreach($transaksi->detailTransaksi as $dt)
+                                    <li class="d-flex justify-content-between mb-2 pb-2 border-bottom">
+                                        <span>{{ $dt->jumlah }}x {{ $dt->produk->nama_produk ?? 'Item Dihapus' }}</span>
+                                        <span class="fw-semibold">Rp {{ number_format($dt->subtotal, 0, ',', '.') }}</span>
+                                    </li>
+                                @endforeach
+                            </ul>
+                            <div class="d-flex justify-content-between mt-3">
+                                <span class="fw-bold text-muted">TOTAL</span>
+                                <span class="fw-bold fs-5 text-primary">Rp {{ number_format($transaksi->total_harga, 0, ',', '.') }}</span>
+                            </div>
+                        </div>
+
+                        @if($transaksi->status_pembayaran == 'pending')
+                            <div class="alert alert-warning small text-start">
+                                <strong><i class="fa-solid fa-circle-info"></i> Tunjukkan kode ini!</strong><br>
+                                Silakan bawa HP Anda ke kasir dan tunjukkan kode <b>#{{ $transaksi->kode_transaksi }}</b> untuk melakukan pembayaran secara Tunai.
+                            </div>
+                        @else
+                            <div class="alert alert-success small">
+                                <i class="fa-solid fa-face-smile"></i> Pembayaran Lunas. Selamat bermain!
+                            </div>
+                        @endif
+
+                        <a href="{{ route('katalog') }}" class="btn btn-outline-secondary w-100 rounded-pill fw-bold mt-2"><i class="fa-solid fa-arrow-left"></i> Kembali ke Menu</a>
+                    </div>
                 </div>
-            @endforeach
-            <div class="list-item" style="font-weight: bold; font-size: 18px; margin-top: 10px;">
-                <span>Total Belanja:</span>
-                <span>Rp {{ number_format($transaksi->total_harga, 0, ',', '.') }}</span>
+
             </div>
         </div>
-
     </div>
-
 </body>
 </html>
