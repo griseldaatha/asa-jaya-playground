@@ -1,11 +1,23 @@
 <?php
 
 use App\Http\Controllers\AuthController;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
     return view('welcome');
 });
+
+// Shortcut redirect /dashboard ke dashboard sesuai role
+Route::get('/dashboard', function () {
+    if (!Auth::check()) {
+        return redirect()->route('login');
+    }
+    if (Auth::user()->role === 'owner') {
+        return redirect()->route('owner.dashboard');
+    }
+    return redirect()->route('kasir.dashboard');
+})->middleware('auth')->name('dashboard');
 
 // ==========================================
 // JALUR CUSTOMER (GUEST SCAN QR)
