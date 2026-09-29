@@ -4,7 +4,7 @@
 <div class="karyawan-page">
     <style>
         .karyawan-page {
-            --primary-gradient: linear-gradient(135deg, #0d6efd 0%, #6610f2 100%);
+            --primary-gradient: linear-gradient(135deg, #5B6D92 0%, #4A5978 100%);
             --radius: 16px;
             --soft-bg: #f8fafc;
             border-radius: 20px;
@@ -190,7 +190,7 @@
     <div class="row g-3 mb-4">
         <!-- Card 1: Total Akun Kasir -->
         <div class="col-md-5 col-12">
-            <div class="card stat-card p-3.5 h-100">
+            <div class="card stat-card p-4 h-100">
                 <div class="d-flex align-items-center justify-content-between">
                     <div>
                         <span class="text-uppercase fw-bold text-muted" style="font-size: 11px; letter-spacing: 0.5px;">Total Akun Kasir</span>
@@ -205,13 +205,13 @@
 
         <!-- Card 2: Tips Keamanan Password -->
         <div class="col-md-7 col-12">
-            <div class="card border-0 shadow-sm rounded-4 bg-info-subtle border-start border-info border-5 h-100 p-3.5">
+            <div class="card border-0 shadow-sm rounded-4 h-100 p-4" style="background-color: #D5E3E6 !important; border-left: 5px solid #5B6D92 !important;">
                 <div class="d-flex align-items-center gap-3">
-                    <div class="text-info-emphasis fs-3">
+                    <div class="text-dark fs-3">
                         <i class="fa-solid fa-key"></i>
                     </div>
                     <div>
-                        <h6 class="fw-bold text-info-emphasis mb-1">Petunjuk Perubahan Password</h6>
+                        <h6 class="fw-bold text-dark mb-1">Petunjuk Perubahan Password</h6>
                         <p class="mb-0 small text-secondary">
                             Kosongkan kolom password saat melakukan pengeditan jika Anda tidak ingin mengubah password akun kasir yang sudah ada.
                         </p>
@@ -343,7 +343,7 @@
                         @php
                             $avatarColors = [
                                 ['bg' => 'bg-primary-subtle', 'text' => 'text-primary'],
-                                ['bg' => 'bg-info-subtle', 'text' => 'text-info-emphasis'],
+                                ['bg' => 'bg-info-subtle', 'text' => 'text-dark'],
                                 ['bg' => 'bg-success-subtle', 'text' => 'text-success'],
                                 ['bg' => 'bg-warning-subtle', 'text' => 'text-warning-emphasis'],
                                 ['bg' => 'bg-purple-subtle', 'text' => 'text-purple'],
