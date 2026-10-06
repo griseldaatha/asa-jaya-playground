@@ -31,12 +31,9 @@
         .bg-soft-gold { background-color: #fef3c7; color: #d97706; }
     </style>
 
-    <!-- Page Title Header -->
-    <div class="d-flex justify-content-between align-items-center mb-4">
-        <div>
-            <h3 class="page-title"><i class="fa-solid fa-chart-line me-2 text-primary"></i>Ringkasan Keuangan ({{ date('d F Y') }})</h3>
-            <p class="page-subtitle mb-0">Pantau performa transaksi, pendapatan, dan pengeluaran playground hari ini.</p>
-        </div>
+    <!-- Date Only Header -->
+    <div class="mb-4">
+        <h4 class="fw-bold text-dark mb-0"><i class="fa-regular fa-calendar-check text-primary me-2"></i>{{ date('d F Y') }}</h4>
     </div>
 
     <!-- 4 Main Financial Stat Cards -->
