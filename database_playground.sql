@@ -195,7 +195,7 @@ CREATE TABLE `produk` (
 
 LOCK TABLES `produk` WRITE;
 /*!40000 ALTER TABLE `produk` DISABLE KEYS */;
-INSERT INTO `produk` VALUES (1,1,'Tiket Mandi Bola (1 Jam)',10000,50,NULL,1,NULL,NULL);
+INSERT INTO `produk` VALUES (1,1,'Tiket Mandi Bola (1 Jam)',10000,50,'produk/tiket_mandi_bola.jpg',1,NULL,'2026-10-05 18:22:53');
 /*!40000 ALTER TABLE `produk` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -279,4 +279,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2026-10-06  8:20:42
+-- Dump completed on 2026-10-06  8:23:06
