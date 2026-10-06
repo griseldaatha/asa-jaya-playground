@@ -94,7 +94,6 @@
             <div class="card border-0 shadow-sm rounded-4 overflow-hidden bg-white">
                 <div class="card-header bg-white py-3 d-flex justify-content-between align-items-center border-bottom">
                     <h6 class="fw-bold mb-0 text-dark"><i class="fa-solid fa-clock-rotate-left me-2 text-primary"></i>Transaksi Terbaru</h6>
-                    <span class="badge bg-primary text-white rounded-pill px-3">Live Feed</span>
                 </div>
                 <div class="card-body p-0">
                     <div class="table-responsive">
