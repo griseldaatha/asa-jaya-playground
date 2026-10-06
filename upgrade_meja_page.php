@@ -1,3 +1,9 @@
+<?php
+
+$dir = __DIR__;
+$view_file = $dir . '/resources/views/owner/meja/index.blade.php';
+
+$blade_code = <<<'BLADE'
 @extends('layouts.admin')
 @section('content')
 <div class="d-flex flex-wrap justify-content-between align-items-center mb-4 gap-3">
@@ -152,3 +158,7 @@ function cetakStikerQR(idMeja, token, qrImgSrc, fullUrl) {
 }
 </script>
 @endsection
+BLADE;
+
+file_put_contents($view_file, $blade_code);
+echo "Meja page updated with QR Code column and instant printing modal!";
