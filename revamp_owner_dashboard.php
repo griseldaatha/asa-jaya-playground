@@ -1,3 +1,108 @@
+<?php
+
+$dir = __DIR__;
+
+// 1. UPDATE Owner/DashboardController.php
+$controller_file = $dir . '/app/Http/Controllers/Owner/DashboardController.php';
+$controller_code = <<<PHP
+<?php
+
+namespace App\Http\Controllers\Owner;
+
+use App\Http\Controllers\Controller;
+use App\Models\Pengeluaran;
+use App\Models\Transaksi;
+use App\Models\User;
+use App\Models\Meja;
+use App\Models\DetailTransaksi;
+use Carbon\Carbon;
+use Illuminate\Support\Facades\DB;
+
+class DashboardController extends Controller
+{
+    public function index()
+    {
+        \$hariIni = Carbon::today();
+
+        // 1. Total Transaksi Hari Ini
+        \$totalTransaksi = Transaksi::whereDate('created_at', \$hariIni)
+            ->where('status_pesanan', '!=', 'dibatalkan')
+            ->count();
+
+        // 2. Pendapatan Hari Ini
+        \$pendapatan = Transaksi::whereDate('created_at', \$hariIni)
+            ->where('status_pembayaran', 'lunas')
+            ->sum('total_harga');
+
+        // 3. Pengeluaran Hari Ini
+        \$pengeluaran = Pengeluaran::whereDate('tanggal_pengeluaran', \$hariIni)->sum('nominal');
+
+        // 4. Pendapatan Bersih
+        \$pendapatanBersih = \$pendapatan - \$pengeluaran;
+
+        // 5. Transaksi Terbaru (5 teratas)
+        \$transaksiTerbaru = Transaksi::with(['detailTransaksi.produk'])
+            ->orderBy('created_at', 'desc')
+            ->take(5)
+            ->get();
+
+        // 6. Ringkasan Kasir & Meja
+        \$totalKasir = User::where('role', 'kasir')->count();
+        \$totalMeja = Meja::where('is_active', true)->count();
+
+        // 7. Produk Terlaris
+        \$produkTerlaris = DetailTransaksi::select('produk_id', DB::raw('SUM(jumlah) as total_terjual'))
+            ->with('produk')
+            ->groupBy('produk_id')
+            ->orderBy('total_terjual', 'desc')
+            ->take(4)
+            ->get();
+
+        return view('owner.dashboard', compact(
+            'totalTransaksi',
+            'pendapatan',
+            'pengeluaran',
+            'pendapatanBersih',
+            'transaksiTerbaru',
+            'totalKasir',
+            'totalMeja',
+            'produkTerlaris'
+        ));
+    }
+}
+PHP;
+file_put_contents($controller_file, $controller_code);
+
+
+// 2. FIX SIDEBAR IN layouts/admin.blade.php (Strict 3 items for Owner)
+$admin_file = $dir . '/resources/views/layouts/admin.blade.php';
+$admin_content = file_get_contents($admin_file);
+
+$old_owner_nav = <<<HTML
+                @if(Auth::user()->role === 'owner')
+                    <a href="{{ route('owner.dashboard') }}" class="{{ request()->routeIs('owner.dashboard') ? 'active' : '' }}"><i class="fa-solid fa-chart-line"></i> Dashboard Owner</a>
+                    <a href="{{ route('owner.karyawan.index') }}" class="{{ request()->routeIs('owner.karyawan.*') ? 'active' : '' }}"><i class="fa-solid fa-users-gear"></i> Kasir & User</a>
+                    <a href="{{ route('owner.meja.index') }}" class="{{ request()->routeIs('owner.meja.*') ? 'active' : '' }}"><i class="fa-solid fa-qrcode"></i> Data Meja / QR</a>
+                    <a href="{{ route('admin.transaksi.index') }}" class="{{ request()->routeIs('admin.transaksi.*') ? 'active' : '' }}"><i class="fa-solid fa-clock-rotate-left"></i> Riwayat Transaksi</a>
+                    <a href="{{ route('admin.kategori.index') }}" class="{{ request()->routeIs('admin.kategori.*') ? 'active' : '' }}"><i class="fa-solid fa-tags"></i> Kategori Produk</a>
+                    <a href="{{ route('admin.produk.index') }}" class="{{ request()->routeIs('admin.produk.*') ? 'active' : '' }}"><i class="fa-solid fa-box-open"></i> Barang Penjualan</a>
+                    <a href="{{ route('admin.pengeluaran.index') }}" class="{{ request()->routeIs('admin.pengeluaran.*') ? 'active' : '' }}"><i class="fa-solid fa-money-bill-trend-up"></i> Pengeluaran</a>
+HTML;
+
+$new_owner_nav = <<<HTML
+                @if(Auth::user()->role === 'owner')
+                    <a href="{{ route('owner.dashboard') }}" class="{{ request()->routeIs('owner.dashboard') ? 'active' : '' }}"><i class="fa-solid fa-chart-line"></i> Dashboard Owner</a>
+                    <a href="{{ route('owner.karyawan.index') }}" class="{{ request()->routeIs('owner.karyawan.*') ? 'active' : '' }}"><i class="fa-solid fa-users-gear"></i> Kelola Kasir & User</a>
+                    <a href="{{ route('owner.meja.index') }}" class="{{ request()->routeIs('owner.meja.*') ? 'active' : '' }}"><i class="fa-solid fa-qrcode"></i> Data Meja / QR</a>
+HTML;
+
+$admin_content = str_replace($old_owner_nav, $new_owner_nav, $admin_content);
+file_put_contents($admin_file, $admin_content);
+
+
+// 3. REWRITE owner/dashboard.blade.php
+$view_file = $dir . '/resources/views/owner/dashboard.blade.php';
+$view_code = <<<HTML
 @extends('layouts.admin')
 
 @section('content')
@@ -61,7 +166,7 @@
                     <span class="text-uppercase fw-bold text-muted small">Total Transaksi</span>
                     <div class="icon-box bg-icy"><i class="fa-solid fa-receipt"></i></div>
                 </div>
-                <h3 class="fw-bold mb-1 text-dark">{{ number_format() }} <span class="fs-6 text-muted fw-normal">Pesanan</span></h3>
+                <h3 class="fw-bold mb-1 text-dark">{{ number_format($totalTransaksi) }} <span class="fs-6 text-muted fw-normal">Pesanan</span></h3>
                 <small class="text-muted"><i class="fa-solid fa-circle-check text-success me-1"></i>Status Aktif Hari Ini</small>
             </div>
         </div>
@@ -73,7 +178,7 @@
                     <span class="text-uppercase fw-bold text-muted small">Pendapatan Kotor</span>
                     <div class="icon-box bg-soft-green"><i class="fa-solid fa-wallet"></i></div>
                 </div>
-                <h3 class="fw-bold mb-1 text-success">Rp {{ number_format(, 0, ',', '.') }}</h3>
+                <h3 class="fw-bold mb-1 text-success">Rp {{ number_format($pendapatan, 0, ',', '.') }}</h3>
                 <small class="text-muted"><i class="fa-solid fa-arrow-trend-up text-success me-1"></i>Pembayaran Lunas</small>
             </div>
         </div>
@@ -85,7 +190,7 @@
                     <span class="text-uppercase fw-bold text-muted small">Total Pengeluaran</span>
                     <div class="icon-box bg-soft-red"><i class="fa-solid fa-money-bill-wave"></i></div>
                 </div>
-                <h3 class="fw-bold mb-1 text-danger">Rp {{ number_format(, 0, ',', '.') }}</h3>
+                <h3 class="fw-bold mb-1 text-danger">Rp {{ number_format($pengeluaran, 0, ',', '.') }}</h3>
                 <small class="text-muted"><i class="fa-solid fa-circle-minus text-danger me-1"></i>Biaya Operasional</small>
             </div>
         </div>
@@ -97,7 +202,7 @@
                     <span class="text-uppercase fw-bold text-muted small">Pendapatan Bersih</span>
                     <div class="icon-box bg-soft-gold"><i class="fa-solid fa-sack-dollar"></i></div>
                 </div>
-                <h3 class="fw-bold mb-1 text-primary">Rp {{ number_format(, 0, ',', '.') }}</h3>
+                <h3 class="fw-bold mb-1 text-primary">Rp {{ number_format($pendapatanBersih, 0, ',', '.') }}</h3>
                 <small class="text-muted"><i class="fa-solid fa-chart-line text-primary me-1"></i>Margin Profit</small>
             </div>
         </div>
@@ -125,19 +230,19 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                @forelse( as )
+                                @forelse($transaksiTerbaru as $t)
                                 <tr>
-                                    <td class="fw-bold text-primary">#{{  }}</td>
+                                    <td class="fw-bold text-primary">#{{ $t->kode_transaksi }}</td>
                                     <td>
-                                        <div class="fw-semibold text-dark">{{  }}</div>
-                                        <small class="text-muted">Meja/Spot: {{  ?? '-' }}</small>
+                                        <div class="fw-semibold text-dark">{{ $t->nama_pemesan }}</div>
+                                        <small class="text-muted">Meja/Spot: {{ $t->meja_id ?? '-' }}</small>
                                     </td>
                                     <td>
-                                        <span class="badge bg-light text-dark border text-uppercase">{{  }}</span>
+                                        <span class="badge bg-light text-dark border text-uppercase">{{ $t->metode_pembayaran }}</span>
                                     </td>
-                                    <td class="fw-bold">Rp {{ number_format(, 0, ',', '.') }}</td>
+                                    <td class="fw-bold">Rp {{ number_format($t->total_harga, 0, ',', '.') }}</td>
                                     <td>
-                                        @if( == 'lunas')
+                                        @if($t->status_pembayaran == 'lunas')
                                             <span class="badge bg-success"><i class="fa-solid fa-check me-1"></i>Lunas</span>
                                         @else
                                             <span class="badge bg-warning text-dark"><i class="fa-solid fa-clock me-1"></i>Pending</span>
@@ -174,7 +279,7 @@
                                 <small class="text-muted">Petugas Operasional</small>
                             </div>
                         </div>
-                        <h4 class="fw-bold mb-0 text-primary">{{  }}</h4>
+                        <h4 class="fw-bold mb-0 text-primary">{{ $totalKasir }}</h4>
                     </div>
 
                     <div class="d-flex justify-content-between align-items-center p-3 rounded-3" style="background-color: #D5E3E6;">
@@ -185,7 +290,7 @@
                                 <small class="text-muted">Titik Scan Aktif</small>
                             </div>
                         </div>
-                        <h4 class="fw-bold mb-0 text-primary">{{  }}</h4>
+                        <h4 class="fw-bold mb-0 text-primary">{{ $totalMeja }}</h4>
                     </div>
                 </div>
             </div>
@@ -197,13 +302,13 @@
                 </div>
                 <div class="card-body p-3">
                     <ul class="list-group list-group-flush">
-                        @forelse( as )
+                        @forelse($produkTerlaris as $pt)
                         <li class="list-group-item d-flex justify-content-between align-items-center px-0 border-0 mb-2">
                             <div class="d-flex align-items-center gap-2">
                                 <span class="badge bg-primary rounded-circle p-2" style="width: 28px; height: 28px; display: flex; align-items: center; justify-content: center;"><i class="fa-solid fa-shapes"></i></span>
-                                <span class="fw-bold small text-dark">{{ ->nama_produk ?? 'Produk' }}</span>
+                                <span class="fw-bold small text-dark">{{ $pt->produk->nama_produk ?? 'Produk' }}</span>
                             </div>
-                            <span class="badge bg-light text-primary border fw-bold">{{  }} Terjual</span>
+                            <span class="badge bg-light text-primary border fw-bold">{{ $pt->total_terjual }} Terjual</span>
                         </li>
                         @empty
                         <li class="list-group-item px-0 border-0 text-center text-muted small py-3">
@@ -218,3 +323,7 @@
     </div>
 </div>
 @endsection
+HTML;
+file_put_contents($view_file, $view_code);
+
+echo "Owner Dashboard Revamped Successfully!";
