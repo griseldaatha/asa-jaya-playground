@@ -43,7 +43,6 @@
                 </div>
                 <button type="submit" class="btn btn-primary w-100 py-2 fw-bold"><i class="fa-solid fa-right-to-bracket"></i> MASUK</button>
             </form>
-            <p class="text-muted mt-4 mb-0" style="font-size: 0.85rem;">Hanya untuk karyawan & manajemen</p>
         </div>
     </div>
 
