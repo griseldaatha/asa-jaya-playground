@@ -37,7 +37,7 @@ CREATE TABLE `detail_transaksi` (
   KEY `produk_id` (`produk_id`),
   CONSTRAINT `detail_transaksi_ibfk_1` FOREIGN KEY (`transaksi_id`) REFERENCES `transaksi` (`id`) ON DELETE CASCADE,
   CONSTRAINT `detail_transaksi_ibfk_2` FOREIGN KEY (`produk_id`) REFERENCES `produk` (`id`) ON DELETE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -46,6 +46,7 @@ CREATE TABLE `detail_transaksi` (
 
 LOCK TABLES `detail_transaksi` WRITE;
 /*!40000 ALTER TABLE `detail_transaksi` DISABLE KEYS */;
+INSERT INTO `detail_transaksi` VALUES (1,1,1,2,10000,20000,'Anak umur 5 tahun','2026-10-05 18:46:03','2026-10-05 18:46:03'),(2,2,1,2,10000,20000,'Anak umur 5 tahun','2026-10-05 18:46:28','2026-10-05 18:46:28');
 /*!40000 ALTER TABLE `detail_transaksi` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -195,7 +196,7 @@ CREATE TABLE `produk` (
 
 LOCK TABLES `produk` WRITE;
 /*!40000 ALTER TABLE `produk` DISABLE KEYS */;
-INSERT INTO `produk` VALUES (1,1,'Tiket Mandi Bola (1 Jam)',10000,50,'produk/tiket_mandi_bola.jpg',1,NULL,'2026-10-05 18:22:53');
+INSERT INTO `produk` VALUES (1,1,'Tiket Mandi Bola (1 Jam)',10000,46,'produk/tiket_mandi_bola.jpg',1,NULL,'2026-10-05 18:46:28');
 /*!40000 ALTER TABLE `produk` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -228,7 +229,7 @@ CREATE TABLE `transaksi` (
   KEY `fk_transaksi_kasir` (`kasir_id`),
   CONSTRAINT `fk_transaksi_kasir` FOREIGN KEY (`kasir_id`) REFERENCES `users` (`id`) ON DELETE SET NULL,
   CONSTRAINT `transaksi_ibfk_2` FOREIGN KEY (`meja_id`) REFERENCES `meja` (`id`) ON DELETE SET NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -237,6 +238,7 @@ CREATE TABLE `transaksi` (
 
 LOCK TABLES `transaksi` WRITE;
 /*!40000 ALTER TABLE `transaksi` DISABLE KEYS */;
+INSERT INTO `transaksi` VALUES (1,'TRX-6AC452DB78F35','x1XKxlyN7DjKgMqmBAaJT9xVj3QgljYN',NULL,1,'Budi Tes','qr code','tunai',20000,'pending','menunggu','2026-10-06 01:46:03','2026-10-05 18:46:03','2026-10-05 18:46:03'),(2,'TRX-6AC452F4CD679','zNZwlpodaLKJTbJJvykzH10uhIix3ibU',2,1,'Budi Tes','qr code','tunai',20000,'lunas','selesai','2026-10-06 01:46:28','2026-10-05 18:46:28','2026-10-05 18:46:28');
 /*!40000 ALTER TABLE `transaksi` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -279,4 +281,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2026-10-06  8:23:06
+-- Dump completed on 2026-10-06  8:46:38
