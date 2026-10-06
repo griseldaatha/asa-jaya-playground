@@ -247,12 +247,8 @@
             <div class="pt-3">
                 @if(Auth::user()->role === 'owner')
                     <a href="{{ route('owner.dashboard') }}" class="{{ request()->routeIs('owner.dashboard') ? 'active' : '' }}"><i class="fa-solid fa-chart-line"></i> Dashboard Owner</a>
-                    <a href="{{ route('owner.karyawan.index') }}" class="{{ request()->routeIs('owner.karyawan.*') ? 'active' : '' }}"><i class="fa-solid fa-users-gear"></i> Kasir & User</a>
+                    <a href="{{ route('owner.karyawan.index') }}" class="{{ request()->routeIs('owner.karyawan.*') ? 'active' : '' }}"><i class="fa-solid fa-users-gear"></i> Kelola Kasir & User</a>
                     <a href="{{ route('owner.meja.index') }}" class="{{ request()->routeIs('owner.meja.*') ? 'active' : '' }}"><i class="fa-solid fa-qrcode"></i> Data Meja / QR</a>
-                    <a href="{{ route('admin.transaksi.index') }}" class="{{ request()->routeIs('admin.transaksi.*') ? 'active' : '' }}"><i class="fa-solid fa-clock-rotate-left"></i> Riwayat Transaksi</a>
-                    <a href="{{ route('admin.kategori.index') }}" class="{{ request()->routeIs('admin.kategori.*') ? 'active' : '' }}"><i class="fa-solid fa-tags"></i> Kategori Produk</a>
-                    <a href="{{ route('admin.produk.index') }}" class="{{ request()->routeIs('admin.produk.*') ? 'active' : '' }}"><i class="fa-solid fa-box-open"></i> Barang Penjualan</a>
-                    <a href="{{ route('admin.pengeluaran.index') }}" class="{{ request()->routeIs('admin.pengeluaran.*') ? 'active' : '' }}"><i class="fa-solid fa-money-bill-trend-up"></i> Pengeluaran</a>
                 @elseif(Auth::user()->role === 'kasir')
                     <a href="{{ route('kasir.dashboard') }}" class="{{ request()->routeIs('kasir.dashboard') ? 'active' : '' }}"><i class="fa-solid fa-bell-concierge"></i> Antrean Aktif (Live)</a>
                     <a href="{{ route('admin.transaksi.index') }}" class="{{ request()->routeIs('admin.transaksi.*') ? 'active' : '' }}"><i class="fa-solid fa-clock-rotate-left"></i> Riwayat Transaksi</a>
