@@ -130,10 +130,6 @@
             <span id="order-count-badge" class="badge bg-primary rounded-pill px-3 py-2 fs-6 shadow-sm fw-bold">
                 0 Pesanan
             </span>
-            <div class="live-indicator d-flex align-items-center gap-2">
-                <span class="live-dot"></span>
-                <span class="fw-bold text-secondary small">LIVE</span>
-            </div>
         </div>
     </div>
 
