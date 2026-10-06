@@ -1,3 +1,9 @@
+<?php
+
+$dir = __DIR__;
+$view_file = $dir . '/resources/views/owner/dashboard.blade.php';
+
+$blade_content = <<<'BLADE'
 @extends('layouts.admin')
 
 @section('content')
@@ -204,3 +210,7 @@
     </div>
 </div>
 @endsection
+BLADE;
+
+file_put_contents($view_file, $blade_content);
+echo "Hero banner removed!";
