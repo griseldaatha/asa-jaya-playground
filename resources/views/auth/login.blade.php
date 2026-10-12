@@ -502,7 +502,7 @@
                     <label for="username" class="form-label-custom">Username</label>
                     <div class="input-group-custom">
                         <i class="fa-regular fa-user"></i>
-                        <input type="text" name="username" id="username" value="{{ old('username') }}" placeholder="kasir1" required autofocus autocomplete="username">
+                        <input type="text" name="username" id="username" value="{{ old('username') }}" required autofocus autocomplete="username">
                     </div>
                 </div>
 
@@ -511,7 +511,7 @@
                     <label for="password" class="form-label-custom">Password</label>
                     <div class="input-group-custom">
                         <i class="fa-solid fa-lock" style="font-size: 0.95rem;"></i>
-                        <input type="password" name="password" id="password" placeholder="••••••••" required autocomplete="current-password">
+                        <input type="password" name="password" id="password" required autocomplete="current-password">
                         <button type="button" class="btn-toggle-eye" onclick="togglePasswordVisibility()" aria-label="Lihat Password">
                             <i class="fa-regular fa-eye" id="eyeIcon"></i>
                         </button>
