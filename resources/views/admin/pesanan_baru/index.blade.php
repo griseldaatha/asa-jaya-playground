@@ -149,7 +149,9 @@
                              data-harga="{{ $p->harga }}">
                             <div class="product-card h-100 shadow-sm" onclick="tambahKeKeranjang({{ $p->id }}, '{{ addslashes($p->nama_produk) }}', {{ $p->harga }}, {{ $p->stok }})">
                                 <div class="product-img-box position-relative">
-                                    @if($p->foto && file_exists(public_path('storage/'.$p->foto)))
+                                    @if($p->foto_produk && file_exists(public_path('storage/'.$p->foto_produk)))
+                                        <img src="{{ asset('storage/'.$p->foto_produk) }}" alt="{{ $p->nama_produk }}">
+                                    @elseif($p->foto && file_exists(public_path('storage/'.$p->foto)))
                                         <img src="{{ asset('storage/'.$p->foto) }}" alt="{{ $p->nama_produk }}">
                                     @else
                                         <i class="fa-solid fa-shapes text-secondary fs-1 opacity-50"></i>
