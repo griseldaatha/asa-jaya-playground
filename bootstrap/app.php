@@ -18,9 +18,22 @@ return Application::configure(basePath: dirname(__DIR__))
         ]);
         $middleware->validateCsrfTokens(except: [
             'midtrans/notification',
+            'keranjang/*',
+            'keranjang',
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {
+        $exceptions->render(function (\Illuminate\Session\TokenMismatchException $e, Request $request) {
+            if ($request->expectsJson() || $request->ajax()) {
+                return response()->json([
+                    'message' => 'Sesi telah berakhir. Silakan muat ulang halaman.',
+                    'csrf_expired' => true,
+                ], 419);
+            }
+
+            return redirect()->back(302, [], '/katalog')->with('warning', 'Sesi Anda telah diperbarui, silakan ulangi aksi Anda.');
+        });
+
         $exceptions->shouldRenderJsonWhen(
             fn (Request $request) => $request->is('api/*') || $request->expectsJson(),
         );

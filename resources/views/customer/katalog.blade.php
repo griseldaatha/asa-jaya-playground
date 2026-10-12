@@ -994,6 +994,8 @@
         function ubahJumlah(id, delta) {
             const form = document.getElementById('form-qty-' + id);
             const input = document.getElementById('input-qty-' + id);
+            const buttons = form.querySelectorAll('button');
+            buttons.forEach(btn => btn.disabled = true);
             let val = parseInt(input.value, 10) || 0;
             let newVal = val + delta;
             if (newVal < 0) newVal = 0;
