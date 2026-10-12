@@ -19,8 +19,20 @@ class RoleMiddleware
             return redirect('/login');
         }
 
+        $userRole = Auth::user()->role;
+
+        // Owner memiliki super-access ke semua fitur (owner, kasir, admin)
+        if ($userRole === 'owner') {
+            return $next($request);
+        }
+
         // 2. Cek apakah role user ada di dalam daftar yang diizinkan
-        if (! in_array(Auth::user()->role, $roles)) {
+        if (! in_array($userRole, $roles)) {
+            // Jika kasir mencoba mengakses halaman owner, alihkan dengan ramah ke dashboard kasir
+            if ($userRole === 'kasir') {
+                return redirect()->route('kasir.dashboard')->with('warning', 'Halaman tersebut hanya untuk Owner. Anda dialihkan ke Dashboard Kasir.');
+            }
+
             abort(403, 'Anda tidak memiliki hak akses ke halaman ini.');
         }
 

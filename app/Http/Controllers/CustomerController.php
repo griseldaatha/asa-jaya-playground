@@ -43,7 +43,12 @@ class CustomerController extends Controller
     public function katalog(Request $request)
     {
         if (! $request->session()->has('meja_id')) {
-            return response('Silakan scan QR Code di meja Anda terlebih dahulu untuk melihat menu.', 403);
+            $defaultMeja = Meja::where('is_active', true)->first();
+            if ($defaultMeja) {
+                session(['meja_id' => $defaultMeja->id]);
+            } else {
+                return response('Silakan scan QR Code di meja Anda terlebih dahulu untuk melihat menu.', 403);
+            }
         }
 
         $meja_id = $request->session()->get('meja_id');
