@@ -308,28 +308,9 @@
 
                     <!-- Tombol Cepat -->
                     <div class="mb-3">
-                        <div class="text-muted small fw-bold text-uppercase mb-1.5" style="font-size: 0.72rem; letter-spacing: 0.5px; color: #64748b !important;">Nominal Cepat:</div>
-                        <div class="row g-2">
-                            <div class="col-6">
-                                <button type="button" class="btn btn-sm w-100 fw-bold py-2 rounded-3 border transition-all" style="background-color: #FAF5EF; color: #5B6D92; border-color: #D5E3E6;" onclick="setNominalCepat('pas')">
-                                    <i class="fa-solid fa-equals me-1 text-primary"></i> Uang Pas
-                                </button>
-                            </div>
-                            <div class="col-6">
-                                <button type="button" class="btn btn-sm w-100 fw-bold py-2 rounded-3 bg-white text-dark border transition-all" style="border-color: #e2e8f0;" onclick="setNominalCepat(20000)">
-                                    Rp 20.000
-                                </button>
-                            </div>
-                            <div class="col-6">
-                                <button type="button" class="btn btn-sm w-100 fw-bold py-2 rounded-3 bg-white text-dark border transition-all" style="border-color: #e2e8f0;" onclick="setNominalCepat(50000)">
-                                    Rp 50.000
-                                </button>
-                            </div>
-                            <div class="col-6">
-                                <button type="button" class="btn btn-sm w-100 fw-bold py-2 rounded-3 bg-white text-dark border transition-all" style="border-color: #e2e8f0;" onclick="setNominalCepat(100000)">
-                                    Rp 100.000
-                                </button>
-                            </div>
+                        <div class="text-muted small fw-bold text-uppercase mb-1.5" style="font-size: 0.72rem; letter-spacing: 0.5px; color: #64748b !important;">Pilihan Nominal Cepat:</div>
+                        <div class="row g-2" id="containerTombolCepat">
+                            <!-- Diisi dinamis oleh JS berdasarkan total tagihan -->
                         </div>
                     </div>
 
@@ -475,10 +456,13 @@
                     <button type="button" class="btn btn-light text-secondary fw-semibold px-3 py-2 rounded-3 border" data-bs-dismiss="modal">
                         Tutup
                     </button>
-                    <a id="btnCetakStrukDetail" href="#" target="_blank" class="btn btn-primary px-3 py-2 rounded-3 fw-bold shadow-sm d-flex align-items-center gap-2" style="background-color: #5B6D92 !important; border-color: #5B6D92 !important;">
-                        <i class="fa-solid fa-print"></i>
-                        <span>Cetak Struk</span>
-                    </a>
+                    <div class="d-flex align-items-center gap-2">
+                        <span id="detailActionBtnContainer"></span>
+                        <a id="btnCetakStrukDetail" href="#" target="_blank" class="btn btn-primary px-3 py-2 rounded-3 fw-bold shadow-sm d-flex align-items-center gap-2" style="background-color: #5B6D92 !important; border-color: #5B6D92 !important;">
+                            <i class="fa-solid fa-print"></i>
+                            <span>Cetak Struk</span>
+                        </a>
+                    </div>
                 </div>
             </div>
         </div>
@@ -675,6 +659,19 @@
         // Link cetak struk modal
         document.getElementById('btnCetakStrukDetail').href = `/admin/transaksi/${p.id}/struk`;
 
+        // Tombol Terima Uang dari Detail jika masih pending Tunai
+        const actionBtnContainer = document.getElementById('detailActionBtnContainer');
+        if (p.status_pembayaran === 'pending' && !isQris) {
+            actionBtnContainer.innerHTML = `
+                <button type="button" onclick="modalDetailInstance.hide(); bukaModalBayar(${p.id}, '${p.kode_transaksi}', ${p.total_harga})" class="btn text-white px-3 py-2 rounded-3 fw-bold shadow-sm d-flex align-items-center gap-1.5" style="background-color: #198754; border-color: #198754;">
+                    <i class="fa-solid fa-money-bill-wave"></i>
+                    <span>Terima Uang</span>
+                </button>
+            `;
+        } else {
+            actionBtnContainer.innerHTML = '';
+        }
+
         if (modalDetailInstance) {
             modalDetailInstance.show();
         }
@@ -688,6 +685,56 @@
         if (!str) return 0;
         const cleaned = str.toString().replace(/[^0-9]/g, '');
         return cleaned ? parseInt(cleaned, 10) : 0;
+    }
+
+    function renderTombolCepat(total) {
+        const container = document.getElementById('containerTombolCepat');
+        if (!container) return;
+
+        let options = ['pas'];
+        const denominations = [10000, 20000, 50000, 100000, 150000, 200000];
+        
+        const round10k = Math.ceil(total / 10000) * 10000;
+        if (round10k > total && !denominations.includes(round10k)) {
+            denominations.push(round10k);
+        }
+        const round50k = Math.ceil(total / 50000) * 50000;
+        if (round50k > total && !denominations.includes(round50k)) {
+            denominations.push(round50k);
+        }
+        denominations.sort((a, b) => a - b);
+
+        for (const d of denominations) {
+            if (d >= total && !options.includes(d) && options.length < 4) {
+                options.push(d);
+            }
+        }
+        const fallback = [50000, 100000, 200000];
+        for (const fb of fallback) {
+            if (!options.includes(fb) && options.length < 4) {
+                options.push(fb);
+            }
+        }
+
+        container.innerHTML = options.map(opt => {
+            if (opt === 'pas') {
+                return `
+                    <div class="col-6">
+                        <button type="button" class="btn btn-sm w-100 fw-bold py-2 rounded-3 border transition-all text-truncate" style="background-color: #FAF5EF; color: #5B6D92; border-color: #D5E3E6;" onclick="setNominalCepat('pas')" title="Uang Pas">
+                            <i class="fa-solid fa-equals me-1 text-primary"></i> Uang Pas
+                        </button>
+                    </div>
+                `;
+            } else {
+                return `
+                    <div class="col-6">
+                        <button type="button" class="btn btn-sm w-100 fw-bold py-2 rounded-3 bg-white text-dark border transition-all" style="border-color: #e2e8f0;" onclick="setNominalCepat(${opt})">
+                            Rp ${formatRupiah(opt)}
+                        </button>
+                    </div>
+                `;
+            }
+        }).join('');
     }
 
     function bukaModalBayar(id, kode, total) {
@@ -704,6 +751,7 @@
         const inputUang = document.getElementById('inputUangDiterima');
         inputUang.value = '';
         
+        renderTombolCepat(bayarData.total);
         updateKembalianUI(0);
 
         if (modalBayarInstance) {
