@@ -145,79 +145,96 @@
 
     <!-- Modal Pembayaran Tunai (Fitur 1) -->
     <div class="modal fade" id="modalTerimaUang" tabindex="-1" aria-labelledby="modalBayarTitle" aria-hidden="true" data-bs-backdrop="static">
-        <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content border-0 shadow">
-                <div class="modal-header bg-light">
-                    <h5 class="modal-title fw-bold text-dark" id="modalBayarTitle">
-                        <i class="fa-solid fa-money-bill-wave text-success me-2"></i>Terima Uang - <span id="bayarKodeTrx" class="text-primary"></span>
-                    </h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        <div class="modal-dialog modal-dialog-centered" style="max-width: 440px;">
+            <div class="modal-content border-0 shadow-lg rounded-4 overflow-hidden" style="background-color: #ffffff;">
+                <div class="modal-header border-0 pb-0 pt-4 px-4 bg-white d-flex align-items-center justify-content-between">
+                    <div>
+                        <span class="badge rounded-pill px-2.5 py-1 text-uppercase fw-bold" style="background-color: #D5E3E6; color: #5B6D92; font-size: 0.72rem; letter-spacing: 0.5px;">
+                            <i class="fa-solid fa-money-bill-wave me-1"></i> Pembayaran Kasir
+                        </span>
+                        <h5 class="modal-title fw-bold text-dark mt-1 mb-0" id="modalBayarTitle" style="font-size: 1.15rem;">
+                            Terima Uang <span class="text-muted fw-normal" style="font-size: 0.9rem;">#<span id="bayarKodeTrx" class="fw-semibold text-primary"></span></span>
+                        </h5>
+                    </div>
+                    <button type="button" class="btn-close shadow-none" data-bs-dismiss="modal" aria-label="Close" style="font-size: 0.8rem;"></button>
                 </div>
                 
                 <!-- Form Input Bayar -->
-                <div id="formBayarContainer" class="modal-body p-4">
-                    <div class="text-center p-3 rounded-4 bg-light border mb-4">
-                        <div class="text-muted small fw-bold text-uppercase mb-1">Total Tagihan</div>
-                        <div class="display-6 fw-bold text-primary mb-0" id="bayarTotalText">Rp 0</div>
+                <div id="formBayarContainer" class="modal-body p-4 pt-3 bg-white">
+                    <!-- Card Total Tagihan -->
+                    <div class="p-3.5 rounded-4 text-center mb-3" style="background: linear-gradient(135deg, #F0E2D2 0%, #FAF5EF 100%); border: 1px solid rgba(91, 109, 146, 0.15);">
+                        <div class="text-muted small fw-bold text-uppercase mb-1" style="font-size: 0.75rem; letter-spacing: 0.8px; color: #64748b !important;">Total Tagihan</div>
+                        <div class="fw-bold mb-0" id="bayarTotalText" style="font-size: 2rem; color: #5B6D92; letter-spacing: -0.5px;">Rp 0</div>
                     </div>
 
+                    <!-- Input Uang Diterima -->
                     <div class="mb-3">
-                        <label for="inputUangDiterima" class="form-label fw-bold text-dark small text-uppercase">Uang Diterima (Rp)</label>
-                        <div class="input-group input-group-lg shadow-sm">
-                            <span class="input-group-text bg-white fw-bold text-secondary">Rp</span>
-                            <input type="text" id="inputUangDiterima" class="form-control fw-bold fs-4 text-dark" placeholder="0" autocomplete="off" oninput="onInputUangDiterima()">
+                        <label for="inputUangDiterima" class="form-label fw-bold text-dark small text-uppercase mb-1" style="font-size: 0.75rem; letter-spacing: 0.5px;">Uang Diterima (Rp)</label>
+                        <div class="input-group input-group-lg shadow-sm rounded-3 overflow-hidden border" style="border-color: #D5E3E6 !important;">
+                            <span class="input-group-text border-0 fw-bold px-3" style="background-color: #FAF5EF; color: #5B6D92; font-size: 1.05rem;">Rp</span>
+                            <input type="text" id="inputUangDiterima" class="form-control border-0 fw-bold fs-3 text-dark bg-white ps-2" placeholder="0" autocomplete="off" oninput="onInputUangDiterima()" style="box-shadow: none;">
                         </div>
                     </div>
 
                     <!-- Tombol Cepat -->
-                    <div class="mb-4">
-                        <div class="text-muted small fw-bold text-uppercase mb-2">Tombol Cepat:</div>
-                        <div class="d-flex flex-wrap gap-2">
-                            <button type="button" class="btn btn-outline-primary btn-sm flex-fill fw-bold py-2 shadow-sm" onclick="setNominalCepat('pas')">
-                                <i class="fa-solid fa-equals me-1"></i> Uang Pas
-                            </button>
-                            <button type="button" class="btn btn-outline-secondary btn-sm flex-fill fw-bold py-2 shadow-sm" onclick="setNominalCepat(20000)">
-                                20.000
-                            </button>
-                            <button type="button" class="btn btn-outline-secondary btn-sm flex-fill fw-bold py-2 shadow-sm" onclick="setNominalCepat(50000)">
-                                50.000
-                            </button>
-                            <button type="button" class="btn btn-outline-secondary btn-sm flex-fill fw-bold py-2 shadow-sm" onclick="setNominalCepat(100000)">
-                                100.000
-                            </button>
+                    <div class="mb-3">
+                        <div class="text-muted small fw-bold text-uppercase mb-1.5" style="font-size: 0.72rem; letter-spacing: 0.5px; color: #64748b !important;">Nominal Cepat:</div>
+                        <div class="row g-2">
+                            <div class="col-6">
+                                <button type="button" class="btn btn-sm w-100 fw-bold py-2 rounded-3 border transition-all" style="background-color: #FAF5EF; color: #5B6D92; border-color: #D5E3E6;" onclick="setNominalCepat('pas')">
+                                    <i class="fa-solid fa-equals me-1 text-primary"></i> Uang Pas
+                                </button>
+                            </div>
+                            <div class="col-6">
+                                <button type="button" class="btn btn-sm w-100 fw-bold py-2 rounded-3 bg-white text-dark border transition-all" style="border-color: #e2e8f0;" onclick="setNominalCepat(20000)">
+                                    Rp 20.000
+                                </button>
+                            </div>
+                            <div class="col-6">
+                                <button type="button" class="btn btn-sm w-100 fw-bold py-2 rounded-3 bg-white text-dark border transition-all" style="border-color: #e2e8f0;" onclick="setNominalCepat(50000)">
+                                    Rp 50.000
+                                </button>
+                            </div>
+                            <div class="col-6">
+                                <button type="button" class="btn btn-sm w-100 fw-bold py-2 rounded-3 bg-white text-dark border transition-all" style="border-color: #e2e8f0;" onclick="setNominalCepat(100000)">
+                                    Rp 100.000
+                                </button>
+                            </div>
                         </div>
                     </div>
 
                     <!-- Box Status Kembalian Live -->
-                    <div id="boxKembalianLive" class="alert alert-secondary p-3 mb-0 rounded-3 border d-flex align-items-center justify-content-between">
+                    <div id="boxKembalianLive" class="alert p-3 mb-0 rounded-3 border d-flex align-items-center transition-all" style="background-color: #f8fafc; border-color: #e2e8f0; color: #475569;">
                         <div class="d-flex align-items-center w-100">
-                            <i id="kembalianIcon" class="fa-solid fa-circle-info fs-4 me-3 text-secondary"></i>
+                            <div id="kembalianIconBox" class="rounded-circle d-flex align-items-center justify-content-center me-3 flex-shrink-0" style="width: 38px; height: 38px; background-color: #e2e8f0;">
+                                <i id="kembalianIcon" class="fa-solid fa-circle-info fs-5 text-secondary"></i>
+                            </div>
                             <div class="flex-grow-1">
-                                <div class="small fw-semibold" id="kembalianStatusLabel">Status Pembayaran</div>
-                                <div class="fw-bold fs-5" id="kembalianStatusValue">Masukkan uang diterima</div>
+                                <div class="small fw-semibold text-muted text-uppercase" style="font-size: 0.7rem; letter-spacing: 0.5px;" id="kembalianStatusLabel">Status Pembayaran</div>
+                                <div class="fw-bold fs-6 text-dark" id="kembalianStatusValue">Masukkan uang diterima</div>
                             </div>
                         </div>
                     </div>
                 </div>
 
                 <!-- Modal Footer untuk Form -->
-                <div class="modal-footer bg-light" id="modalBayarFooter">
-                    <button type="button" class="btn btn-outline-secondary px-3" data-bs-dismiss="modal">Batal</button>
-                    <button type="button" id="btnKonfirmasiBayar" class="btn btn-success fw-bold px-4 shadow-sm" disabled onclick="submitKonfirmasiBayar()">
-                        <i class="fa-solid fa-check me-1.5"></i> Konfirmasi
+                <div class="modal-footer border-top-0 pt-0 pb-4 px-4 bg-white d-flex justify-content-end gap-2" id="modalBayarFooter">
+                    <button type="button" class="btn btn-light text-secondary fw-semibold px-3 py-2 rounded-3 border" data-bs-dismiss="modal">Batal</button>
+                    <button type="button" id="btnKonfirmasiBayar" class="btn text-white fw-bold px-4 py-2 rounded-3 shadow-sm" style="background-color: #198754; border-color: #198754;" disabled onclick="submitKonfirmasiBayar()">
+                        <i class="fa-solid fa-check me-1.5"></i> Konfirmasi Bayar
                     </button>
                 </div>
 
                 <!-- View Sukses (Tampil Setelah Berhasil) -->
-                <div id="suksesBayarContainer" class="modal-body p-4 text-center" style="display: none;">
-                    <div class="mx-auto mb-3 text-success bg-success-subtle rounded-circle d-flex align-items-center justify-content-center shadow-sm" style="width: 76px; height: 76px;">
-                        <i class="fa-solid fa-circle-check fs-1"></i>
+                <div id="suksesBayarContainer" class="modal-body p-4 text-center bg-white" style="display: none;">
+                    <div class="mx-auto mb-3 text-white rounded-circle d-flex align-items-center justify-content-center shadow-sm" style="width: 70px; height: 70px; background-color: #198754;">
+                        <i class="fa-solid fa-check fs-2"></i>
                     </div>
                     <h4 class="fw-bold text-dark mb-1">Pembayaran Berhasil!</h4>
-                    <p class="text-muted small mb-4">Pesanan #<span id="suksesKodeTrx"></span> telah lunas.</p>
+                    <p class="text-muted small mb-4">Pesanan #<span id="suksesKodeTrx"></span> telah lunas tercatat.</p>
 
-                    <div class="p-3 bg-light rounded-4 border mb-4 text-start shadow-sm">
-                        <div class="d-flex justify-content-between text-muted small mb-1">
+                    <div class="p-3.5 rounded-4 border mb-4 text-start shadow-sm" style="background-color: #FAF5EF; border-color: #D5E3E6 !important;">
+                        <div class="d-flex justify-content-between text-muted small mb-1.5">
                             <span>Total Tagihan:</span>
                             <span class="fw-bold text-dark" id="suksesTotalTagihan">Rp 0</span>
                         </div>
@@ -225,19 +242,19 @@
                             <span>Uang Diterima:</span>
                             <span class="fw-bold text-dark" id="suksesUangDiterima">Rp 0</span>
                         </div>
-                        <hr class="my-2">
-                        <div class="d-flex justify-content-between align-items-center">
+                        <hr class="my-2" style="border-color: #D5E3E6;">
+                        <div class="d-flex justify-content-between align-items-center pt-1">
                             <span class="fw-bold text-dark fs-6">Kembalian:</span>
-                            <span class="fs-3 fw-bold text-success" id="suksesKembalianText">Rp 0</span>
+                            <span class="fs-2 fw-bold text-success" id="suksesKembalianText">Rp 0</span>
                         </div>
                     </div>
 
                     <div class="d-grid gap-2">
-                        <a id="btnCetakStrukModal" href="#" target="_blank" class="btn btn-primary btn-lg fw-bold shadow-sm">
-                            <i class="fa-solid fa-print me-2"></i> Cetak Struk
+                        <a id="btnCetakStrukModal" href="#" target="_blank" class="btn btn-primary py-2.5 fw-bold rounded-3 shadow-sm" style="background-color: #5B6D92 !important; border-color: #5B6D92 !important;">
+                            <i class="fa-solid fa-print me-2"></i> Cetak Struk Transaksi
                         </a>
-                        <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
-                            Tutup
+                        <button type="button" class="btn btn-light border py-2 text-secondary fw-semibold rounded-3" data-bs-dismiss="modal">
+                            Selesai & Tutup
                         </button>
                     </div>
                 </div>
@@ -320,34 +337,62 @@
 
     function updateKembalianUI(uangDiterima) {
         const box = document.getElementById('boxKembalianLive');
+        const iconBox = document.getElementById('kembalianIconBox');
         const icon = document.getElementById('kembalianIcon');
         const label = document.getElementById('kembalianStatusLabel');
         const val = document.getElementById('kembalianStatusValue');
         const btn = document.getElementById('btnKonfirmasiBayar');
 
         if (!uangDiterima || uangDiterima === 0) {
-            box.className = 'alert alert-secondary p-3 mb-0 rounded-3 border d-flex align-items-center justify-content-between';
-            icon.className = 'fa-solid fa-circle-info fs-4 me-3 text-secondary';
+            box.className = 'alert p-3 mb-0 rounded-3 border d-flex align-items-center transition-all';
+            box.style.backgroundColor = '#f8fafc';
+            box.style.borderColor = '#e2e8f0';
+            box.style.color = '#475569';
+            if (iconBox) {
+                iconBox.style.backgroundColor = '#e2e8f0';
+                iconBox.style.color = '#64748b';
+            }
+            icon.className = 'fa-solid fa-circle-info fs-5 text-secondary';
             label.textContent = 'Status Pembayaran';
+            val.className = 'fw-bold fs-6 text-dark';
             val.textContent = 'Masukkan uang diterima';
             btn.disabled = true;
+            btn.style.opacity = '0.6';
             return;
         }
 
         if (uangDiterima < bayarData.total) {
             const kurang = bayarData.total - uangDiterima;
-            box.className = 'alert alert-danger p-3 mb-0 rounded-3 border d-flex align-items-center justify-content-between';
-            icon.className = 'fa-solid fa-circle-xmark fs-4 me-3 text-danger';
+            box.className = 'alert p-3 mb-0 rounded-3 border d-flex align-items-center transition-all';
+            box.style.backgroundColor = '#fef2f2';
+            box.style.borderColor = '#fecaca';
+            box.style.color = '#991b1b';
+            if (iconBox) {
+                iconBox.style.backgroundColor = '#fee2e2';
+                iconBox.style.color = '#dc2626';
+            }
+            icon.className = 'fa-solid fa-circle-xmark fs-5 text-danger';
             label.textContent = 'Uang Belum Cukup';
-            val.textContent = 'Uang kurang Rp ' + formatRupiah(kurang);
+            val.className = 'fw-bold fs-6 text-danger';
+            val.textContent = 'Kurang Rp ' + formatRupiah(kurang);
             btn.disabled = true;
+            btn.style.opacity = '0.6';
         } else {
             const kembalian = uangDiterima - bayarData.total;
-            box.className = 'alert alert-success p-3 mb-0 rounded-3 border d-flex align-items-center justify-content-between';
-            icon.className = 'fa-solid fa-circle-check fs-4 me-3 text-success';
-            label.textContent = 'Kembalian Pas/Lebih';
-            val.textContent = 'Kembalian: Rp ' + formatRupiah(kembalian);
+            box.className = 'alert p-3 mb-0 rounded-3 border d-flex align-items-center transition-all';
+            box.style.backgroundColor = '#f0fdf4';
+            box.style.borderColor = '#bbf7d0';
+            box.style.color = '#166534';
+            if (iconBox) {
+                iconBox.style.backgroundColor = '#dcfce7';
+                iconBox.style.color = '#16a34a';
+            }
+            icon.className = 'fa-solid fa-circle-check fs-5 text-success';
+            label.textContent = kembalian === 0 ? 'Uang Pas' : 'Kembalian';
+            val.className = 'fw-bold fs-5 text-success';
+            val.textContent = kembalian === 0 ? 'Tidak ada kembalian' : 'Rp ' + formatRupiah(kembalian);
             btn.disabled = false;
+            btn.style.opacity = '1';
         }
     }
 
