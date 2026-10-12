@@ -165,6 +165,24 @@
             margin-bottom: 8px;
         }
 
+        .btn-more-items {
+            transition: all 0.2s ease;
+        }
+
+        .btn-more-items:hover {
+            background-color: #f5ebe0 !important;
+            border-color: #5B6D92 !important;
+        }
+
+        .btn-more-items:hover span.text-muted {
+            color: #43557A !important;
+        }
+
+        .btn-more-items:hover i {
+            transform: translateX(2px);
+            color: #5B6D92 !important;
+        }
+
         .item-pesanan-icon {
             width: 40px;
             height: 40px;
@@ -994,8 +1012,12 @@
                         </div>
                     `;
 
-                    // Item pesanan card
-                    let listItemsHtml = p.detail_transaksi.map(dt => `
+                    // Item pesanan card (tampilkan maksimal 2 item agar kartu rapi dan proporsional)
+                    const maxDisplayItems = 2;
+                    const itemsToDisplay = p.detail_transaksi ? p.detail_transaksi.slice(0, maxDisplayItems) : [];
+                    const sisaItemCount = (p.detail_transaksi ? p.detail_transaksi.length : 0) - maxDisplayItems;
+
+                    let listItemsHtml = itemsToDisplay.map(dt => `
                         <div class="item-pesanan-box">
                             <div class="d-flex align-items-center flex-grow-1 overflow-hidden me-2">
                                 <div class="item-pesanan-icon">
@@ -1008,6 +1030,18 @@
                             <span class="text-secondary fw-semibold" style="font-size: 0.9rem;">${dt.jumlah}x</span>
                         </div>
                     `).join('');
+
+                    if (sisaItemCount > 0) {
+                        listItemsHtml += `
+                            <div role="button" onclick="bukaModalDetail(${p.id})" class="btn-more-items py-2 px-3 rounded-3 d-flex align-items-center justify-content-between mb-2 text-decoration-none shadow-2xs" style="background-color: #FAF5EF; border: 1px dashed #D5E3E6; cursor: pointer;">
+                                <div class="d-flex align-items-center gap-2">
+                                    <span class="badge rounded-pill fw-bold px-2 py-1" style="background-color: #D5E3E6; color: #5B6D92; font-size: 0.72rem;">+${sisaItemCount} item lainnya</span>
+                                    <span class="fw-semibold text-muted" style="font-size: 0.8rem;">Lihat detail lengkap</span>
+                                </div>
+                                <i class="fa-solid fa-chevron-right text-muted" style="font-size: 0.75rem;"></i>
+                            </div>
+                        `;
+                    }
 
                     // Tombol Aksi Utama
                     let qrisPendingNotice = '';
