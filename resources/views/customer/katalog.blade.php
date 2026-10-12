@@ -687,8 +687,65 @@
                 padding: 16px 20px;
             }
 
-            .cart-panel-footer {
-                padding: 16px 20px 24px 20px;
+            /* Floating Mobile Cart Bar (Hijau Capsule) */
+            .mobile-cart-bar {
+                display: none;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .mobile-cart-bar {
+                display: flex !important;
+                position: fixed;
+                bottom: 20px;
+                left: 16px;
+                right: 16px;
+                background-color: #16a34a;
+                color: #ffffff;
+                border-radius: 18px;
+                padding: 14px 20px;
+                align-items: center;
+                justify-content: space-between;
+                box-shadow: 0 8px 24px rgba(22, 163, 74, 0.35);
+                z-index: 1030;
+                cursor: pointer;
+                text-decoration: none;
+                transition: transform 0.2s ease, box-shadow 0.2s ease;
+            }
+
+            .mobile-cart-bar:active {
+                transform: scale(0.98);
+            }
+
+            .mobile-cart-bar-left {
+                display: flex;
+                flex-direction: column;
+                line-height: 1.25;
+            }
+
+            .mobile-cart-bar-items {
+                font-weight: 800;
+                font-size: 1.05rem;
+                letter-spacing: -0.2px;
+            }
+
+            .mobile-cart-bar-right {
+                display: flex;
+                align-items: center;
+                gap: 6px;
+                font-weight: 800;
+                font-size: 1.05rem;
+                text-align: right;
+            }
+
+            .mobile-cart-bar-arrow {
+                font-size: 0.9rem;
+            }
+        }
+
+        @media (min-width: 769px) {
+            .mobile-cart-bar {
+                display: none !important;
             }
         }
 
@@ -831,11 +888,27 @@
         @endforeach
     </main>
 
+    <!-- FLOATING BOTTOM BAR KHUSUS MOBILE (HIJAU CAPSULE) -->
+    @if(!empty($items))
+        @php
+            $totalQtyItems = collect($items)->sum('jumlah');
+        @endphp
+        <div class="mobile-cart-bar" onclick="toggleCartPanel()">
+            <div class="mobile-cart-bar-left">
+                <span class="mobile-cart-bar-items">{{ $totalQtyItems }} item · Rp {{ number_format($total, 0, ',', '.') }}</span>
+            </div>
+            <div class="mobile-cart-bar-right">
+                <span>Lihat pesanan</span>
+                <i class="fa-solid fa-chevron-right mobile-cart-bar-arrow"></i>
+            </div>
+        </div>
+    @endif
+
     <!-- OVERLAY UNTUK PANEL SIDEBAR -->
-    <div class="cart-panel-overlay {{ !empty($items) ? 'show' : '' }}" id="cartOverlay" onclick="closeCartPanel()"></div>
+    <div class="cart-panel-overlay" id="cartOverlay" onclick="closeCartPanel()"></div>
 
     <!-- SIDEBAR PANEL KERANJANG (PESANAN ANDA) -->
-    <aside class="cart-sidebar-panel {{ !empty($items) ? 'open' : '' }}" id="cartSidebar">
+    <aside class="cart-sidebar-panel" id="cartSidebar">
         <div class="cart-panel-header">
             <h3 class="cart-panel-title">Pesanan Anda</h3>
             <button type="button" class="btn-close-panel" onclick="closeCartPanel()" aria-label="Tutup">
