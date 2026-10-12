@@ -8,13 +8,8 @@ use Illuminate\Support\Facades\Auth;
 class AuthController extends Controller
 {
     // Menampilkan halaman login
-    public function showLogin()
+    public function showLogin(Request $request)
     {
-        // Jika sudah login, langsung arahkan ke dashboard masing-masing
-        if (Auth::check()) {
-            return $this->redirectBasedOnRole(Auth::user()->role);
-        }
-
         return view('auth.login');
     }
 
