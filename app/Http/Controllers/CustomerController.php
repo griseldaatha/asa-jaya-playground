@@ -222,7 +222,7 @@ class CustomerController extends Controller
 
         // Jika memilih QRIS tapi belum dikonfigurasi, tolak ramah tanpa mengosongkan keranjang
         if ($request->metode_pembayaran === 'payment_gateway' && ! MidtransService::isConfigured()) {
-            return redirect()->route('keranjang.lihat')->with('error', 'QRIS belum dikonfigurasi.');
+            return back()->with('error', 'Metode pembayaran QRIS belum dikonfigurasi. Silakan pilih opsi Tunai.');
         }
 
         try {

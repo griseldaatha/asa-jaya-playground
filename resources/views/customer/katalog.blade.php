@@ -768,6 +768,20 @@
                 font-size: 1.05rem;
             }
         }
+
+        .payment-method-card {
+            background-color: #ffffff;
+            border-color: #cbd5e1 !important;
+            user-select: none;
+        }
+        .payment-method-card:has(input:checked) {
+            border-color: #5B6D92 !important;
+            background-color: #f1f5f9;
+            box-shadow: 0 0 0 1px #5B6D92;
+        }
+        .payment-method-card:hover {
+            border-color: #94a3b8 !important;
+        }
     </style>
 </head>
 <body class="{{ !empty($items) ? 'with-sidebar-desktop' : '' }}">
@@ -955,13 +969,46 @@
                     </div>
                     
                     @if(\App\Services\MidtransService::isConfigured())
-                        <input type="hidden" name="metode_pembayaran" value="payment_gateway">
-                        <div class="p-2 mb-3 bg-light rounded-3 border d-flex align-items-center justify-content-between">
-                            <span class="small fw-bold text-dark"><i class="fa-solid fa-qrcode text-primary me-1"></i> Pembayaran QRIS</span>
-                            <span class="badge bg-success-subtle text-success">Otomatis</span>
+                        <div class="mb-3">
+                            <label class="form-label fw-bold small text-muted mb-1.5" style="font-size: 0.78rem; letter-spacing: 0.3px;">METODE PEMBAYARAN</label>
+                            <div class="d-flex flex-column gap-2">
+                                <!-- Opsi QRIS -->
+                                <label class="payment-method-card d-flex align-items-center justify-content-between p-2.5 rounded-3 border" for="pay_qris" style="cursor: pointer; transition: all 0.2s ease;">
+                                    <div class="d-flex align-items-center gap-2.5">
+                                        <input type="radio" name="metode_pembayaran" id="pay_qris" value="payment_gateway" class="form-check-input m-0" checked>
+                                        <div>
+                                            <div class="small fw-bold text-dark d-flex align-items-center gap-1.5">
+                                                <i class="fa-solid fa-qrcode text-primary"></i>
+                                                <span>QRIS</span>
+                                            </div>
+                                            <div class="text-muted" style="font-size: 0.7rem;">GoPay, OVO, Dana, BCA, dll.</div>
+                                        </div>
+                                    </div>
+                                    <span class="badge bg-success-subtle text-success border border-success-subtle rounded-pill px-2 py-0.5" style="font-size: 0.68rem;">Otomatis</span>
+                                </label>
+
+                                <!-- Opsi Tunai -->
+                                <label class="payment-method-card d-flex align-items-center justify-content-between p-2.5 rounded-3 border" for="pay_tunai" style="cursor: pointer; transition: all 0.2s ease;">
+                                    <div class="d-flex align-items-center gap-2.5">
+                                        <input type="radio" name="metode_pembayaran" id="pay_tunai" value="tunai" class="form-check-input m-0">
+                                        <div>
+                                            <div class="small fw-bold text-dark d-flex align-items-center gap-1.5">
+                                                <i class="fa-solid fa-money-bill-wave text-success"></i>
+                                                <span>Tunai</span>
+                                            </div>
+                                            <div class="text-muted" style="font-size: 0.7rem;">Bayar langsung di kasir</div>
+                                        </div>
+                                    </div>
+                                    <span class="badge bg-secondary-subtle text-secondary border border-secondary-subtle rounded-pill px-2 py-0.5" style="font-size: 0.68rem;">Kasir</span>
+                                </label>
+                            </div>
                         </div>
                     @else
                         <input type="hidden" name="metode_pembayaran" value="tunai">
+                        <div class="p-2 mb-3 bg-light rounded-3 border d-flex align-items-center justify-content-between">
+                            <span class="small fw-bold text-dark"><i class="fa-solid fa-money-bill-wave text-success me-1"></i> Pembayaran Tunai</span>
+                            <span class="badge bg-secondary-subtle text-secondary">Bayar di Kasir</span>
+                        </div>
                     @endif
 
                     <button type="submit" class="btn-pesan-sekarang">

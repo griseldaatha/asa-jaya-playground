@@ -16,6 +16,19 @@
         .header { background: white; padding: 15px 20px; position: sticky; top: 0; z-index: 100; box-shadow: 0 2px 10px rgba(0,0,0,0.05); }
         .item-card { background: white; border-radius: 12px; padding: 15px; margin-bottom: 15px; box-shadow: 0 2px 5px rgba(0,0,0,0.02); border: 1px solid #f0f0f0; }
         .bottom-bar { position: fixed; bottom: 0; left: 0; width: 100%; background: white; padding: 15px 20px; box-shadow: 0 -4px 15px rgba(0,0,0,0.05); border-radius: 20px 20px 0 0; }
+        .payment-method-card {
+            background-color: #ffffff;
+            border-color: #cbd5e1 !important;
+            user-select: none;
+        }
+        .payment-method-card:has(input:checked) {
+            border-color: #5B6D92 !important;
+            background-color: #f1f5f9;
+            box-shadow: 0 0 0 1px #5B6D92;
+        }
+        .payment-method-card:hover {
+            border-color: #94a3b8 !important;
+        }
     </style>
 </head>
 <body>
@@ -60,20 +73,38 @@
                         <input type="text" name="nama_pemesan" class="form-control bg-light" placeholder="Contoh: Budi" required>
                     </div>
                     @if(\App\Services\MidtransService::isConfigured())
-                        <input type="hidden" name="metode_pembayaran" value="payment_gateway">
-                        <div class="mb-2">
-                            <label class="fw-bold small text-muted mb-1">METODE PEMBAYARAN</label>
-                            <div class="p-3 bg-light rounded-3 border d-flex align-items-center justify-content-between">
-                                <div class="d-flex align-items-center gap-2">
-                                    <span class="badge bg-primary px-2.5 py-1.5 fw-bold" style="font-size: 0.8rem;">
-                                        <i class="fa-solid fa-qrcode me-1"></i>QRIS
-                                    </span>
-                                    <div>
-                                        <div class="fw-bold text-dark small">Scan & Bayar Otomatis</div>
-                                        <div class="text-muted" style="font-size: 0.725rem;">GoPay, OVO, DANA, BCA, ShopeePay, dll.</div>
+                        <div class="mb-3">
+                            <label class="fw-bold small text-muted mb-1.5">METODE PEMBAYARAN</label>
+                            <div class="d-flex flex-column gap-2">
+                                <!-- QRIS -->
+                                <label class="payment-method-card d-flex align-items-center justify-content-between p-3 rounded-3 border" for="pay_qris_keranjang" style="cursor: pointer; transition: all 0.2s ease;">
+                                    <div class="d-flex align-items-center gap-3">
+                                        <input type="radio" name="metode_pembayaran" id="pay_qris_keranjang" value="payment_gateway" class="form-check-input m-0" checked>
+                                        <div>
+                                            <div class="fw-bold text-dark small d-flex align-items-center gap-1.5">
+                                                <i class="fa-solid fa-qrcode text-primary"></i>
+                                                <span>QRIS (Scan & Bayar Otomatis)</span>
+                                            </div>
+                                            <div class="text-muted" style="font-size: 0.725rem;">GoPay, OVO, DANA, BCA, ShopeePay, dll.</div>
+                                        </div>
                                     </div>
-                                </div>
-                                <span class="badge bg-success-subtle text-success border border-success-subtle rounded-pill px-2.5 py-1">Otomatis</span>
+                                    <span class="badge bg-success-subtle text-success border border-success-subtle rounded-pill px-2.5 py-1">Otomatis</span>
+                                </label>
+
+                                <!-- Tunai -->
+                                <label class="payment-method-card d-flex align-items-center justify-content-between p-3 rounded-3 border" for="pay_tunai_keranjang" style="cursor: pointer; transition: all 0.2s ease;">
+                                    <div class="d-flex align-items-center gap-3">
+                                        <input type="radio" name="metode_pembayaran" id="pay_tunai_keranjang" value="tunai" class="form-check-input m-0">
+                                        <div>
+                                            <div class="fw-bold text-dark small d-flex align-items-center gap-1.5">
+                                                <i class="fa-solid fa-money-bill-wave text-success"></i>
+                                                <span>Tunai</span>
+                                            </div>
+                                            <div class="text-muted" style="font-size: 0.725rem;">Bayar langsung di meja kasir</div>
+                                        </div>
+                                    </div>
+                                    <span class="badge bg-secondary-subtle text-secondary border border-secondary-subtle rounded-pill px-2.5 py-1">Di Kasir</span>
+                                </label>
                             </div>
                         </div>
                     @else
@@ -84,7 +115,7 @@
                                 <div class="d-flex align-items-center gap-2">
                                     <span class="badge bg-secondary px-2.5 py-1.5 fw-bold" style="font-size: 0.8rem;">
                                         <i class="fa-solid fa-money-bill-wave me-1"></i>TUNAI
-                                    </div>
+                                    </span>
                                     <span class="fw-bold text-dark small">Bayar di Kasir</span>
                                 </div>
                             </div>
