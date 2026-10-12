@@ -29,7 +29,7 @@ class KasirController extends Controller
     public function getPesananAktif()
     {
         // Hanya ambil pesanan yang belum Selesai dan belum Dibatalkan
-        $pesanan = Transaksi::with(['detailTransaksi.produk', 'meja'])
+        $pesanan = Transaksi::with(['detailTransaksi.produk', 'meja', 'kasir'])
             ->whereNotIn('status_pesanan', ['selesai', 'dibatalkan'])
             ->orderBy('created_at', 'asc')
             ->get();

@@ -199,6 +199,28 @@
             box-shadow: 0 6px 16px rgba(22, 163, 74, 0.3);
         }
 
+        .btn-action-secondary {
+            background-color: #ffffff !important;
+            border: 1px solid #cbd5e1 !important;
+            color: #334155 !important;
+            border-radius: 12px;
+            font-weight: 600;
+            padding: 8px 12px;
+            font-size: 0.85rem;
+            transition: all 0.2s ease;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .btn-action-secondary:hover {
+            background-color: #f8fafc !important;
+            color: #0f172a !important;
+            border-color: #94a3b8 !important;
+            transform: translateY(-1px);
+        }
+
         .btn-action-cancel {
             color: #dc2626;
             text-decoration: underline;
@@ -351,6 +373,98 @@
             </div>
         </div>
     </div>
+
+    <!-- Modal Detail Transaksi (Antrean Aktif) -->
+    <div class="modal fade" id="modalDetailTransaksi" tabindex="-1" aria-labelledby="modalDetailTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable" style="max-width: 520px;">
+            <div class="modal-content border-0 shadow-lg rounded-4 overflow-hidden" style="background-color: #ffffff;">
+                <div class="modal-header border-0 pb-0 pt-4 px-4 bg-white d-flex align-items-center justify-content-between">
+                    <div>
+                        <span class="badge rounded-pill px-2.5 py-1 text-uppercase fw-bold" style="background-color: #D5E3E6; color: #5B6D92; font-size: 0.72rem; letter-spacing: 0.5px;">
+                            <i class="fa-solid fa-receipt me-1"></i> Rincian Pesanan
+                        </span>
+                        <h5 class="modal-title fw-bold text-dark mt-1 mb-0" id="modalDetailTitle" style="font-size: 1.15rem;">
+                            Detail Transaksi <span class="text-primary fw-bold" id="detailKodeTrx">#</span>
+                        </h5>
+                    </div>
+                    <button type="button" class="btn-close shadow-none" data-bs-dismiss="modal" aria-label="Close" style="font-size: 0.8rem;"></button>
+                </div>
+
+                <div class="modal-body p-4 pt-3 bg-white">
+                    <!-- Info Pelanggan & Meja -->
+                    <div class="p-3 rounded-4 mb-3" style="background-color: #FAF5EF; border: 1px solid #D5E3E6;">
+                        <div class="row g-2">
+                            <div class="col-6">
+                                <span class="text-muted small d-block" style="font-size: 0.72rem;">Nama Pemesan</span>
+                                <span class="fw-bold text-dark fs-6" id="detailNamaPemesan">-</span>
+                            </div>
+                            <div class="col-6">
+                                <span class="text-muted small d-block" style="font-size: 0.72rem;">Meja / Lokasi</span>
+                                <span class="fw-bold text-dark fs-6" id="detailMeja">-</span>
+                            </div>
+                            <div class="col-6">
+                                <span class="text-muted small d-block" style="font-size: 0.72rem;">Waktu Pesan</span>
+                                <span class="text-secondary small fw-medium" id="detailWaktu">-</span>
+                            </div>
+                            <div class="col-6">
+                                <span class="text-muted small d-block" style="font-size: 0.72rem;">Metode Bayar</span>
+                                <span id="detailMetodeBayar">-</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Status Badges -->
+                    <div class="d-flex align-items-center justify-content-between mb-3 px-1">
+                        <div>
+                            <span class="text-muted small me-1">Status Bayar:</span>
+                            <span id="detailStatusBayar">-</span>
+                        </div>
+                        <div>
+                            <span class="text-muted small me-1">Status Pesanan:</span>
+                            <span id="detailStatusPesanan">-</span>
+                        </div>
+                    </div>
+
+                    <!-- Daftar Item Pesanan -->
+                    <div class="mb-3">
+                        <div class="text-muted small fw-bold text-uppercase mb-2" style="font-size: 0.72rem; letter-spacing: 0.5px;">
+                            Item Pesanan (<span id="detailTotalItemCount">0</span>)
+                        </div>
+                        <div id="detailListItems" class="d-flex flex-column gap-2" style="max-height: 200px; overflow-y: auto;">
+                            <!-- Injected by JS -->
+                        </div>
+                    </div>
+
+                    <!-- Rincian Finansial -->
+                    <div class="p-3 rounded-4 border bg-white shadow-sm" style="border-color: #e2e8f0 !important;">
+                        <div class="d-flex justify-content-between text-muted small mb-1.5">
+                            <span>Total Tagihan:</span>
+                            <span class="fw-bold text-dark fs-6" id="detailTotalHarga">Rp 0</span>
+                        </div>
+                        <div class="d-flex justify-content-between text-muted small mb-1.5">
+                            <span>Uang Diterima:</span>
+                            <span class="fw-bold text-dark" id="detailUangDiterima">-</span>
+                        </div>
+                        <hr class="my-2" style="border-color: #e2e8f0;">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <span class="fw-bold text-dark">Uang Kembalian:</span>
+                            <span class="fw-bold text-success fs-5" id="detailUangKembalian">-</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="modal-footer border-top-0 pt-0 pb-4 px-4 bg-white d-flex justify-content-between align-items-center">
+                    <button type="button" class="btn btn-light text-secondary fw-semibold px-3 py-2 rounded-3 border" data-bs-dismiss="modal">
+                        Tutup
+                    </button>
+                    <a id="btnCetakStrukDetail" href="#" target="_blank" class="btn btn-primary px-3 py-2 rounded-3 fw-bold shadow-sm d-flex align-items-center gap-2" style="background-color: #5B6D92 !important; border-color: #5B6D92 !important;">
+                        <i class="fa-solid fa-print"></i>
+                        <span>Cetak Struk</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 @endsection
 
@@ -358,7 +472,9 @@
 <script>
     const csrfToken = document.querySelector('meta[name="csrf-token"]').content;
     let modalBayarInstance = null;
+    let modalDetailInstance = null;
     let bayarData = { id: null, kode: '', total: 0 };
+    let activePesananList = [];
 
     document.addEventListener('DOMContentLoaded', function() {
         const modalEl = document.getElementById('modalTerimaUang');
@@ -368,7 +484,104 @@
                 fetchPesanan();
             });
         }
+
+        const modalDetailEl = document.getElementById('modalDetailTransaksi');
+        if (modalDetailEl) {
+            modalDetailInstance = new bootstrap.Modal(modalDetailEl);
+        }
     });
+
+    function bukaModalDetail(id) {
+        const p = activePesananList.find(item => item.id === id);
+        if (!p) return;
+
+        document.getElementById('detailKodeTrx').textContent = '#' + p.kode_transaksi;
+        document.getElementById('detailNamaPemesan').textContent = p.nama_pemesan || 'Pelanggan';
+        
+        let namaMeja = p.meja ? `Meja #${p.meja.nomor_meja ?? p.meja.id}` : (p.meja_id ? `Meja #${p.meja_id}` : 'Kasir / Langsung');
+        document.getElementById('detailMeja').textContent = namaMeja;
+
+        let waktuStr = '-';
+        if (p.created_at) {
+            const dateObj = new Date(p.created_at.includes('T') ? p.created_at : p.created_at.replace(' ', 'T'));
+            if (!isNaN(dateObj.getTime())) {
+                waktuStr = dateObj.toLocaleDateString('id-ID', { day: 'numeric', month: 'short', year: 'numeric' }) + ' ' + 
+                           dateObj.toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' }).replace(':', '.') + ' WIB';
+            }
+        }
+        document.getElementById('detailWaktu').textContent = waktuStr;
+
+        let isQris = (p.metode_pembayaran === 'payment_gateway');
+        document.getElementById('detailMetodeBayar').innerHTML = isQris
+            ? '<span class="badge bg-light text-dark border px-2 py-1"><i class="fa-solid fa-qrcode text-primary me-1"></i>QRIS</span>'
+            : '<span class="badge bg-light text-dark border px-2 py-1"><i class="fa-solid fa-money-bill-wave text-success me-1"></i>TUNAI</span>';
+
+        let badgeBayar = '';
+        if (p.status_pembayaran === 'lunas') {
+            badgeBayar = '<span class="badge bg-success-subtle text-success border border-success-subtle rounded-pill px-2.5 py-1 fw-bold"><i class="fa-solid fa-circle-check me-1"></i>LUNAS</span>';
+        } else if (p.status_pembayaran === 'batal') {
+            badgeBayar = '<span class="badge bg-danger-subtle text-danger border border-danger-subtle rounded-pill px-2.5 py-1 fw-bold"><i class="fa-solid fa-circle-xmark me-1"></i>BATAL</span>';
+        } else {
+            badgeBayar = '<span class="badge bg-warning-subtle text-dark border border-warning-subtle rounded-pill px-2.5 py-1 fw-bold"><i class="fa-solid fa-clock me-1"></i>MENUNGGU</span>';
+        }
+        document.getElementById('detailStatusBayar').innerHTML = badgeBayar;
+
+        let badgePesanan = '';
+        if (p.status_pesanan === 'menunggu') {
+            badgePesanan = '<span class="badge bg-secondary-subtle text-secondary border border-secondary-subtle rounded-pill px-2.5 py-1 fw-bold"><i class="fa-solid fa-hourglass-start me-1"></i>MENUNGGU</span>';
+        } else if (p.status_pesanan === 'diproses') {
+            badgePesanan = '<span class="badge bg-primary-subtle text-primary border border-primary-subtle rounded-pill px-2.5 py-1 fw-bold"><i class="fa-solid fa-fire-burner me-1"></i>DIPROSES</span>';
+        } else if (p.status_pesanan === 'selesai') {
+            badgePesanan = '<span class="badge bg-info-subtle text-info-emphasis border border-info-subtle rounded-pill px-2.5 py-1 fw-bold"><i class="fa-solid fa-check-double me-1"></i>SELESAI</span>';
+        } else {
+            badgePesanan = '<span class="badge bg-dark-subtle text-dark rounded-pill px-2.5 py-1 fw-bold">' + (p.status_pesanan || '-') + '</span>';
+        }
+        document.getElementById('detailStatusPesanan').innerHTML = badgePesanan;
+
+        // Render item list
+        const items = p.detail_transaksi || [];
+        document.getElementById('detailTotalItemCount').textContent = items.length;
+        const containerItems = document.getElementById('detailListItems');
+        if (items.length === 0) {
+            containerItems.innerHTML = '<div class="text-muted small text-center py-2">Tidak ada item pesanan</div>';
+        } else {
+            containerItems.innerHTML = items.map((dt, idx) => `
+                <div class="p-2.5 rounded-3 border d-flex justify-content-between align-items-center" style="background-color: #f8fafc;">
+                    <div class="d-flex align-items-center gap-2 overflow-hidden me-2">
+                        <span class="badge bg-white text-dark border rounded-circle" style="width: 24px; height: 24px; display: inline-flex; align-items: center; justify-content: center; font-size: 11px;">${idx + 1}</span>
+                        <div class="overflow-hidden">
+                            <div class="fw-bold text-dark text-truncate" style="font-size: 0.9rem;">${dt.produk ? dt.produk.nama_produk : 'Produk'}</div>
+                            ${dt.catatan ? `<div class="text-muted small" style="font-size: 0.75rem;"><i class="fa-regular fa-note-sticky me-1"></i>${dt.catatan}</div>` : ''}
+                        </div>
+                    </div>
+                    <div class="text-end flex-shrink-0">
+                        <div class="fw-bold text-dark small">Rp ${formatRupiah(dt.subtotal)}</div>
+                        <div class="text-muted" style="font-size: 0.72rem;">${dt.jumlah}x @ Rp ${formatRupiah(dt.harga_satuan)}</div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Finansial
+        document.getElementById('detailTotalHarga').textContent = 'Rp ' + formatRupiah(p.total_harga);
+        if (isQris) {
+            document.getElementById('detailUangDiterima').innerHTML = '<span class="text-primary small fw-semibold"><i class="fa-solid fa-qrcode me-1"></i>QRIS Otomatis</span>';
+            document.getElementById('detailUangKembalian').innerHTML = '<span class="text-muted small fw-normal">Rp 0 (Uang Pas)</span>';
+        } else if (p.uang_diterima !== null && p.uang_diterima !== undefined) {
+            document.getElementById('detailUangDiterima').textContent = 'Rp ' + formatRupiah(p.uang_diterima);
+            document.getElementById('detailUangKembalian').textContent = 'Rp ' + formatRupiah(p.uang_kembalian || 0);
+        } else {
+            document.getElementById('detailUangDiterima').innerHTML = '<span class="text-muted fst-italic">Belum dibayar</span>';
+            document.getElementById('detailUangKembalian').innerHTML = '<span class="text-muted fst-italic">-</span>';
+        }
+
+        // Link cetak struk modal
+        document.getElementById('btnCetakStrukDetail').href = `/admin/transaksi/${p.id}/struk`;
+
+        if (modalDetailInstance) {
+            modalDetailInstance.show();
+        }
+    }
 
     function formatRupiah(num) {
         return new Intl.NumberFormat('id-ID').format(Math.max(0, num || 0));
@@ -547,6 +760,7 @@
         fetch('/kasir/api/pesanan-aktif')
             .then(res => res.json())
             .then(data => {
+                activePesananList = data;
                 const container = document.getElementById('antrean-container');
                 const countBadge = document.getElementById('order-count-badge');
                 if (countBadge) {
@@ -650,7 +864,7 @@
                         </div>
                     `).join('');
 
-                    // Tombol Aksi
+                    // Tombol Aksi Utama
                     let qrisPendingNotice = '';
                     let actionBtnHtml = '';
 
@@ -730,10 +944,25 @@
                                     </div>
                                 </div>
 
-                                <!-- Tombol Aksi & Pembatalan -->
+                                <!-- Tombol Aksi Utama -->
                                 <div class="mt-auto">
                                     ${qrisPendingNotice}
                                     ${actionBtnHtml}
+
+                                    <!-- Tombol Detail Transaksi & Cetak Struk -->
+                                    <div class="row g-2 mb-2">
+                                        <div class="col-6">
+                                            <button type="button" onclick="bukaModalDetail(${p.id})" class="btn-action-secondary w-100" title="Lihat Detail Transaksi">
+                                                <i class="fa-solid fa-receipt me-1.5 text-primary"></i> Detail
+                                            </button>
+                                        </div>
+                                        <div class="col-6">
+                                            <a href="/admin/transaksi/${p.id}/struk" target="_blank" class="btn-action-secondary w-100" title="Cetak Struk Transaksi">
+                                                <i class="fa-solid fa-print me-1.5 text-secondary"></i> Struk
+                                            </a>
+                                        </div>
+                                    </div>
+
                                     ${btnBatalHtml}
                                     <div class="text-center mt-2">
                                         <span class="text-muted fw-bold" style="font-size: 0.8rem; letter-spacing: 0.3px;">#${p.kode_transaksi}</span>
