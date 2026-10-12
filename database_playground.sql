@@ -37,7 +37,7 @@ CREATE TABLE `detail_transaksi` (
   KEY `produk_id` (`produk_id`),
   CONSTRAINT `detail_transaksi_ibfk_1` FOREIGN KEY (`transaksi_id`) REFERENCES `transaksi` (`id`) ON DELETE CASCADE,
   CONSTRAINT `detail_transaksi_ibfk_2` FOREIGN KEY (`produk_id`) REFERENCES `produk` (`id`) ON DELETE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -46,7 +46,7 @@ CREATE TABLE `detail_transaksi` (
 
 LOCK TABLES `detail_transaksi` WRITE;
 /*!40000 ALTER TABLE `detail_transaksi` DISABLE KEYS */;
-INSERT INTO `detail_transaksi` VALUES (1,1,1,2,10000,20000,'Anak umur 5 tahun','2026-10-05 18:46:03','2026-10-05 18:46:03'),(2,2,1,2,10000,20000,'Anak umur 5 tahun','2026-10-05 18:46:28','2026-10-05 18:46:28');
+INSERT INTO `detail_transaksi` VALUES (1,1,1,2,10000,20000,'Anak umur 5 tahun','2026-10-05 18:46:03','2026-10-05 18:46:03'),(2,2,1,2,10000,20000,'Anak umur 5 tahun','2026-10-05 18:46:28','2026-10-05 18:46:28'),(3,3,1,3,10000,30000,NULL,'2026-10-05 19:11:20','2026-10-05 19:11:20'),(4,4,1,3,10000,30000,NULL,'2026-10-05 19:14:33','2026-10-05 19:14:33'),(5,5,1,1,10000,10000,NULL,'2026-10-05 19:27:56','2026-10-05 19:27:56'),(6,6,1,1,10000,10000,NULL,'2026-10-05 19:31:32','2026-10-05 19:31:32'),(7,7,1,1,10000,10000,NULL,'2026-10-05 19:44:02','2026-10-05 19:44:02');
 /*!40000 ALTER TABLE `detail_transaksi` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -113,13 +113,15 @@ DROP TABLE IF EXISTS `meja`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `meja` (
   `id` bigint unsigned NOT NULL AUTO_INCREMENT,
+  `nomor_meja` int DEFAULT NULL,
   `qr_token` varchar(255) DEFAULT NULL,
   `qr_code_url` varchar(100) DEFAULT NULL,
   `is_active` tinyint(1) DEFAULT '1',
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`),
-  UNIQUE KEY `qr_token` (`qr_token`)
+  UNIQUE KEY `qr_token` (`qr_token`),
+  UNIQUE KEY `nomor_meja` (`nomor_meja`)
 ) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -129,7 +131,7 @@ CREATE TABLE `meja` (
 
 LOCK TABLES `meja` WRITE;
 /*!40000 ALTER TABLE `meja` DISABLE KEYS */;
-INSERT INTO `meja` VALUES (1,'X7A9',NULL,1,NULL,NULL),(2,'KATD0',NULL,1,'2026-09-14 23:54:34','2026-09-14 23:54:34'),(3,'1FZTB',NULL,1,'2026-10-05 18:58:12','2026-10-05 18:58:12');
+INSERT INTO `meja` VALUES (1,1,'X7A9',NULL,1,NULL,NULL),(2,2,'KATD0',NULL,1,'2026-09-14 23:54:34','2026-09-14 23:54:34'),(3,3,'1FZTB',NULL,1,'2026-10-05 18:58:12','2026-10-05 18:58:12');
 /*!40000 ALTER TABLE `meja` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -196,7 +198,7 @@ CREATE TABLE `produk` (
 
 LOCK TABLES `produk` WRITE;
 /*!40000 ALTER TABLE `produk` DISABLE KEYS */;
-INSERT INTO `produk` VALUES (1,1,'Tiket Mandi Bola (1 Jam)',10000,46,'produk/tiket_mandi_bola.jpg',1,NULL,'2026-10-05 18:46:28');
+INSERT INTO `produk` VALUES (1,1,'Tiket Mandi Bola (1 Jam)',10000,37,'produk/tiket_mandi_bola.jpg',1,NULL,'2026-10-05 19:44:02');
 /*!40000 ALTER TABLE `produk` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -217,6 +219,11 @@ CREATE TABLE `transaksi` (
   `tipe_pesanan` enum('qr code','kasir') DEFAULT NULL,
   `metode_pembayaran` enum('tunai','payment_gateway') DEFAULT NULL,
   `total_harga` int DEFAULT NULL,
+  `uang_diterima` int DEFAULT NULL,
+  `uang_kembalian` int DEFAULT NULL,
+  `midtrans_transaction_id` varchar(64) DEFAULT NULL,
+  `qris_url` varchar(255) DEFAULT NULL,
+  `qris_expired_at` datetime DEFAULT NULL,
   `status_pembayaran` enum('pending','lunas','batal','kadaluarsa') DEFAULT NULL,
   `status_pesanan` enum('menunggu','diproses','selesai','dibatalkan') DEFAULT NULL,
   `waktu_transaksi` datetime DEFAULT NULL,
@@ -229,7 +236,7 @@ CREATE TABLE `transaksi` (
   KEY `fk_transaksi_kasir` (`kasir_id`),
   CONSTRAINT `fk_transaksi_kasir` FOREIGN KEY (`kasir_id`) REFERENCES `users` (`id`) ON DELETE SET NULL,
   CONSTRAINT `transaksi_ibfk_2` FOREIGN KEY (`meja_id`) REFERENCES `meja` (`id`) ON DELETE SET NULL
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -238,7 +245,7 @@ CREATE TABLE `transaksi` (
 
 LOCK TABLES `transaksi` WRITE;
 /*!40000 ALTER TABLE `transaksi` DISABLE KEYS */;
-INSERT INTO `transaksi` VALUES (1,'TRX-6AC452DB78F35','x1XKxlyN7DjKgMqmBAaJT9xVj3QgljYN',NULL,1,'Budi Tes','qr code','tunai',20000,'pending','menunggu','2026-10-06 01:46:03','2026-10-05 18:46:03','2026-10-05 18:46:03'),(2,'TRX-6AC452F4CD679','zNZwlpodaLKJTbJJvykzH10uhIix3ibU',2,1,'Budi Tes','qr code','tunai',20000,'lunas','selesai','2026-10-06 01:46:28','2026-10-05 18:46:28','2026-10-05 18:46:28');
+INSERT INTO `transaksi` VALUES (1,'TRX-6AC452DB78F35','x1XKxlyN7DjKgMqmBAaJT9xVj3QgljYN',2,1,'Budi Tes','qr code','tunai',20000,NULL,NULL,NULL,NULL,NULL,'lunas','selesai','2026-10-06 01:46:03','2026-10-05 18:46:03','2026-10-05 19:13:36'),(2,'TRX-6AC452F4CD679','zNZwlpodaLKJTbJJvykzH10uhIix3ibU',2,1,'Budi Tes','qr code','tunai',20000,NULL,NULL,NULL,NULL,NULL,'lunas','selesai','2026-10-06 01:46:28','2026-10-05 18:46:28','2026-10-05 18:46:28'),(3,'TRX-6AC458C899F82','OWMEAozGXy6CXAKAczpSh8jVGBA2zhyX',2,2,'tes','qr code','tunai',30000,NULL,NULL,NULL,NULL,NULL,'lunas','selesai','2026-10-06 02:11:20','2026-10-05 19:11:20','2026-10-05 19:13:05'),(4,'TRX-6AC45989031A0','JljiwSvZPEUkvxyCtWaeHUBD1KPtgkFm',2,3,'tes','qr code','tunai',30000,NULL,NULL,NULL,NULL,NULL,'lunas','selesai','2026-10-06 02:14:33','2026-10-05 19:14:33','2026-10-05 19:28:42'),(5,'TRX-6AC45CACABB94','swT9D8by5SPpXhdwU6rmejHfq45JpuYs',NULL,3,'tes','qr code','tunai',10000,NULL,NULL,NULL,NULL,NULL,'pending','menunggu','2026-10-06 02:27:56','2026-10-05 19:27:56','2026-10-05 19:27:56'),(6,'TRX-6AC45D84AAC98','oPT4ntjtVmPeRu6jRDzJCBgAiFpb7qBm',NULL,1,'fahmi','qr code','tunai',10000,NULL,NULL,NULL,NULL,NULL,'pending','menunggu','2026-10-06 02:31:32','2026-10-05 19:31:32','2026-10-05 19:31:32'),(7,'TRX-6AC46072C4AFD','0Z4DCXYaTbi55kW5wIcZzeFlkBx76P8p',NULL,1,'fahmi','qr code','tunai',10000,NULL,NULL,NULL,NULL,NULL,'pending','menunggu','2026-10-06 02:44:02','2026-10-05 19:44:02','2026-10-05 19:44:02');
 /*!40000 ALTER TABLE `transaksi` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -281,4 +288,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2026-10-06  9:04:38
+-- Dump completed on 2026-10-12 10:25:31
