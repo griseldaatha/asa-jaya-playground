@@ -3,8 +3,8 @@
 @section('content')
 <!-- Header Action -->
 <div class="d-flex justify-content-end align-items-center mb-4">
-    <button class="btn btn-primary shadow-sm px-3 d-flex align-items-center gap-2" data-bs-toggle="modal" data-bs-target="#modalTambah">
-        <i class="fa-solid fa-plus"></i>
+    <button class="btn btn-primary d-flex align-items-center gap-2 shadow-sm rounded-3 px-3 py-2 fw-semibold" data-bs-toggle="modal" data-bs-target="#modalTambah">
+        <i class="fa-solid fa-plus-circle fs-6"></i>
         <span>Catat Pengeluaran</span>
     </button>
 </div>
@@ -29,43 +29,95 @@
 </div>
 
 <!-- Modal Catat Pengeluaran -->
-<div class="modal fade" id="modalTambah" tabindex="-1" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title fw-bold"><i class="fa-solid fa-file-circle-plus text-primary me-2"></i>Catat Pengeluaran Baru</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <form action="{{ route('admin.pengeluaran.store') }}" method="POST">
-                @csrf
-                <div class="modal-body">
-                    <div class="mb-3">
-                        <label class="form-label fw-semibold small text-secondary">Tanggal Pengeluaran <span class="text-danger">*</span></label>
-                        <input type="date" name="tanggal_pengeluaran" class="form-control" value="{{ date('Y-m-d') }}" required>
+<div class="modal fade" id="modalTambah" tabindex="-1" aria-labelledby="modalTambahPengeluaranTitle" aria-hidden="true" data-bs-backdrop="static">
+    <div class="modal-dialog modal-dialog-centered" style="max-width: 520px;">
+        <div class="modal-content border-0 rounded-4 overflow-hidden shadow-lg" style="background-color: #ffffff;">
+            <!-- Header Modal Bersih & Modern -->
+            <div class="modal-header border-0 pb-0 pt-4 px-4 bg-white d-flex align-items-center justify-content-between">
+                <div class="d-flex align-items-center gap-3">
+                    <div class="rounded-3 d-flex align-items-center justify-content-center shadow-sm" style="width: 44px; height: 44px; background: linear-gradient(135deg, #5B6D92 0%, #43557A 100%); color: #ffffff;">
+                        <i class="fa-solid fa-file-circle-plus fs-5"></i>
                     </div>
-                    <div class="mb-3">
-                        <label class="form-label fw-semibold small text-secondary">Kategori Pengeluaran <span class="text-danger">*</span></label>
-                        <select name="kategori_pengeluaran_id" class="form-select" required>
-                            @foreach($kategori as $kat)
-                                <option value="{{ $kat->id }}">{{ $kat->nama_kategori }}</option>
-                            @endforeach
-                        </select>
-                    </div>
-                    <div class="mb-3">
-                        <label class="form-label fw-semibold small text-secondary">Nominal (Rp) <span class="text-danger">*</span></label>
-                        <div class="input-group">
-                            <span class="input-group-text bg-light fw-bold text-muted">Rp</span>
-                            <input type="number" name="nominal" class="form-control" placeholder="0" required min="1">
-                        </div>
-                    </div>
-                    <div class="mb-3">
-                        <label class="form-label fw-semibold small text-secondary">Keterangan / Rincian</label>
-                        <input type="text" name="keterangan" class="form-control" placeholder="Contoh: Beli sapu dan pel lantai">
+                    <div>
+                        <h5 class="modal-title fw-bold text-dark mb-0" id="modalTambahPengeluaranTitle" style="font-size: 1.2rem; letter-spacing: -0.3px;">
+                            Catat Pengeluaran Baru
+                        </h5>
                     </div>
                 </div>
-                <div class="modal-footer bg-light">
-                    <button type="button" class="btn btn-secondary px-3" data-bs-dismiss="modal">Batal</button>
-                    <button type="submit" class="btn btn-primary px-4"><i class="fa-solid fa-floppy-disk me-1"></i> Simpan Catatan</button>
+                <button type="button" class="btn-close shadow-none" data-bs-dismiss="modal" aria-label="Close" style="font-size: 0.85rem;"></button>
+            </div>
+
+            <form action="{{ route('admin.pengeluaran.store') }}" method="POST">
+                @csrf
+                <div class="modal-body p-4 pt-3 bg-white">
+                    <div class="row g-3">
+                        <!-- Tanggal Pengeluaran -->
+                        <div class="col-12">
+                            <label class="form-label fw-bold small text-dark mb-1" style="font-size: 0.82rem;">
+                                Tanggal Pengeluaran <span class="text-danger">*</span>
+                            </label>
+                            <div class="input-group shadow-sm rounded-3 overflow-hidden border" style="border-color: #e2e8f0 !important;">
+                                <span class="input-group-text border-0 bg-light text-secondary px-3">
+                                    <i class="fa-regular fa-calendar"></i>
+                                </span>
+                                <input type="date" name="tanggal_pengeluaran" class="form-control border-0 ps-2 fw-semibold text-dark bg-white" value="{{ date('Y-m-d') }}" required style="font-size: 0.92rem; box-shadow: none;">
+                            </div>
+                        </div>
+
+                        <!-- Kategori Pengeluaran -->
+                        <div class="col-12">
+                            <label class="form-label fw-bold small text-dark mb-1" style="font-size: 0.82rem;">
+                                Kategori Pengeluaran <span class="text-danger">*</span>
+                            </label>
+                            <div class="input-group shadow-sm rounded-3 overflow-hidden border" style="border-color: #e2e8f0 !important;">
+                                <span class="input-group-text border-0 bg-light text-secondary px-3">
+                                    <i class="fa-solid fa-shapes"></i>
+                                </span>
+                                <select name="kategori_pengeluaran_id" class="form-select border-0 ps-2 fw-semibold text-dark bg-white" required style="font-size: 0.92rem; box-shadow: none;">
+                                    @foreach($kategori as $kat)
+                                        <option value="{{ $kat->id }}">{{ $kat->nama_kategori }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        </div>
+
+                        <!-- Nominal -->
+                        <div class="col-12">
+                            <label class="form-label fw-bold small text-dark mb-1" style="font-size: 0.82rem;">
+                                Nominal (Rp) <span class="text-danger">*</span>
+                            </label>
+                            <div class="input-group shadow-sm rounded-3 overflow-hidden border" style="border-color: #e2e8f0 !important;">
+                                <span class="input-group-text border-0 bg-light text-secondary px-3 fw-bold" style="font-size: 0.88rem;">
+                                    Rp
+                                </span>
+                                <input type="number" name="nominal" class="form-control border-0 ps-2 fw-semibold text-dark bg-white" placeholder="0" required min="1" style="font-size: 0.92rem; box-shadow: none;">
+                            </div>
+                        </div>
+
+                        <!-- Keterangan / Rincian -->
+                        <div class="col-12">
+                            <label class="form-label fw-bold small text-dark mb-1" style="font-size: 0.82rem;">
+                                Keterangan / Rincian <span class="text-muted fw-normal">(Opsional)</span>
+                            </label>
+                            <div class="input-group shadow-sm rounded-3 overflow-hidden border" style="border-color: #e2e8f0 !important;">
+                                <span class="input-group-text border-0 bg-light text-secondary px-3">
+                                    <i class="fa-regular fa-comment-dots"></i>
+                                </span>
+                                <input type="text" name="keterangan" class="form-control border-0 ps-2 fw-semibold text-dark bg-white" placeholder="Contoh: Beli sapu dan pel lantai" maxlength="255" style="font-size: 0.92rem; box-shadow: none;">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Footer Tombol Aksi -->
+                <div class="modal-footer border-top-0 pt-0 pb-4 px-4 bg-white d-flex justify-content-end gap-2">
+                    <button type="button" class="btn btn-light text-secondary px-3 py-2 rounded-3 border fw-semibold" data-bs-dismiss="modal">
+                        Batal
+                    </button>
+                    <button type="submit" class="btn text-white px-4 py-2 rounded-3 fw-bold shadow-sm d-flex align-items-center gap-2" style="background-color: #43557A; border-color: #43557A;">
+                        <i class="fa-solid fa-floppy-disk"></i>
+                        <span>Simpan Catatan</span>
+                    </button>
                 </div>
             </form>
         </div>
