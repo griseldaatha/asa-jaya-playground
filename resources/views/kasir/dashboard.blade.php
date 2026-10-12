@@ -52,65 +52,167 @@
 
         /* Kasir Card Styling */
         .kasir-card {
-            border: none;
-            border-radius: var(--kasir-card-radius);
-            box-shadow: 0 4px 14px rgba(0, 0, 0, 0.05);
+            border: 1px solid #edf2f7;
+            border-radius: 24px;
+            box-shadow: 0 4px 18px rgba(0, 0, 0, 0.04);
             transition: transform 0.25s ease, box-shadow 0.25s ease;
             background: #ffffff;
             overflow: hidden;
         }
 
         .kasir-card:hover {
-            transform: translateY(-4px);
-            box-shadow: 0 12px 26px rgba(0, 0, 0, 0.1);
+            transform: translateY(-3px);
+            box-shadow: 0 10px 24px rgba(0, 0, 0, 0.08);
         }
 
-        /* Status Accents */
-        .kasir-card.card-pending {
-            border-top: 5px solid #ffc107;
-            background: linear-gradient(180deg, #fffdf2 0%, #ffffff 120px);
-        }
-
-        .kasir-card.card-lunas {
-            border-top: 5px solid #198754;
-        }
-
-        .kasir-card.card-diproses {
-            border-top: 5px solid #0d6efd;
-        }
-
-        /* Touch-friendly Buttons */
-        .btn-kasir-action {
-            min-height: 44px;
-            font-size: 0.925rem;
-            border-radius: 10px;
-            font-weight: 700;
-            transition: all 0.2s ease;
-            display: inline-flex;
+        /* Avatar Pemesan */
+        .kasir-avatar {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            background-color: #fde047;
+            color: #854d0e;
+            font-weight: 800;
+            font-size: 1.35rem;
+            display: flex;
             align-items: center;
             justify-content: center;
+            flex-shrink: 0;
         }
 
-        .btn-kasir-action:hover {
-            transform: translateY(-1px);
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        /* Stepper Wizard Mini */
+        .stepper-mini {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            position: relative;
+            margin: 1rem 0;
+            padding: 0 6px;
         }
 
-        /* Badge Styling */
-        .badge-kasir {
-            font-size: 0.725rem;
-            padding: 5px 10px;
-            border-radius: 30px;
+        .step-mini-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            position: relative;
+            z-index: 2;
+        }
+
+        .step-mini-circle {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.85rem;
             font-weight: 700;
-            letter-spacing: 0.3px;
+            background-color: #e2e8f0;
+            color: #64748b;
+            transition: all 0.2s ease;
         }
 
-        /* Price Tag Block */
-        .price-tag-container {
-            background: rgba(13, 110, 253, 0.06);
-            border-radius: 12px;
+        .step-mini-item.active .step-mini-circle {
+            background-color: #f59e0b;
+            color: #ffffff;
+        }
+
+        .step-mini-item.completed .step-mini-circle {
+            background-color: #16a34a;
+            color: #ffffff;
+        }
+
+        .step-mini-label {
+            font-size: 0.725rem;
+            font-weight: 600;
+            margin-top: 5px;
+            color: #64748b;
+        }
+
+        .step-mini-item.active .step-mini-label {
+            color: #b45309;
+            font-weight: 700;
+        }
+
+        .step-mini-item.completed .step-mini-label {
+            color: #15803d;
+            font-weight: 700;
+        }
+
+        .step-mini-line {
+            flex-grow: 1;
+            height: 4px;
+            background-color: #e2e8f0;
+            border-radius: 4px;
+            margin: 0 8px;
+            margin-bottom: 22px;
+            z-index: 1;
+        }
+
+        .step-mini-line.active {
+            background-color: #16a34a;
+        }
+
+        /* Item Pesanan Box */
+        .item-pesanan-box {
+            background-color: #fef7ee;
+            border: 1px solid #fdebd2;
+            border-radius: 16px;
             padding: 10px 14px;
-            border: 1px solid rgba(13, 110, 253, 0.12);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 8px;
+        }
+
+        .item-pesanan-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 12px;
+            background-color: #fed7aa;
+            color: #c2410c;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.15rem;
+            margin-right: 12px;
+            flex-shrink: 0;
+        }
+
+        /* Action Buttons */
+        .btn-action-main {
+            background-color: #16a34a !important;
+            border-color: #16a34a !important;
+            color: #ffffff !important;
+            border-radius: 14px;
+            font-weight: 700;
+            padding: 12px 16px;
+            font-size: 1rem;
+            transition: all 0.2s ease;
+            box-shadow: 0 4px 12px rgba(22, 163, 74, 0.2);
+        }
+
+        .btn-action-main:hover {
+            background-color: #15803d !important;
+            border-color: #15803d !important;
+            transform: translateY(-1px);
+            box-shadow: 0 6px 16px rgba(22, 163, 74, 0.3);
+        }
+
+        .btn-action-cancel {
+            color: #dc2626;
+            text-decoration: underline;
+            font-size: 0.875rem;
+            font-weight: 600;
+            background: none;
+            border: none;
+            padding: 6px 0;
+            cursor: pointer;
+            transition: color 0.15s ease;
+        }
+
+        .btn-action-cancel:hover {
+            color: #991b1b;
         }
     </style>
 
@@ -483,97 +585,170 @@
                 data.forEach(p => {
                     let isQris = (p.metode_pembayaran === 'payment_gateway');
                     let badgeMetode = isQris 
-                        ? `<span class="badge bg-primary text-white badge-kasir"><i class="fa-solid fa-qrcode me-1"></i>QRIS</span>` 
-                        : `<span class="badge bg-secondary text-white badge-kasir"><i class="fa-solid fa-money-bill-wave me-1"></i>TUNAI</span>`;
+                        ? `<span class="badge rounded-pill px-2.5 py-1 fw-bold" style="background-color: #f1f5f9; color: #475569; font-size: 0.75rem;"><i class="fa-solid fa-qrcode me-1"></i>QRIS</span>` 
+                        : `<span class="badge rounded-pill px-2.5 py-1 fw-bold" style="background-color: #e2e8f0; color: #475569; font-size: 0.75rem;"><i class="fa-solid fa-money-bill-wave me-1"></i>Tunai</span>`;
 
-                    let btnLunas = '';
+                    // Inisial avatar
+                    let inisial = (p.nama_pemesan && p.nama_pemesan.trim().length > 0) ? p.nama_pemesan.trim().charAt(0).toUpperCase() : 'P';
+                    
+                    // Format waktu jam:menit
+                    let waktuStr = '';
+                    if (p.created_at) {
+                        const dateObj = new Date(p.created_at.includes('T') ? p.created_at : p.created_at.replace(' ', 'T'));
+                        if (!isNaN(dateObj.getTime())) {
+                            waktuStr = dateObj.toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' }).replace(':', '.');
+                        }
+                    }
+                    let namaMeja = p.meja ? `Meja #${p.meja.nomor_meja ?? p.meja.id}` : (p.meja_id ? `Meja #${p.meja_id}` : 'Kasir');
+                    let infoSub = `${namaMeja}${waktuStr ? ' · masuk ' + waktuStr : ''}`;
+
+                    // Stepper: 1: Pesan, 2: Bayar, 3: Selesai
+                    let step1Class = 'completed'; // selalu selesai karena sudah masuk antrean
+                    let step2Class = '';
+                    let step3Class = '';
+                    let line1Class = '';
+                    let line2Class = '';
+
+                    if (p.status_pembayaran === 'pending') {
+                        // Sedang menunggu bayar
+                        step2Class = 'active';
+                        line1Class = 'active';
+                    } else if (p.status_pembayaran === 'lunas') {
+                        step2Class = 'completed';
+                        line1Class = 'active';
+                        if (p.status_pesanan === 'selesai') {
+                            step3Class = 'completed';
+                            line2Class = 'active';
+                        } else {
+                            step3Class = 'active';
+                        }
+                    }
+
+                    let stepperHtml = `
+                        <div class="stepper-mini">
+                            <div class="step-mini-item ${step1Class}">
+                                <div class="step-mini-circle"><i class="fa-solid fa-check"></i></div>
+                                <div class="step-mini-label">Pesan</div>
+                            </div>
+                            <div class="step-mini-line ${line1Class}"></div>
+                            <div class="step-mini-item ${step2Class}">
+                                <div class="step-mini-circle">
+                                    ${step2Class === 'completed' ? '<i class="fa-solid fa-check"></i>' : '2'}
+                                </div>
+                                <div class="step-mini-label">Bayar</div>
+                            </div>
+                            <div class="step-mini-line ${line2Class}"></div>
+                            <div class="step-mini-item ${step3Class}">
+                                <div class="step-mini-circle">
+                                    ${step3Class === 'completed' ? '<i class="fa-solid fa-check"></i>' : '3'}
+                                </div>
+                                <div class="step-mini-label">Selesai</div>
+                            </div>
+                        </div>
+                    `;
+
+                    // Item pesanan card
+                    let listItemsHtml = p.detail_transaksi.map(dt => `
+                        <div class="item-pesanan-box">
+                            <div class="d-flex align-items-center flex-grow-1 overflow-hidden me-2">
+                                <div class="item-pesanan-icon">
+                                    <i class="fa-solid fa-ticket"></i>
+                                </div>
+                                <span class="fw-bold text-dark text-truncate" style="font-size: 0.95rem;">
+                                    ${dt.produk ? dt.produk.nama_produk : 'Produk'}
+                                </span>
+                            </div>
+                            <span class="text-secondary fw-semibold" style="font-size: 0.9rem;">${dt.jumlah}x</span>
+                        </div>
+                    `).join('');
+
+                    // Tombol Aksi
                     let qrisPendingNotice = '';
+                    let actionBtnHtml = '';
 
                     if (p.status_pembayaran === 'pending') {
                         if (isQris) {
                             qrisPendingNotice = `
-                                <div class="alert alert-warning py-2 px-3 small d-flex align-items-center mb-2 rounded-3 border-warning-subtle">
+                                <div class="alert alert-warning py-2.5 px-3 small d-flex align-items-center mb-3 rounded-4 border-warning-subtle text-dark">
                                     <div class="spinner-border spinner-border-sm text-warning me-2" role="status"></div>
-                                    <span class="fw-semibold text-dark" style="font-size: 0.825rem;">Menunggu pembayaran QRIS</span>
+                                    <span class="fw-semibold" style="font-size: 0.85rem;">Menunggu pembayaran QRIS...</span>
                                 </div>
                             `;
                         } else {
-                            btnLunas = `<button onclick="bukaModalBayar(${p.id}, '${p.kode_transaksi}', ${p.total_harga})" class="btn btn-kasir-action btn-success w-100 mb-2 shadow-sm"><i class="fa-solid fa-money-bill-wave me-2"></i> Terima Uang</button>`;
+                            actionBtnHtml = `
+                                <button onclick="bukaModalBayar(${p.id}, '${p.kode_transaksi}', ${p.total_harga})" class="btn btn-action-main w-100 mb-2">
+                                    <i class="fa-solid fa-money-bill-wave me-2"></i> Terima uang
+                                </button>
+                            `;
                         }
+                    } else if (p.status_pesanan === 'menunggu' && p.status_pembayaran === 'lunas') {
+                        actionBtnHtml = `
+                            <button onclick="updateStatus(${p.id}, 'diproses')" class="btn btn-action-main w-100 mb-2" style="background-color: #5B6D92 !important; border-color: #5B6D92 !important;">
+                                <i class="fa-solid fa-fire-burner me-2"></i> Proses Pesanan
+                            </button>
+                        `;
+                    } else if (p.status_pesanan === 'diproses') {
+                        actionBtnHtml = `
+                            <button onclick="updateStatus(${p.id}, 'selesai')" class="btn btn-action-main w-100 mb-2" style="background-color: #0284c7 !important; border-color: #0284c7 !important;">
+                                <i class="fa-solid fa-check-double me-2"></i> Selesai (Serahkan)
+                            </button>
+                        `;
                     }
 
-                    let btnProses = (p.status_pesanan === 'menunggu' && p.status_pembayaran === 'lunas') ? `<button onclick="updateStatus(${p.id}, 'diproses')" class="btn btn-kasir-action btn-primary w-100 mb-2 shadow-sm"><i class="fa-solid fa-fire-burner me-2"></i> Proses Pesanan</button>` : '';
-                    let btnSelesai = p.status_pesanan === 'diproses' ? `<button onclick="updateStatus(${p.id}, 'selesai')" class="btn btn-kasir-action btn-info text-white w-100 mb-2 shadow-sm"><i class="fa-solid fa-check-double me-2"></i> Selesai (Serahkan)</button>` : '';
-                    let btnBatal = p.status_pembayaran === 'pending' ? `<button onclick="updateStatus(${p.id}, 'batal')" class="btn btn-kasir-action btn-outline-danger w-100"><i class="fa-solid fa-xmark me-2"></i> Batal (Kembalikan Stok)</button>` : '';
-                    
-                    let bgBorder = p.status_pembayaran === 'lunas' ? (p.status_pesanan === 'diproses' ? 'card-diproses' : 'card-lunas') : 'card-pending';
-
-                    let badgePembayaran = p.status_pembayaran === 'lunas' 
-                        ? `<span class="badge bg-success-subtle text-success border border-success-subtle badge-kasir"><i class="fa-solid fa-circle-check me-1"></i>LUNAS</span>` 
-                        : `<span class="badge bg-warning-subtle text-dark border border-warning-subtle badge-kasir"><i class="fa-solid fa-triangle-exclamation me-1"></i>BELUM BAYAR</span>`;
-
-                    let badgePesanan = p.status_pesanan === 'diproses'
-                        ? `<span class="badge bg-primary-subtle text-primary border border-primary-subtle badge-kasir"><i class="fa-solid fa-fire-burner me-1"></i>DIPROSES</span>`
-                        : `<span class="badge bg-secondary-subtle text-secondary border border-secondary-subtle badge-kasir"><i class="fa-solid fa-hourglass-start me-1"></i>MENUNGGU</span>`;
-
-                    let listItems = p.detail_transaksi.map(dt => `
-                        <li class="list-group-item py-2 px-3 text-sm d-flex justify-content-between align-items-center bg-transparent border-bottom">
-                            <span class="text-dark fw-medium small me-2 text-truncate" style="max-width: 160px;" title="${dt.produk ? dt.produk.nama_produk : 'Dihapus'}">
-                                ${dt.produk ? dt.produk.nama_produk : 'Dihapus'}
-                            </span>
-                            <span class="badge bg-dark-subtle text-dark-emphasis rounded-pill px-2.5 py-1 fw-bold" style="font-size: 11px;">${dt.jumlah}x</span>
-                        </li>
-                    `).join('');
-
-                    let waktuRelatif = getRelativeTime(p.created_at);
-                    let namaMeja = p.meja ? `Meja #${p.meja.nomor_meja ?? p.meja.id}` : (p.meja_id ? `Meja #${p.meja_id}` : 'Kasir / Langsung');
-                    let iconMeja = p.meja_id ? 'fa-chair text-warning' : 'fa-cash-register text-info';
+                    let btnBatalHtml = p.status_pembayaran === 'pending' ? `
+                        <div class="text-center mt-1">
+                            <button onclick="updateStatus(${p.id}, 'batal')" class="btn-action-cancel">
+                                Batal (Kembalikan stok)
+                            </button>
+                        </div>
+                    ` : '';
 
                     let html = `
-                        <div class="col-xl-3 col-lg-4 col-md-6 col-12">
-                            <div class="card h-100 kasir-card ${bgBorder}">
-                                <div class="card-body p-4 d-flex flex-column justify-content-between">
-                                    <div>
-                                        <div class="d-flex justify-content-between align-items-start mb-2">
-                                            <div>
-                                                <h5 class="fw-bold text-dark mb-0 fs-5">#${p.kode_transaksi}</h5>
-                                                ${waktuRelatif ? `<small class="text-muted" style="font-size: 11px;"><i class="fa-regular fa-clock me-1"></i>${waktuRelatif}</small>` : ''}
-                                            </div>
-                                            <div class="d-flex flex-column align-items-end gap-1">
-                                                <div class="d-flex gap-1">
-                                                    ${badgeMetode}
-                                                    ${badgePembayaran}
-                                                </div>
-                                                ${badgePesanan}
-                                            </div>
+                        <div class="col-xl-4 col-lg-6 col-12">
+                            <div class="card h-100 kasir-card p-4">
+                                <!-- Top Bar: Avatar, Nama, Meja, Badge Tunai/QRIS -->
+                                <div class="d-flex align-items-center justify-content-between mb-2">
+                                    <div class="d-flex align-items-center gap-3 overflow-hidden me-2">
+                                        <div class="kasir-avatar">
+                                            ${inisial}
                                         </div>
-                                        
-                                        <div class="bg-light p-2.5 rounded-3 mb-3 d-flex justify-content-between align-items-center mt-2">
-                                            <span class="small text-dark fw-semibold text-truncate me-2">
-                                                <i class="fa-solid fa-user text-primary me-1.5"></i>${p.nama_pemesan}
-                                            </span>
-                                            <span class="badge bg-white text-dark border shadow-sm fw-bold small">
-                                                <i class="fa-solid ${iconMeja} me-1"></i>${namaMeja}
-                                            </span>
-                                        </div>
-                                        
-                                        <div class="mb-3">
-                                            <div class="text-uppercase text-muted fw-bold mb-1" style="font-size: 10px; letter-spacing: 0.5px;">Item Pesanan:</div>
-                                            <ul class="list-group list-group-flush border rounded-3 overflow-hidden">
-                                                ${listItems}
-                                            </ul>
+                                        <div class="overflow-hidden">
+                                            <h5 class="fw-bold text-dark mb-0 text-truncate" style="font-size: 1.2rem; letter-spacing: -0.3px;">
+                                                ${p.nama_pemesan || 'Pelanggan'}
+                                            </h5>
+                                            <div class="text-muted small" style="font-size: 0.85rem;">
+                                                ${infoSub}
+                                            </div>
                                         </div>
                                     </div>
-                                    
                                     <div>
-                                        <div class="price-tag-container d-flex justify-content-between align-items-center mb-3">
-                                            <span class="small text-muted fw-semibold">Total Bayar:</span>
-                                            <h5 class="fw-bold text-primary mb-0">Rp ${new Intl.NumberFormat('id-ID').format(p.total_harga)}</h5>
-                                        </div>
-                                        
-                                        <div class="actions">
-                                            ${qrisPendingNotice} ${btnLunas} ${btnProses} ${btnSelesai} ${btnBatal}
-                                        </div>
+                                        ${badgeMetode}
+                                    </div>
+                                </div>
+
+                                <!-- Stepper Status (Pesan -> Bayar -> Selesai) -->
+                                ${stepperHtml}
+
+                                <!-- Daftar Item Pesanan -->
+                                <div class="my-2 flex-grow-1">
+                                    ${listItemsHtml}
+                                </div>
+
+                                <!-- Total Bayar -->
+                                <div class="d-flex justify-content-between align-items-baseline my-3">
+                                    <span class="text-secondary fw-normal fs-6">Total bayar</span>
+                                    <div class="fw-bold text-dark" style="font-size: 1.85rem; letter-spacing: -0.5px;">
+                                        Rp ${new Intl.NumberFormat('id-ID').format(p.total_harga)}
+                                    </div>
+                                </div>
+
+                                <!-- Tombol Aksi & Pembatalan -->
+                                <div class="mt-auto">
+                                    ${qrisPendingNotice}
+                                    ${actionBtnHtml}
+                                    ${btnBatalHtml}
+                                    <div class="text-center mt-2">
+                                        <span class="text-muted fw-bold" style="font-size: 0.8rem; letter-spacing: 0.3px;">#${p.kode_transaksi}</span>
                                     </div>
                                 </div>
                             </div>
