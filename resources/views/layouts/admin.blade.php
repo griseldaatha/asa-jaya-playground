@@ -265,10 +265,7 @@
         <!-- Page Content -->
         <div id="content">
             <div class="topbar">
-                <h6 class="m-0 text-secondary fw-semibold">
-                    <i class="fa-solid fa-shield-halved me-1 text-primary"></i>
-                    @if(Auth::user()->role === 'owner') Portal Owner @else Portal Kasir @endif
-                </h6>
+                <div></div>
                 <div class="d-flex align-items-center">
                     <span class="me-3 fw-medium text-dark small"><i class="fa-regular fa-circle-user text-primary me-1"></i> Halo, {{ Auth::user()->nama }}</span>
                     <form action="{{ route('logout') }}" method="POST" class="m-0">
