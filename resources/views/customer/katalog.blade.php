@@ -3,186 +3,766 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Katalog Asa Jaya</title>
+    <title>Katalog Asa Jaya Playground</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
     <style>
-        body { background-color: #F0E2D2; /* Warna beige seperti di foto */ font-family: 'Segoe UI', sans-serif; height: 100vh; overflow: hidden; }
-        
-        .layout-container { display: flex; height: 100vh; }
-        
-        /* LEFT SIDE - MENU */
-        .left-side { flex: 1; padding: 20px; overflow-y: auto; }
-        
-        /* Horizontal Category Pills */
-        .category-scroll { display: flex; overflow-x: auto; gap: 10px; padding-bottom: 15px; scrollbar-width: none; }
-        .category-scroll::-webkit-scrollbar { display: none; }
-        .cat-pill { background: white; border: none; border-radius: 12px; padding: 10px 20px; font-weight: bold; color: #555; white-space: nowrap; display: flex; align-items: center; gap: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.05); text-decoration: none; transition: 0.2s; }
-        .cat-pill:hover, .cat-pill.active { background: white; color: #5B6D92; border: 2px solid #5B6D92; }
-        
-        /* Product Cards */
-        .product-card { background: white; border-radius: 15px; overflow: hidden; padding: 12px; border: none; box-shadow: 0 4px 8px rgba(0,0,0,0.05); height: 100%; display: flex; flex-direction: column; position: relative; }
-        .badge-new { position: absolute; top: 12px; left: 12px; background: #5B6D92; color: white; padding: 2px 8px; border-radius: 4px; font-size: 0.7rem; font-weight: bold; z-index: 2; }
-        .product-img { width: 100%; height: 140px; object-fit: cover; border-radius: 10px; margin-bottom: 12px; background-color: #eee; }
-        .product-title { font-weight: bold; font-size: 0.95rem; line-height: 1.2; margin-bottom: 5px; color: #333; }
-        .product-price { font-weight: bold; font-size: 0.85rem; color: #000; margin-bottom: 15px; }
-        .btn-tambah { background: #5B6D92; color: white; border: none; width: 100%; padding: 8px; border-radius: 8px; font-size: 0.85rem; font-weight: bold; transition: 0.2s; }
-        .btn-tambah:hover { background: #5B6D92; }
-
-        /* RIGHT SIDE - CART */
-        .right-side { width: 350px; background: white; box-shadow: -5px 0 15px rgba(0,0,0,0.05); border-radius: 20px 0 0 20px; display: flex; flex-direction: column; }
-        @media (max-width: 991px) {
-            .layout-container { flex-direction: column; overflow-y: auto; height: auto; }
-            .left-side { overflow-y: visible; padding-bottom: 0; }
-            .right-side { width: 100%; border-radius: 20px 20px 0 0; margin-top: 20px; min-height: 400px; }
+        :root {
+            --bg-canvas: #F0E2D2;
+            --brand-navy: #2d4059;
+            --brand-primary: #5B6D92;
+            --brand-yellow: #f59e0b;
+            --brand-coral: #ea580c;
+            --ticket-bg: #ffffff;
+            --ticket-photo-bg: #bae6fd;
+            --text-dark: #1e293b;
         }
 
-        .cart-header { padding: 20px; border-bottom: 1px solid #eee; display: flex; justify-content: space-between; align-items: center; }
-        .cart-body { flex: 1; overflow-y: auto; padding: 20px; }
-        .cart-footer { padding: 20px; border-top: 1px solid #eee; background: #fff; border-radius: 0 0 0 20px; }
-        
-        .empty-cart { text-align: center; color: #777; margin-top: 50px; }
-        .empty-cart i { font-size: 4rem; color: #c8e6c9; margin-bottom: 15px; }
-        
-        .cart-item { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; padding-bottom: 15px; border-bottom: 1px dashed #eee; }
-        .cart-item-info h6 { font-weight: bold; font-size: 0.9rem; margin-bottom: 2px; }
-        .cart-item-info small { color: #888; font-size: 0.8rem; }
-    
-        .btn-primary, .bg-primary { background-color: #5B6D92 !important; border-color: #5B6D92 !important; }
-        .text-primary { color: #5B6D92 !important; }
-        .cart-header { background: #D5E3E6 !important; }
-        .cat-pill:hover, .cat-pill.active { background: #D5E3E6; color: #5B6D92; border: 2px solid #5B6D92; }
-</style>
+        body {
+            background-color: var(--bg-canvas);
+            font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, Roboto, sans-serif;
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+            color: var(--text-dark);
+            overflow-x: hidden;
+        }
+
+        /* Top Navbar */
+        .katalog-header {
+            padding: 18px 28px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .brand-logo-area {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            text-decoration: none;
+        }
+
+        .brand-shapes {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .shape-triangle {
+            width: 0;
+            height: 0;
+            border-left: 9px solid transparent;
+            border-right: 9px solid transparent;
+            border-bottom: 16px solid #eab308;
+        }
+
+        .shape-circle {
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            background-color: #ef4444;
+        }
+
+        .shape-square {
+            width: 15px;
+            height: 15px;
+            border-radius: 3px;
+            background-color: #3b82f6;
+        }
+
+        .brand-title {
+            font-weight: 800;
+            font-size: 1.35rem;
+            color: var(--text-dark);
+            letter-spacing: -0.3px;
+            margin: 0;
+        }
+
+        .header-actions {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .spot-badge {
+            background-color: #dbeafe;
+            color: #1e40af;
+            font-weight: 700;
+            font-size: 0.85rem;
+            padding: 8px 16px;
+            border-radius: 30px;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            border: 1px solid rgba(59, 130, 246, 0.2);
+        }
+
+        .btn-pesanan-toggle {
+            background-color: #27374d;
+            color: #ffffff;
+            border: none;
+            border-radius: 30px;
+            padding: 8px 18px;
+            font-weight: 700;
+            font-size: 0.9rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.2s ease;
+            box-shadow: 0 4px 12px rgba(39, 55, 77, 0.2);
+            cursor: pointer;
+        }
+
+        .btn-pesanan-toggle:hover {
+            background-color: #1e293b;
+            transform: translateY(-1px);
+        }
+
+        .badge-count-yellow {
+            background-color: #f59e0b;
+            color: #ffffff;
+            font-weight: 800;
+            font-size: 0.78rem;
+            width: 22px;
+            height: 22px;
+            border-radius: 50%;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* Main Content Layout with Offcanvas / Side Panel */
+        .content-area {
+            padding: 0 28px 40px 28px;
+            transition: margin-right 0.3s ease;
+        }
+
+        /* Category Filter Tabs */
+        .category-container {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 24px;
+            overflow-x: auto;
+            padding-bottom: 6px;
+            scrollbar-width: none;
+        }
+        .category-container::-webkit-scrollbar {
+            display: none;
+        }
+
+        .btn-category-tab {
+            background: #ffffff;
+            border: 2px solid #27374d;
+            color: #27374d;
+            border-radius: 30px;
+            padding: 8px 20px;
+            font-weight: 700;
+            font-size: 0.9rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            text-decoration: none;
+            white-space: nowrap;
+            transition: all 0.2s ease;
+        }
+
+        .btn-category-tab:hover, .btn-category-tab.active {
+            background: #27374d;
+            color: #ffffff;
+        }
+
+        .section-category-title {
+            font-weight: 800;
+            font-size: 1.25rem;
+            color: #1e293b;
+            margin-bottom: 18px;
+        }
+
+        /* ================= TICKET PASS CARD DESIGN ================= */
+        .ticket-card {
+            background-color: #ffffff;
+            border-radius: 22px;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.05);
+            display: flex;
+            overflow: hidden;
+            position: relative;
+            min-height: 195px;
+            border: 1px solid rgba(0,0,0,0.04);
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .ticket-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.09);
+        }
+
+        /* Left side: Photo Gelang / Illustration */
+        .ticket-left {
+            width: 145px;
+            flex-shrink: 0;
+            background: linear-gradient(135deg, #cbeafe 0%, #bae6fd 100%);
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-right: 2px dashed #cbd5e1;
+        }
+
+        /* Foto gelang jika ada */
+        .ticket-wristband-img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        /* Gelang tiket visual default saat gambar tidak ada */
+        .ticket-default-wristband {
+            width: 100%;
+            height: 100%;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .wristband-sun {
+            position: absolute;
+            top: -15px;
+            right: -15px;
+            width: 90px;
+            height: 90px;
+            border-radius: 50%;
+            background-color: #facc15;
+        }
+
+        .wristband-tag {
+            background-color: #ffffff;
+            border-radius: 8px;
+            box-shadow: 0 3px 8px rgba(0, 0, 0, 0.12);
+            padding: 5px 12px;
+            font-size: 0.78rem;
+            font-weight: 800;
+            color: #2563eb;
+            letter-spacing: 1.5px;
+            border: 1.5px dashed #93c5fd;
+            transform: rotate(-10deg);
+            z-index: 2;
+        }
+
+        /* Potongan Bulat (Punch Hole Notches) Atas dan Bawah */
+        .ticket-notch-top {
+            position: absolute;
+            top: -11px;
+            left: 134px; /* pas di garis putus-putus */
+            width: 22px;
+            height: 22px;
+            background-color: var(--bg-canvas);
+            border-radius: 50%;
+            z-index: 5;
+            box-shadow: inset 0 -1px 2px rgba(0,0,0,0.06);
+        }
+
+        .ticket-notch-bottom {
+            position: absolute;
+            bottom: -11px;
+            left: 134px; /* pas di garis putus-putus */
+            width: 22px;
+            height: 22px;
+            background-color: var(--bg-canvas);
+            border-radius: 50%;
+            z-index: 5;
+            box-shadow: inset 0 1px 2px rgba(0,0,0,0.06);
+        }
+
+        /* Right side: Detail, Harga, dan Stepper Qty */
+        .ticket-right {
+            flex-grow: 1;
+            padding: 16px 20px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .ticket-badge-tersedia {
+            background-color: #dcfce7;
+            color: #166534;
+            font-size: 0.72rem;
+            font-weight: 700;
+            padding: 3px 10px;
+            border-radius: 20px;
+            display: inline-block;
+            margin-bottom: 6px;
+        }
+
+        .ticket-title {
+            font-weight: 800;
+            font-size: 1.05rem;
+            color: #1e293b;
+            margin-bottom: 4px;
+            line-height: 1.3;
+        }
+
+        .ticket-price {
+            font-weight: 800;
+            font-size: 1.3rem;
+            color: #c2410c; /* Warna oranye tua kontras */
+            margin-bottom: 12px;
+        }
+
+        /* Stepper Qty Button Box */
+        .ticket-stepper-box {
+            background-color: #f1f5f9;
+            border-radius: 12px;
+            padding: 3px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: space-between;
+            max-width: 175px;
+            border: 1px solid #e2e8f0;
+        }
+
+        .btn-stepper {
+            width: 34px;
+            height: 34px;
+            border-radius: 9px;
+            border: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.95rem;
+            font-weight: 800;
+            transition: all 0.15s ease;
+            cursor: pointer;
+        }
+
+        .btn-stepper-minus {
+            background-color: #ffffff;
+            color: #475569;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+        }
+
+        .btn-stepper-plus {
+            background-color: #1e3a8a;
+            color: #ffffff;
+            box-shadow: 0 2px 4px rgba(30, 58, 138, 0.25);
+        }
+
+        .btn-stepper-plus:hover {
+            background-color: #172554;
+        }
+
+        .stepper-val {
+            font-weight: 700;
+            font-size: 0.95rem;
+            color: #1e293b;
+            min-width: 38px;
+            text-align: center;
+        }
+
+        /* ================= SIDEBAR KERANJANG (OFFCANVAS / PANEL) ================= */
+        .cart-sidebar-panel {
+            position: fixed;
+            top: 0;
+            right: 0;
+            width: 360px;
+            max-width: 100vw;
+            height: 100vh;
+            background: #ffffff;
+            box-shadow: -6px 0 24px rgba(0, 0, 0, 0.12);
+            z-index: 1050;
+            display: flex;
+            flex-direction: column;
+            transform: translateX(100%);
+            transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .cart-sidebar-panel.open {
+            transform: translateX(0);
+        }
+
+        .cart-panel-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(2px);
+            z-index: 1040;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.25s ease;
+        }
+
+        .cart-panel-overlay.show {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .cart-panel-header {
+            padding: 20px 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid #f1f5f9;
+        }
+
+        .cart-panel-title {
+            font-weight: 800;
+            font-size: 1.15rem;
+            color: #1e293b;
+            margin: 0;
+        }
+
+        .btn-close-panel {
+            background: none;
+            border: none;
+            font-size: 1.25rem;
+            color: #64748b;
+            cursor: pointer;
+            padding: 4px;
+            transition: color 0.15s ease;
+        }
+
+        .btn-close-panel:hover {
+            color: #0f172a;
+        }
+
+        .cart-panel-body {
+            flex: 1;
+            overflow-y: auto;
+            padding: 20px 24px;
+        }
+
+        /* Order item pill card */
+        .order-item-card {
+            background-color: #ffffff;
+            border: 1px solid #e2e8f0;
+            border-radius: 14px;
+            padding: 12px 16px;
+            margin-bottom: 12px;
+            position: relative;
+        }
+
+        .order-item-card .item-name {
+            font-weight: 700;
+            font-size: 0.95rem;
+            color: #1e293b;
+            margin-bottom: 2px;
+        }
+
+        .order-item-card .item-qty-price {
+            font-size: 0.85rem;
+            color: #64748b;
+            font-weight: 600;
+        }
+
+        .btn-item-delete {
+            position: absolute;
+            top: 10px;
+            right: 12px;
+            background: none;
+            border: none;
+            color: #ef4444;
+            font-size: 0.85rem;
+            cursor: pointer;
+            opacity: 0.7;
+            transition: opacity 0.15s ease;
+        }
+
+        .btn-item-delete:hover {
+            opacity: 1;
+        }
+
+        .cart-panel-footer {
+            padding: 20px 24px;
+            border-top: 1px solid #f1f5f9;
+            background-color: #ffffff;
+        }
+
+        .total-display-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+            margin-bottom: 18px;
+        }
+
+        .total-display-label {
+            font-size: 0.95rem;
+            color: #64748b;
+            font-weight: 600;
+        }
+
+        .total-display-val {
+            font-size: 1.6rem;
+            font-weight: 800;
+            color: #0f172a;
+            letter-spacing: -0.5px;
+        }
+
+        .btn-pesan-sekarang {
+            background-color: #16a34a;
+            color: #ffffff;
+            border: none;
+            border-radius: 14px;
+            width: 100%;
+            padding: 14px;
+            font-size: 1.05rem;
+            font-weight: 700;
+            transition: all 0.2s ease;
+            box-shadow: 0 4px 14px rgba(22, 163, 74, 0.25);
+        }
+
+        .btn-pesan-sekarang:hover {
+            background-color: #15803d;
+            transform: translateY(-1px);
+        }
+
+        /* Responsive on large screen: Option to keep panel sticky */
+        @media (min-width: 1200px) {
+            .with-sidebar-desktop .content-area {
+                margin-right: 360px;
+            }
+            .with-sidebar-desktop .cart-sidebar-panel {
+                transform: translateX(0);
+                box-shadow: -4px 0 16px rgba(0,0,0,0.04);
+            }
+            .with-sidebar-desktop .cart-panel-overlay {
+                display: none;
+            }
+        }
+    </style>
 </head>
-<body>
-    <div class="layout-container">
-        
-        <!-- BAGIAN KIRI: MENU & KATALOG -->
-        <div class="left-side">
-            <div class="d-flex justify-content-between align-items-center mb-3">
-                <h4 class="fw-bold m-0"><i class="fa-solid fa-shapes text-light"></i> Asa Jaya Playground</h4>
-                <span class="badge bg-secondary">Meja/Spot: {{ $nomor_meja ?? $meja_id }}</span>
+<body class="{{ !empty($items) ? 'with-sidebar-desktop' : '' }}">
+
+    <!-- TOP HEADER -->
+    <header class="katalog-header">
+        <a href="{{ route('katalog') }}" class="brand-logo-area">
+            <div class="brand-shapes">
+                <div class="shape-triangle"></div>
+                <div class="shape-circle"></div>
+                <div class="shape-square"></div>
             </div>
+            <h1 class="brand-title">Asa Jaya Playground</h1>
+        </a>
 
-            @if(session('success'))
-                <div class="alert alert-success alert-dismissible py-2 small" role="alert">
-                    {{ session('success') }}
-                    <button type="button" class="btn-close btn-sm" data-bs-dismiss="alert"></button>
-                </div>
-            @endif
-            @if(session('error'))
-                <div class="alert alert-danger alert-dismissible py-2 small" role="alert">
-                    {{ session('error') }}
-                    <button type="button" class="btn-close btn-sm" data-bs-dismiss="alert"></button>
-                </div>
-            @endif
+        <div class="header-actions">
+            <span class="spot-badge">
+                <i class="fa-solid fa-location-dot"></i> Meja/Spot: {{ $nomor_meja ?? $meja_id }}
+            </span>
 
-            <!-- Kategori Horizontal Pills -->
-            <div class="category-scroll">
-                @foreach($kategori_produk as $kat)
-                    @if($kat->produk->where('is_active', true)->count() > 0)
-                        <a href="#kat-{{ $kat->id }}" class="cat-pill">
-                            <i class="fa-solid fa-tag text-primary"></i> {{ $kat->nama_kategori }}
-                        </a>
-                    @endif
-                @endforeach
+            <button type="button" class="btn-pesanan-toggle" onclick="toggleCartPanel()">
+                <i class="fa-solid fa-cart-shopping"></i> Pesanan
+                @if(!empty($items))
+                    <span class="badge-count-yellow">{{ count($items) }}</span>
+                @endif
+            </button>
+        </div>
+    </header>
+
+    <!-- ALERT NOTIFIKASI -->
+    <div class="px-4">
+        @if(session('success'))
+            <div class="alert alert-success alert-dismissible py-2.5 small rounded-4 mb-3 border-0 shadow-sm" role="alert">
+                <i class="fa-solid fa-circle-check me-1.5"></i> {{ session('success') }}
+                <button type="button" class="btn-close btn-sm" data-bs-dismiss="alert"></button>
             </div>
+        @endif
+        @if(session('error'))
+            <div class="alert alert-danger alert-dismissible py-2.5 small rounded-4 mb-3 border-0 shadow-sm" role="alert">
+                <i class="fa-solid fa-triangle-exclamation me-1.5"></i> {{ session('error') }}
+                <button type="button" class="btn-close btn-sm" data-bs-dismiss="alert"></button>
+            </div>
+        @endif
+    </div>
 
-            <!-- Daftar Produk -->
-            <div class="mt-3 pb-5">
-                @foreach($kategori_produk as $kat)
-                    @if($kat->produk->where('is_active', true)->count() > 0)
-                        <h5 id="kat-{{ $kat->id }}" class="fw-bold mb-3 mt-4" style="color: #444;">{{ $kat->nama_kategori }}</h5>
-                        <div class="row g-3">
-                            @foreach($kat->produk->where('is_active', true) as $p)
-                            <div class="col-6 col-md-4 col-xl-3">
-                                <div class="product-card">
-                                    <span class="badge-new">Tersedia</span>
-                                    @if($p->foto_produk)
-                                        <img src="{{ asset('storage/'.$p->foto_produk) }}" class="product-img" alt="{{ $p->nama_produk }}">
-                                    @else
-                                        <div class="product-img d-flex align-items-center justify-content-center text-muted fs-3"><i class="fa-solid fa-image opacity-25"></i></div>
-                                    @endif
-                                    
-                                    <div class="product-title">{{ $p->nama_produk }}</div>
-                                    <div class="product-price">Rp {{ number_format($p->harga, 0, ',', '.') }}</div>
-                                    
-                                    <div class="mt-auto">
-                                        <form action="{{ route('keranjang.tambah') }}" method="POST">
-                                            @csrf
-                                            <input type="hidden" name="produk_id" value="{{ $p->id }}">
-                                            <input type="hidden" name="jumlah" value="1">
-                                            <button type="submit" class="btn-tambah">Tambah</button>
-                                        </form>
+    <!-- MAIN CONTENT AREA -->
+    <main class="content-area">
+        <!-- Horizontal Category Filter -->
+        <div class="category-container">
+            @foreach($kategori_produk as $kat)
+                @if($kat->produk->where('is_active', true)->count() > 0)
+                    <a href="#kat-{{ $kat->id }}" class="btn-category-tab">
+                        <i class="fa-solid fa-ticket-simple"></i> {{ $kat->nama_kategori }}
+                    </a>
+                @endif
+            @endforeach
+        </div>
+
+        <!-- Daftar Tiket / Produk Karcis -->
+        @foreach($kategori_produk as $kat)
+            @if($kat->produk->where('is_active', true)->count() > 0)
+                <div class="mb-5" id="kat-{{ $kat->id }}">
+                    <h2 class="section-category-title">{{ $kat->nama_kategori }}</h2>
+                    <div class="row g-4">
+                        @foreach($kat->produk->where('is_active', true) as $p)
+                            @php
+                                $itemInCart = collect($items)->firstWhere('produk_id', $p->id);
+                                $qtyInCart = $itemInCart ? $itemInCart['jumlah'] : 0;
+                            @endphp
+                            <div class="col-xl-6 col-lg-6 col-md-12 col-12">
+                                <div class="ticket-card">
+                                    <!-- Potongan Bulat Atas & Bawah -->
+                                    <div class="ticket-notch-top"></div>
+                                    <div class="ticket-notch-bottom"></div>
+
+                                    <!-- Bagian Kiri: Foto Gelang / Tiket -->
+                                    <div class="ticket-left">
+                                        @if($p->foto_produk)
+                                            <img src="{{ asset('storage/'.$p->foto_produk) }}" class="ticket-wristband-img" alt="{{ $p->nama_produk }}">
+                                        @else
+                                            <div class="ticket-default-wristband">
+                                                <div class="wristband-sun"></div>
+                                                <div class="wristband-tag">00001</div>
+                                            </div>
+                                        @endif
+                                    </div>
+
+                                    <!-- Bagian Kanan: Info & Stepper -->
+                                    <div class="ticket-right">
+                                        <div>
+                                            <span class="ticket-badge-tersedia">Tersedia</span>
+                                            <h3 class="ticket-title">{{ $p->nama_produk }}</h3>
+                                            <div class="ticket-price">Rp {{ number_format($p->harga, 0, ',', '.') }}</div>
+                                        </div>
+
+                                        <div>
+                                            <!-- Form Tambah ke Keranjang dengan Stepper -->
+                                            <form action="{{ route('keranjang.tambah') }}" method="POST" id="form-tambah-{{ $p->id }}" class="d-flex align-items-center gap-2">
+                                                @csrf
+                                                <input type="hidden" name="produk_id" value="{{ $p->id }}">
+                                                <input type="hidden" name="jumlah" id="input-qty-{{ $p->id }}" value="1">
+
+                                                <div class="ticket-stepper-box">
+                                                    <button type="button" class="btn-stepper btn-stepper-minus" onclick="decreaseQty({{ $p->id }})">
+                                                        <i class="fa-solid fa-minus"></i>
+                                                    </button>
+                                                    <span class="stepper-val" id="display-qty-{{ $p->id }}">1</span>
+                                                    <button type="button" class="btn-stepper btn-stepper-plus" onclick="submitQty({{ $p->id }})">
+                                                        <i class="fa-solid fa-plus"></i>
+                                                    </button>
+                                                </div>
+                                            </form>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-                            @endforeach
-                        </div>
-                    @endif
-                @endforeach
-            </div>
+                        @endforeach
+                    </div>
+                </div>
+            @endif
+        @endforeach
+    </main>
+
+    <!-- OVERLAY UNTUK PANEL SIDEBAR -->
+    <div class="cart-panel-overlay {{ !empty($items) ? 'show' : '' }}" id="cartOverlay" onclick="closeCartPanel()"></div>
+
+    <!-- SIDEBAR PANEL KERANJANG (PESANAN ANDA) -->
+    <aside class="cart-sidebar-panel {{ !empty($items) ? 'open' : '' }}" id="cartSidebar">
+        <div class="cart-panel-header">
+            <h3 class="cart-panel-title">Pesanan Anda</h3>
+            <button type="button" class="btn-close-panel" onclick="closeCartPanel()" aria-label="Tutup">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
         </div>
 
-        <!-- BAGIAN KANAN: KERANJANG (SIDEBAR) -->
-        <div class="right-side">
-            <div class="cart-header">
-                <h5 class="fw-bold m-0">Pesanan Anda</h5>
-                <span class="badge bg-primary rounded-pill">{{ count($items) }} Item</span>
-            </div>
-            
-            <div class="cart-body">
-                @if(empty($items))
-                    <div class="empty-cart">
-                        <i class="fa-solid fa-bell-concierge"></i>
-                        <h6 class="fw-bold text-dark mt-3">Belum ada menu yang dipilih</h6>
-                        <p class="small">Silakan tambahkan menu dari katalog di sebelah kiri.</p>
-                    </div>
-                @else
-                    @foreach($items as $item)
-                        <div class="cart-item">
-                            <div class="cart-item-info">
-                                <h6>{{ $item['nama_produk'] }}</h6>
-                                <small>Rp {{ number_format($item['harga'], 0, ',', '.') }} &times; {{ $item['jumlah'] }}</small>
-                            </div>
-                            <div class="text-end">
-                                <div class="fw-bold mb-1">Rp {{ number_format($item['subtotal'], 0, ',', '.') }}</div>
-                                <form action="{{ route('keranjang.hapus', $item['produk_id']) }}" method="POST" style="display:inline;">
-                                    @csrf
-                                    <button class="btn btn-sm text-danger p-0"><i class="fa-solid fa-trash"></i> Hapus</button>
-                                </form>
-                            </div>
-                        </div>
-                    @endforeach
-                @endif
-            </div>
-
-            @if(!empty($items))
-            <div class="cart-footer">
-                <div class="d-flex justify-content-between align-items-center mb-3">
-                    <span class="text-muted fw-bold">Total Pembayaran</span>
-                    <span class="fs-4 fw-bold text-primary">Rp {{ number_format($total, 0, ',', '.') }}</span>
+        <div class="cart-panel-body">
+            @if(empty($items))
+                <div class="text-center py-5 text-muted">
+                    <i class="fa-solid fa-cart-shopping fs-1 opacity-25 mb-3"></i>
+                    <h6 class="fw-bold text-dark">Pesanan masih kosong</h6>
+                    <p class="small text-muted">Pilih karcis tiket wahana untuk menambahkan ke pesanan.</p>
                 </div>
+            @else
+                @foreach($items as $item)
+                    <div class="order-item-card">
+                        <form action="{{ route('keranjang.hapus', $item['produk_id']) }}" method="POST">
+                            @csrf
+                            <button type="submit" class="btn-item-delete" title="Hapus Item">
+                                <i class="fa-solid fa-trash-can"></i>
+                            </button>
+                        </form>
+                        <div class="item-name">{{ $item['nama_produk'] }}</div>
+                        <div class="item-qty-price">{{ $item['jumlah'] }}x · Rp {{ number_format($item['harga'], 0, ',', '.') }}</div>
+                    </div>
+                @endforeach
+            @endif
+        </div>
+
+        @if(!empty($items))
+            <div class="cart-panel-footer">
+                <div class="total-display-row">
+                    <span class="total-display-label">Total</span>
+                    <span class="total-display-val">Rp {{ number_format($total, 0, ',', '.') }}</span>
+                </div>
+
                 <form action="{{ route('checkout') }}" method="POST">
                     @csrf
-                    <input type="text" name="nama_pemesan" class="form-control mb-2" placeholder="Nama Pemesan (Wajib)" required>
+                    <div class="mb-3">
+                        <input type="text" name="nama_pemesan" class="form-control rounded-3 py-2" placeholder="Nama Pemesan (Wajib)" required style="border-color: #cbd5e1;">
+                    </div>
+                    
                     @if(\App\Services\MidtransService::isConfigured())
                         <input type="hidden" name="metode_pembayaran" value="payment_gateway">
-                        <div class="p-2 mb-2 bg-light rounded border d-flex align-items-center justify-content-between">
+                        <div class="p-2 mb-3 bg-light rounded-3 border d-flex align-items-center justify-content-between">
                             <span class="small fw-bold text-dark"><i class="fa-solid fa-qrcode text-primary me-1"></i> Pembayaran QRIS</span>
                             <span class="badge bg-success-subtle text-success">Otomatis</span>
                         </div>
                     @else
                         <input type="hidden" name="metode_pembayaran" value="tunai">
                     @endif
-                    <button type="submit" class="btn-tambah" style="font-size: 1rem; padding: 12px;">Pesan Sekarang</button>
+
+                    <button type="submit" class="btn-pesan-sekarang">
+                        Pesan sekarang
+                    </button>
                 </form>
             </div>
-            @endif
-        </div>
+        @endif
+    </aside>
 
-    </div>
-    
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        function toggleCartPanel() {
+            const panel = document.getElementById('cartSidebar');
+            const overlay = document.getElementById('cartOverlay');
+            if (panel.classList.contains('open')) {
+                closeCartPanel();
+            } else {
+                panel.classList.add('open');
+                overlay.classList.add('show');
+            }
+        }
+
+        function closeCartPanel() {
+            const panel = document.getElementById('cartSidebar');
+            const overlay = document.getElementById('cartOverlay');
+            panel.classList.remove('open');
+            overlay.classList.remove('show');
+            document.body.classList.remove('with-sidebar-desktop');
+        }
+
+        function decreaseQty(id) {
+            const input = document.getElementById('input-qty-' + id);
+            const display = document.getElementById('display-qty-' + id);
+            let val = parseInt(input.value, 10) || 1;
+            if (val > 1) {
+                val--;
+                input.value = val;
+                display.textContent = val;
+            }
+        }
+
+        function submitQty(id) {
+            const form = document.getElementById('form-tambah-' + id);
+            const input = document.getElementById('input-qty-' + id);
+            const display = document.getElementById('display-qty-' + id);
+            let val = parseInt(input.value, 10) || 1;
+            input.value = val;
+            form.submit();
+        }
+    </script>
 </body>
 </html>
