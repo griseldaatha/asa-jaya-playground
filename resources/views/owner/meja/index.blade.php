@@ -188,40 +188,64 @@
 
     /* Action Buttons */
     .btn-action-cetak {
-        background-color: #ffffff;
-        color: #2563eb;
-        border: 1.5px solid #60a5fa;
-        border-radius: 10px;
-        padding: 8px 16px;
-        font-size: 0.85rem;
-        font-weight: 700;
+        background-color: #f8fafc;
+        color: #334155;
+        border: 1px solid #cbd5e1;
+        border-radius: 9px;
+        height: 36px;
+        padding: 0 13px;
+        font-size: 0.83rem;
+        font-weight: 600;
         display: inline-flex;
         align-items: center;
-        gap: 6px;
-        transition: all 0.2s ease;
+        justify-content: center;
+        gap: 7px;
+        white-space: nowrap;
+        box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
+        transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+        cursor: pointer;
+    }
+
+    .btn-action-cetak i {
+        color: #43557A;
+        font-size: 0.9rem;
+        transition: transform 0.2s ease;
     }
 
     .btn-action-cetak:hover {
-        background-color: #eff6ff;
-        color: #1d4ed8;
+        background-color: #ffffff;
+        color: #0f172a;
+        border-color: #94a3b8;
+        box-shadow: 0 3px 8px rgba(0, 0, 0, 0.07);
+        transform: translateY(-1px);
+    }
+
+    .btn-action-cetak:hover i {
+        transform: scale(1.1);
     }
 
     .btn-action-delete {
         background-color: #ffffff;
         color: #dc2626;
-        border: 1.5px solid #f87171;
-        border-radius: 10px;
-        width: 38px;
-        height: 38px;
+        border: 1px solid #fecaca;
+        border-radius: 9px;
+        width: 36px;
+        height: 36px;
         display: inline-flex;
         align-items: center;
         justify-content: center;
+        font-size: 0.86rem;
+        box-shadow: 0 1px 2px rgba(0, 0, 0, 0.03);
         transition: all 0.2s ease;
+        cursor: pointer;
     }
 
     .btn-action-delete:hover {
         background-color: #fef2f2;
+        border-color: #f87171;
         color: #b91c1c;
+        box-shadow: 0 3px 8px rgba(239, 68, 68, 0.12);
+        transform: translateY(-1px);
     }
 
     .copy-link-btn {
@@ -281,7 +305,7 @@
                     <th style="width: 100px;">QR CODE</th>
                     <th>TOKEN DAN LINK KATALOG</th>
                     <th style="width: 140px;">STATUS</th>
-                    <th class="text-end pe-4" style="width: 180px;">AKSI</th>
+                    <th class="text-end pe-4" style="width: 190px;">AKSI</th>
                 </tr>
             </thead>
             <tbody>
@@ -343,7 +367,7 @@
                     </td>
 
                     <!-- AKSI (CETAK QR & HAPUS) -->
-                    <td class="text-end pe-4">
+                    <td class="text-end pe-4" style="white-space: nowrap;">
                         <div class="d-flex justify-content-end align-items-center gap-2">
                             <button type="button" class="btn-action-cetak" onclick="cetakStikerQR('{{ $nomorDisplay }}', '{{ $m->qr_token }}', '{{ $qrImageApi }}', '{{ $qrUrl }}')">
                                 <i class="fa-solid fa-print"></i>
