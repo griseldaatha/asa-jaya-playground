@@ -486,7 +486,21 @@
             <!-- Judul -->
             <h1 class="brand-title-login mb-4">ASA JAYA PLAYGROUND</h1>
 
-            <!-- Pesan Error Validasi -->
+            <!-- Pesan Notifikasi & Validasi -->
+            @if (session('warning'))
+                <div class="alert alert-warning py-2.5 px-3 small rounded-3 text-start mb-3 border-0 shadow-sm d-flex align-items-center gap-2" role="alert">
+                    <i class="fa-solid fa-triangle-exclamation text-warning-emphasis"></i>
+                    <span>{{ session('warning') }}</span>
+                </div>
+            @endif
+
+            @if (session('status'))
+                <div class="alert alert-info py-2.5 px-3 small rounded-3 text-start mb-3 border-0 shadow-sm d-flex align-items-center gap-2" role="alert">
+                    <i class="fa-solid fa-circle-info"></i>
+                    <span>{{ session('status') }}</span>
+                </div>
+            @endif
+
             @if ($errors->any())
                 <div class="alert alert-danger py-2 px-3 small rounded-3 text-start mb-3 border-0 shadow-sm" role="alert">
                     <i class="fa-solid fa-circle-exclamation me-1"></i> Username atau password salah.
@@ -539,6 +553,19 @@
                 eyeIcon.classList.replace('fa-eye-slash', 'fa-eye');
             }
         }
+
+        // Auto reload halus jika tab ditinggalkan lebih dari 20 menit agar CSRF token selalu valid
+        let tabLastActive = Date.now();
+        document.addEventListener('visibilitychange', function() {
+            if (document.visibilityState === 'visible') {
+                const idleDuration = Date.now() - tabLastActive;
+                if (idleDuration > 20 * 60 * 1000) {
+                    window.location.reload();
+                }
+            } else {
+                tabLastActive = Date.now();
+            }
+        });
     </script>
 </body>
 </html>

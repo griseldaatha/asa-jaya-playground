@@ -31,7 +31,20 @@ return Application::configure(basePath: dirname(__DIR__))
                 ], 419);
             }
 
-            return redirect()->back(302, [], '/katalog')->with('warning', 'Sesi Anda telah diperbarui, silakan ulangi aksi Anda.');
+            return redirect()->back()->withInput()->with('warning', 'Sesi halaman telah kedaluwarsa. Halaman telah diperbarui, silakan coba lagi.');
+        });
+
+        $exceptions->render(function (\Symfony\Component\HttpKernel\Exception\HttpException $e, Request $request) {
+            if ($e->getStatusCode() === 419) {
+                if ($request->expectsJson() || $request->ajax()) {
+                    return response()->json([
+                        'message' => 'Sesi telah berakhir. Silakan muat ulang halaman.',
+                        'csrf_expired' => true,
+                    ], 419);
+                }
+
+                return redirect()->back()->withInput()->with('warning', 'Sesi halaman telah kedaluwarsa. Halaman telah diperbarui, silakan coba lagi.');
+            }
         });
 
         $exceptions->shouldRenderJsonWhen(
