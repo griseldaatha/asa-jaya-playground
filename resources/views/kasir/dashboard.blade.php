@@ -483,6 +483,58 @@
             </div>
         </div>
     </div>
+
+    <!-- Modal Konfirmasi Selesai & Cetak Struk -->
+    <div class="modal fade" id="modalSelesaiPesanan" tabindex="-1" aria-labelledby="modalSelesaiTitle" aria-hidden="true" data-bs-backdrop="static">
+        <div class="modal-dialog modal-dialog-centered" style="max-width: 440px;">
+            <div class="modal-content border-0 shadow-lg rounded-4 overflow-hidden" style="background-color: #ffffff;">
+                <div class="modal-header border-0 pb-0 pt-4 px-4 bg-white d-flex align-items-center justify-content-between">
+                    <div>
+                        <span class="badge rounded-pill px-2.5 py-1 text-uppercase fw-bold" style="background-color: #dcfce7; color: #15803d; font-size: 0.72rem; letter-spacing: 0.5px;">
+                            <i class="fa-solid fa-circle-check me-1"></i> Pesanan Selesai
+                        </span>
+                        <h5 class="modal-title fw-bold text-dark mt-1 mb-0" id="modalSelesaiTitle" style="font-size: 1.15rem;">
+                            Pesanan Telah Diserahkan
+                        </h5>
+                    </div>
+                    <button type="button" class="btn-close shadow-none" data-bs-dismiss="modal" aria-label="Close" style="font-size: 0.8rem;"></button>
+                </div>
+
+                <div class="modal-body p-4 pt-3 bg-white text-center">
+                    <div class="mx-auto mb-3 text-white rounded-circle d-flex align-items-center justify-content-center shadow-sm" style="width: 68px; height: 68px; background-color: #0284c7;">
+                        <i class="fa-solid fa-check-double fs-2"></i>
+                    </div>
+                    <h5 class="fw-bold text-dark mb-1">Pesanan #<span id="selesaiKodeTrx"></span></h5>
+                    <p class="text-muted small mb-3">Pesanan telah berhasil diselesaikan dan diserahkan ke pelanggan.</p>
+
+                    <div class="p-3 rounded-4 border text-start mb-3" style="background-color: #FAF5EF; border-color: #D5E3E6 !important;">
+                        <div class="d-flex justify-content-between text-muted small mb-1">
+                            <span>Nama Pemesan:</span>
+                            <span class="fw-bold text-dark" id="selesaiNamaPemesan">-</span>
+                        </div>
+                        <div class="d-flex justify-content-between text-muted small mb-1">
+                            <span>Meja / Lokasi:</span>
+                            <span class="fw-bold text-dark" id="selesaiMeja">-</span>
+                        </div>
+                        <div class="d-flex justify-content-between text-muted small">
+                            <span>Total Tagihan:</span>
+                            <span class="fw-bold text-primary fs-6" id="selesaiTotalHarga">Rp 0</span>
+                        </div>
+                    </div>
+
+                    <div class="d-grid gap-2">
+                        <a id="btnCetakStrukSelesai" href="#" target="_blank" class="btn btn-primary py-2.5 fw-bold rounded-3 shadow-sm d-flex align-items-center justify-content-center gap-2" style="background-color: #5B6D92 !important; border-color: #5B6D92 !important;">
+                            <i class="fa-solid fa-print"></i>
+                            <span>Cetak Struk Sekarang</span>
+                        </a>
+                        <button type="button" class="btn btn-light border py-2 text-secondary fw-semibold rounded-3" data-bs-dismiss="modal">
+                            Tutup
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 @endsection
 
@@ -491,6 +543,7 @@
     const csrfToken = document.querySelector('meta[name="csrf-token"]').content;
     let modalBayarInstance = null;
     let modalDetailInstance = null;
+    let modalSelesaiInstance = null;
     let bayarData = { id: null, kode: '', total: 0 };
     let activePesananList = [];
 
@@ -507,7 +560,33 @@
         if (modalDetailEl) {
             modalDetailInstance = new bootstrap.Modal(modalDetailEl);
         }
+
+        const modalSelesaiEl = document.getElementById('modalSelesaiPesanan');
+        if (modalSelesaiEl) {
+            modalSelesaiInstance = new bootstrap.Modal(modalSelesaiEl);
+            modalSelesaiEl.addEventListener('hidden.bs.modal', function () {
+                fetchPesanan();
+            });
+        }
     });
+
+    function bukaModalSelesai(pesananObj, transaksiId, strukUrl) {
+        const p = pesananObj || activePesananList.find(item => item.id === transaksiId);
+        if (p) {
+            document.getElementById('selesaiKodeTrx').textContent = p.kode_transaksi;
+            document.getElementById('selesaiNamaPemesan').textContent = p.nama_pemesan || 'Pelanggan';
+            let namaMeja = p.meja ? `Meja #${p.meja.nomor_meja ?? p.meja.id}` : (p.meja_id ? `Meja #${p.meja_id}` : 'Kasir / Langsung');
+            document.getElementById('selesaiMeja').textContent = namaMeja;
+            document.getElementById('selesaiTotalHarga').textContent = 'Rp ' + formatRupiah(p.total_harga);
+        }
+        
+        const btnCetak = document.getElementById('btnCetakStrukSelesai');
+        btnCetak.href = strukUrl || `/admin/transaksi/${transaksiId}/struk`;
+
+        if (modalSelesaiInstance) {
+            modalSelesaiInstance.show();
+        }
+    }
 
     function bukaModalDetail(id) {
         const p = activePesananList.find(item => item.id === id);
@@ -909,7 +988,7 @@
                         `;
                     } else if (p.status_pesanan === 'diproses') {
                         actionBtnHtml = `
-                            <button onclick="updateStatus(${p.id}, 'selesai')" class="btn btn-action-main w-100 mb-2" style="background-color: #0284c7 !important; border-color: #0284c7 !important;">
+                            <button onclick="prosesSelesaiDanCetak(${p.id})" class="btn btn-action-main w-100 mb-2" style="background-color: #0284c7 !important; border-color: #0284c7 !important;">
                                 <i class="fa-solid fa-check-double me-2"></i> Selesai (Serahkan)
                             </button>
                         `;
@@ -967,20 +1046,12 @@
                                     ${qrisPendingNotice}
                                     ${actionBtnHtml}
 
-                                    <!-- Tombol Detail Transaksi & Cetak Struk -->
-                                    <div class="row g-2 mb-2">
-                                        <div class="col-6">
-                                            <button type="button" onclick="bukaModalDetail(${p.id})" class="btn-action-secondary w-100" title="Lihat Detail Transaksi">
-                                                <i class="fa-solid fa-receipt text-primary"></i>
-                                                <span>Detail</span>
-                                            </button>
-                                        </div>
-                                        <div class="col-6">
-                                            <a href="/admin/transaksi/${p.id}/struk" target="_blank" class="btn-action-secondary w-100" title="Cetak Struk Transaksi">
-                                                <i class="fa-solid fa-print text-secondary"></i>
-                                                <span>Struk</span>
-                                            </a>
-                                        </div>
+                                    <!-- Tombol Detail Transaksi -->
+                                    <div class="mb-2">
+                                        <button type="button" onclick="bukaModalDetail(${p.id})" class="btn-action-secondary w-100" title="Lihat Detail Transaksi">
+                                            <i class="fa-solid fa-receipt text-primary"></i>
+                                            <span>Detail Transaksi</span>
+                                        </button>
                                     </div>
 
                                     ${btnBatalHtml}
@@ -1021,6 +1092,19 @@
             fetchPesanan();
             return data;
         });
+    }
+
+    function prosesSelesaiDanCetak(id) {
+        const pesanan = activePesananList.find(item => item.id === id);
+        updateStatus(id, 'selesai')
+            .then(data => {
+                if (data && data.success) {
+                    bukaModalSelesai(pesanan, id, data.struk_url);
+                }
+            })
+            .catch(err => {
+                // error handled in updateStatus
+            });
     }
 
     fetchPesanan(); 
