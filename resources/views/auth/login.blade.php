@@ -483,9 +483,8 @@
                 <div class="shape-square"></div>
             </div>
 
-            <!-- Judul & Sambutan -->
-            <h1 class="brand-title-login">ASA JAYA PLAYGROUND</h1>
-            <p class="brand-subtitle-login">Halo, siap melayani hari ini?</p>
+            <!-- Judul -->
+            <h1 class="brand-title-login mb-4">ASA JAYA PLAYGROUND</h1>
 
             <!-- Pesan Error Validasi -->
             @if ($errors->any())
