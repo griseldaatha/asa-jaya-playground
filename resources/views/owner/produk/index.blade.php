@@ -267,7 +267,6 @@
                             <h5 class="modal-title fw-bold text-dark mb-0" id="modalTambahTitle" style="font-size: 1.2rem; letter-spacing: -0.3px;">
                                 Tambah Produk Baru
                             </h5>
-                            <span class="text-muted small" style="font-size: 0.8rem;">Tambahkan item tiket atau menu baru ke katalog kasir</span>
                         </div>
                     </div>
                     <button type="button" class="btn-close shadow-none" data-bs-dismiss="modal" aria-label="Close" style="font-size: 0.85rem;"></button>
