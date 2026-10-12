@@ -205,18 +205,30 @@
     </div>
 
     <!-- Modal Register Kasir Baru -->
-    <div class="modal fade" id="modalTambah" tabindex="-1" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content border-0 rounded-4 overflow-hidden shadow-lg">
-                <div class="modal-header modal-header-gradient">
-                    <h5 class="modal-title fw-bold"><i class="fa-solid fa-user-plus me-2"></i>Daftarkan Kasir Baru</h5>
-                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+    <div class="modal fade" id="modalTambah" tabindex="-1" aria-labelledby="modalTambahKasirTitle" aria-hidden="true" data-bs-backdrop="static">
+        <div class="modal-dialog modal-dialog-centered" style="max-width: 460px;">
+            <div class="modal-content border-0 rounded-4 overflow-hidden shadow-lg" style="background-color: #ffffff;">
+                <!-- Header Modal Bersih & Modern -->
+                <div class="modal-header border-0 pb-0 pt-4 px-4 bg-white d-flex align-items-center justify-content-between">
+                    <div class="d-flex align-items-center gap-3">
+                        <div class="rounded-3 d-flex align-items-center justify-content-center shadow-sm" style="width: 44px; height: 44px; background: linear-gradient(135deg, #5B6D92 0%, #43557A 100%); color: #ffffff;">
+                            <i class="fa-solid fa-user-plus fs-5"></i>
+                        </div>
+                        <div>
+                            <h5 class="modal-title fw-bold text-dark mb-0" id="modalTambahKasirTitle" style="font-size: 1.2rem; letter-spacing: -0.3px;">
+                                Daftarkan Kasir Baru
+                            </h5>
+                            <span class="text-muted small" style="font-size: 0.8rem;">Buat akun kasir untuk akses POS</span>
+                        </div>
+                    </div>
+                    <button type="button" class="btn-close shadow-none" data-bs-dismiss="modal" aria-label="Close" style="font-size: 0.85rem;"></button>
                 </div>
+
                 <form action="{{ route('owner.karyawan.store') }}" method="POST">
                     @csrf
-                    <div class="modal-body p-4">
+                    <div class="modal-body p-4 pt-3 bg-white">
                         @if($errors->any())
-                            <div class="alert alert-danger border-0 rounded-3 mb-3 small">
+                            <div class="alert alert-danger border-0 rounded-3 mb-3 small py-2 px-3 shadow-sm">
                                 <ul class="mb-0 ps-3">
                                     @foreach($errors->all() as $error)
                                         <li>{{ $error }}</li>
@@ -225,37 +237,60 @@
                             </div>
                         @endif
 
+                        <!-- Input Nama Lengkap -->
                         <div class="mb-3">
-                            <label class="form-label fw-semibold small text-secondary">Nama Lengkap <span class="text-danger">*</span></label>
-                            <div class="input-group">
-                                <span class="input-group-text bg-light text-muted"><i class="fa-solid fa-user"></i></span>
-                                <input type="text" name="nama" class="form-control" placeholder="Contoh: Budi Santoso" value="{{ old('nama') }}" required maxlength="100">
+                            <label class="form-label fw-bold small text-dark mb-1" style="font-size: 0.82rem;">
+                                Nama Lengkap <span class="text-danger">*</span>
+                            </label>
+                            <div class="input-group shadow-sm rounded-3 overflow-hidden border" style="border-color: #e2e8f0 !important;">
+                                <span class="input-group-text border-0 bg-light text-secondary px-3">
+                                    <i class="fa-regular fa-user"></i>
+                                </span>
+                                <input type="text" name="nama" class="form-control border-0 ps-2 fw-semibold text-dark bg-white" placeholder="Contoh: Budi Santoso" value="{{ old('nama') }}" required maxlength="100" style="font-size: 0.95rem; box-shadow: none;">
                             </div>
                         </div>
 
+                        <!-- Input Username Login -->
                         <div class="mb-3">
-                            <label class="form-label fw-semibold small text-secondary">Username Login <span class="text-danger">*</span></label>
-                            <div class="input-group">
-                                <span class="input-group-text bg-light text-muted"><i class="fa-solid fa-at"></i></span>
-                                <input type="text" name="username" class="form-control" placeholder="Contoh: budi_kasir" value="{{ old('username') }}" required maxlength="50">
+                            <label class="form-label fw-bold small text-dark mb-1" style="font-size: 0.82rem;">
+                                Username Login <span class="text-danger">*</span>
+                            </label>
+                            <div class="input-group shadow-sm rounded-3 overflow-hidden border" style="border-color: #e2e8f0 !important;">
+                                <span class="input-group-text border-0 bg-light text-secondary px-3">
+                                    <i class="fa-solid fa-at"></i>
+                                </span>
+                                <input type="text" name="username" class="form-control border-0 ps-2 fw-semibold text-dark bg-white" placeholder="Contoh: budi_kasir" value="{{ old('username') }}" required maxlength="50" style="font-size: 0.95rem; box-shadow: none;">
                             </div>
                         </div>
 
-                        <div class="mb-3">
-                            <label class="form-label fw-semibold small text-secondary">Password Access <span class="text-danger">*</span></label>
-                            <div class="input-group">
-                                <span class="input-group-text bg-light text-muted"><i class="fa-solid fa-lock"></i></span>
-                                <input type="password" name="password" class="form-control" placeholder="Minimal 4 karakter" required minlength="4">
-                                <button type="button" class="btn btn-outline-secondary" onclick="togglePassword(this)">
-                                    <i class="fa-solid fa-eye"></i>
+                        <!-- Input Password Access -->
+                        <div class="mb-2">
+                            <label class="form-label fw-bold small text-dark mb-1" style="font-size: 0.82rem;">
+                                Password Access <span class="text-danger">*</span>
+                            </label>
+                            <div class="input-group shadow-sm rounded-3 overflow-hidden border" style="border-color: #e2e8f0 !important;">
+                                <span class="input-group-text border-0 bg-light text-secondary px-3">
+                                    <i class="fa-solid fa-lock" style="font-size: 0.9rem;"></i>
+                                </span>
+                                <input type="password" name="password" id="modalTambahPassword" class="form-control border-0 ps-2 fw-semibold text-dark bg-white" placeholder="Minimal 4 karakter" required minlength="4" style="font-size: 0.95rem; box-shadow: none;">
+                                <button type="button" class="btn border-0 bg-white text-secondary px-3" onclick="toggleModalPassword(this)">
+                                    <i class="fa-regular fa-eye"></i>
                                 </button>
+                            </div>
+                            <div class="form-text small text-muted mt-1" style="font-size: 0.75rem;">
+                                <i class="fa-solid fa-circle-info me-1"></i> Gunakan password yang mudah diingat oleh kasir bertugas.
                             </div>
                         </div>
                     </div>
-                    <div class="modal-footer bg-light px-4 py-3">
-                        <button type="button" class="btn btn-light px-4 rounded-3 fw-semibold" data-bs-dismiss="modal">Batal</button>
-                        <button type="submit" class="btn btn-primary px-4 rounded-3 fw-bold shadow-sm" style="background: var(--primary-gradient); border: none;">
-                            <i class="fa-solid fa-floppy-disk me-1.5"></i> Simpan Akun
+
+                    <!-- Footer Tombol Aksi -->
+                    <div class="modal-footer border-top-0 pt-0 pb-4 px-4 bg-white d-flex justify-content-end gap-2">
+                        <button type="button" class="btn btn-light text-secondary px-3 py-2 rounded-3 border fw-semibold" data-bs-dismiss="modal">
+                            Batal
+                        </button>
+                        <button type="submit" class="btn text-white px-4 py-2 rounded-3 fw-bold shadow-sm d-flex align-items-center gap-2" style="background-color: #43557A; border-color: #43557A;">
+                            <i class="fa-solid fa-floppy-disk"></i>
+                            <span>Simpan Akun</span>
                         </button>
                     </div>
                 </form>
@@ -491,6 +526,10 @@
             icon.classList.remove('fa-eye-slash');
             icon.classList.add('fa-eye');
         }
+    }
+
+    function toggleModalPassword(button) {
+        togglePassword(button);
     }
 </script>
 
