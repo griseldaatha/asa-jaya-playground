@@ -630,18 +630,17 @@
                                         </div>
 
                                         <div>
-                                            <!-- Form Tambah ke Keranjang dengan Stepper -->
-                                            <form action="{{ route('keranjang.tambah') }}" method="POST" id="form-tambah-{{ $p->id }}" class="d-flex align-items-center gap-2">
+                                            <!-- Form Tambah/Update Keranjang dengan Stepper Sinkron -->
+                                            <form action="{{ route('keranjang.update', $p->id) }}" method="POST" id="form-qty-{{ $p->id }}" class="d-flex align-items-center gap-2">
                                                 @csrf
-                                                <input type="hidden" name="produk_id" value="{{ $p->id }}">
-                                                <input type="hidden" name="jumlah" id="input-qty-{{ $p->id }}" value="1">
+                                                <input type="hidden" name="jumlah" id="input-qty-{{ $p->id }}" value="{{ $qtyInCart }}">
 
                                                 <div class="ticket-stepper-box">
-                                                    <button type="button" class="btn-stepper btn-stepper-minus" onclick="decreaseQty({{ $p->id }})">
+                                                    <button type="button" class="btn-stepper btn-stepper-minus" onclick="ubahJumlah({{ $p->id }}, -1)">
                                                         <i class="fa-solid fa-minus"></i>
                                                     </button>
-                                                    <span class="stepper-val" id="display-qty-{{ $p->id }}">1</span>
-                                                    <button type="button" class="btn-stepper btn-stepper-plus" onclick="submitQty({{ $p->id }})">
+                                                    <span class="stepper-val" id="display-qty-{{ $p->id }}">{{ $qtyInCart }}</span>
+                                                    <button type="button" class="btn-stepper btn-stepper-plus" onclick="ubahJumlah({{ $p->id }}, 1)">
                                                         <i class="fa-solid fa-plus"></i>
                                                     </button>
                                                 </div>
@@ -744,23 +743,13 @@
             document.body.classList.remove('with-sidebar-desktop');
         }
 
-        function decreaseQty(id) {
+        function ubahJumlah(id, delta) {
+            const form = document.getElementById('form-qty-' + id);
             const input = document.getElementById('input-qty-' + id);
-            const display = document.getElementById('display-qty-' + id);
-            let val = parseInt(input.value, 10) || 1;
-            if (val > 1) {
-                val--;
-                input.value = val;
-                display.textContent = val;
-            }
-        }
-
-        function submitQty(id) {
-            const form = document.getElementById('form-tambah-' + id);
-            const input = document.getElementById('input-qty-' + id);
-            const display = document.getElementById('display-qty-' + id);
-            let val = parseInt(input.value, 10) || 1;
-            input.value = val;
+            let val = parseInt(input.value, 10) || 0;
+            let newVal = val + delta;
+            if (newVal < 0) newVal = 0;
+            input.value = newVal;
             form.submit();
         }
     </script>

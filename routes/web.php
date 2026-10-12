@@ -30,6 +30,7 @@ Route::get('/katalog', [CustomerController::class, 'katalog'])->name('katalog');
 
 // Keranjang & Checkout
 Route::post('/keranjang/tambah', [CustomerController::class, 'tambahKeranjang'])->name('keranjang.tambah');
+Route::post('/keranjang/update/{id}', [CustomerController::class, 'updateKeranjang'])->name('keranjang.update');
 Route::get('/keranjang', [CustomerController::class, 'lihatKeranjang'])->name('keranjang.lihat');
 Route::post('/keranjang/hapus/{id}', [CustomerController::class, 'hapusKeranjang'])->name('keranjang.hapus');
 Route::post('/checkout', [CustomerController::class, 'checkout'])->name('checkout');

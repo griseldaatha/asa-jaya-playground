@@ -159,6 +159,51 @@ class CustomerController extends Controller
     }
 
     /**
+     * Sinkronisasi jumlah kuantitas produk di keranjang
+     */
+    public function updateKeranjang(Request $request, $id)
+    {
+        $request->validate([
+            'jumlah' => 'required|integer|min:0',
+        ]);
+
+        $keranjang = session()->get('keranjang', []);
+        $jumlah = (int) $request->jumlah;
+
+        if ($jumlah <= 0) {
+            if (isset($keranjang[$id])) {
+                unset($keranjang[$id]);
+                session(['keranjang' => $keranjang]);
+            }
+            return back()->with('success', 'Item dihapus dari keranjang.');
+        }
+
+        $produk = Produk::where('id', $id)->where('is_active', true)->first();
+        if (! $produk) {
+            return back()->with('error', 'Produk tidak ditemukan.');
+        }
+
+        if ($jumlah > $produk->stok) {
+            return back()->with('error', 'Stok hanya tersisa ' . $produk->stok);
+        }
+
+        if (isset($keranjang[$id])) {
+            $keranjang[$id]['jumlah'] = $jumlah;
+        } else {
+            $keranjang[$id] = [
+                'produk_id' => $id,
+                'nama_produk' => $produk->nama_produk,
+                'harga' => $produk->harga,
+                'jumlah' => $jumlah,
+                'catatan' => null,
+            ];
+        }
+
+        session(['keranjang' => $keranjang]);
+        return back();
+    }
+
+    /**
      * Proses Checkout
      */
     public function checkout(Request $request)
