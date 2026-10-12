@@ -269,7 +269,10 @@
     <!-- Modal Sukses Transaksi Kasir -->
     <div class="modal fade" id="modalSuksesPesanan" tabindex="-1" aria-labelledby="modalSuksesTitle" aria-hidden="true" data-bs-backdrop="static">
         <div class="modal-dialog modal-dialog-centered" style="max-width: 410px;">
-            <div class="modal-content border-0 shadow-lg rounded-4 overflow-hidden bg-white">
+            <div class="modal-content border-0 shadow-lg rounded-4 overflow-hidden bg-white position-relative">
+                <!-- Tombol Silang (Close) -->
+                <button type="button" class="btn-close position-absolute top-0 end-0 m-3 shadow-none z-3" data-bs-dismiss="modal" aria-label="Close" onclick="resetPesananBaru()" style="font-size: 0.85rem;"></button>
+
                 <div class="modal-body p-4 pt-4 text-center">
                     <!-- Icon Centang Cantik -->
                     <div class="mx-auto mb-3 rounded-circle d-flex align-items-center justify-content-center shadow-2xs" style="width: 72px; height: 72px; background: linear-gradient(135deg, #dcfce7 0%, #bbf7d0 100%);">
@@ -302,15 +305,11 @@
                     </div>
 
                     <!-- Tombol Aksi -->
-                    <div class="d-grid gap-2">
+                    <div class="d-grid">
                         <a id="btnCetakStrukKasir" href="#" target="_blank" class="btn text-white py-2.5 fw-bold rounded-3 shadow-sm d-flex align-items-center justify-content-center gap-2" style="background-color: #5B6D92; border-color: #5B6D92; font-size: 0.95rem; transition: all 0.2s;">
                             <i class="fa-solid fa-print"></i>
                             <span>Cetak Struk</span>
                         </a>
-                        <button type="button" class="btn btn-light border py-2.5 fw-semibold rounded-3 text-secondary d-flex align-items-center justify-content-center gap-2 shadow-2xs" data-bs-dismiss="modal" onclick="resetPesananBaru()" style="font-size: 0.9rem; background-color: #ffffff; border-color: #cbd5e1; transition: all 0.2s;">
-                            <i class="fa-solid fa-plus text-primary"></i>
-                            <span class="text-dark">Pesanan Baru</span>
-                        </button>
                     </div>
                 </div>
             </div>
@@ -332,6 +331,9 @@
         const modalEl = document.getElementById('modalSuksesPesanan');
         if (modalEl) {
             modalSuksesInstance = new bootstrap.Modal(modalEl);
+            modalEl.addEventListener('hidden.bs.modal', function () {
+                resetPesananBaru();
+            });
         }
         renderKeranjang();
     });
