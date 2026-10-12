@@ -54,12 +54,37 @@
                         <label class="fw-bold small text-muted mb-1">NAMA PEMESAN / ANAK</label>
                         <input type="text" name="nama_pemesan" class="form-control bg-light" placeholder="Contoh: Budi" required>
                     </div>
-                    <div class="mb-2">
-                        <label class="fw-bold small text-muted mb-1">METODE PEMBAYARAN</label>
-                        <select name="metode_pembayaran" class="form-select bg-light">
-                            <option value="tunai">Tunai di Kasir</option>
-                        </select>
-                    </div>
+                    @if(\App\Services\MidtransService::isConfigured())
+                        <input type="hidden" name="metode_pembayaran" value="payment_gateway">
+                        <div class="mb-2">
+                            <label class="fw-bold small text-muted mb-1">METODE PEMBAYARAN</label>
+                            <div class="p-3 bg-light rounded-3 border d-flex align-items-center justify-content-between">
+                                <div class="d-flex align-items-center gap-2">
+                                    <span class="badge bg-primary px-2.5 py-1.5 fw-bold" style="font-size: 0.8rem;">
+                                        <i class="fa-solid fa-qrcode me-1"></i>QRIS
+                                    </span>
+                                    <div>
+                                        <div class="fw-bold text-dark small">Scan & Bayar Otomatis</div>
+                                        <div class="text-muted" style="font-size: 0.725rem;">GoPay, OVO, DANA, BCA, ShopeePay, dll.</div>
+                                    </div>
+                                </div>
+                                <span class="badge bg-success-subtle text-success border border-success-subtle rounded-pill px-2.5 py-1">Otomatis</span>
+                            </div>
+                        </div>
+                    @else
+                        <input type="hidden" name="metode_pembayaran" value="tunai">
+                        <div class="mb-2">
+                            <label class="fw-bold small text-muted mb-1">METODE PEMBAYARAN</label>
+                            <div class="p-3 bg-light rounded-3 border d-flex align-items-center justify-content-between">
+                                <div class="d-flex align-items-center gap-2">
+                                    <span class="badge bg-secondary px-2.5 py-1.5 fw-bold" style="font-size: 0.8rem;">
+                                        <i class="fa-solid fa-money-bill-wave me-1"></i>TUNAI
+                                    </div>
+                                    <span class="fw-bold text-dark small">Bayar di Kasir</span>
+                                </div>
+                            </div>
+                        </div>
+                    @endif
                 </form>
             </div>
         @endif

@@ -23,6 +23,7 @@ Route::get('/dashboard', function () {
 // JALUR CUSTOMER (GUEST SCAN QR)
 // ==========================================
 use App\Http\Controllers\CustomerController;
+use App\Http\Controllers\MidtransWebhookController;
 
 Route::get('/meja/{qr_token}', [CustomerController::class, 'scanMeja'])->name('scan.meja');
 Route::get('/katalog', [CustomerController::class, 'katalog'])->name('katalog');
@@ -35,6 +36,10 @@ Route::post('/checkout', [CustomerController::class, 'checkout'])->name('checkou
 
 // Status Pesanan (Pakai token di URL query)
 Route::get('/pesanan/{kode_transaksi}', [CustomerController::class, 'statusPesanan'])->name('status.pesanan');
+Route::get('/pesanan/{kode_transaksi}/cek', [CustomerController::class, 'cekStatusPesanan'])->name('status.pesanan.cek');
+
+// Webhook Notifikasi Midtrans (Publik, tanpa CSRF)
+Route::post('/midtrans/notification', [MidtransWebhookController::class, 'handle'])->name('midtrans.notification');
 
 // ==========================================
 // JALUR AUTENTIKASI (LOGIN & LOGOUT)
@@ -50,7 +55,9 @@ use App\Http\Controllers\Owner\DashboardController;
 use App\Http\Controllers\Owner\KaryawanController;
 use App\Http\Controllers\Owner\KategoriController;
 use App\Http\Controllers\Owner\MejaController;
+use App\Http\Controllers\Owner\PendapatanController;
 use App\Http\Controllers\Owner\PengeluaranController;
+use App\Http\Controllers\Owner\PengeluaranLaporanController;
 use App\Http\Controllers\Owner\ProdukController;
 
 Route::middleware(['auth', 'role:owner'])->prefix('owner')->name('owner.')->group(function () {
@@ -67,6 +74,19 @@ Route::middleware(['auth', 'role:owner'])->prefix('owner')->name('owner.')->grou
     Route::post('/karyawan', [KaryawanController::class, 'store'])->name('karyawan.store');
     Route::put('/karyawan/{id}', [KaryawanController::class, 'update'])->name('karyawan.update');
     Route::delete('/karyawan/{id}', [KaryawanController::class, 'destroy'])->name('karyawan.destroy');
+
+    // Redirect /owner/laporan lama ke /owner/pendapatan
+    Route::get('/laporan', function () {
+        return redirect()->route('owner.pendapatan.index');
+    });
+
+    // Laporan Pendapatan
+    Route::get('/pendapatan', [PendapatanController::class, 'index'])->name('pendapatan.index');
+    Route::get('/pendapatan/cetak', [PendapatanController::class, 'cetak'])->name('pendapatan.cetak');
+
+    // Laporan Pengeluaran
+    Route::get('/pengeluaran', [PengeluaranLaporanController::class, 'index'])->name('pengeluaran.index');
+    Route::get('/pengeluaran/cetak', [PengeluaranLaporanController::class, 'cetak'])->name('pengeluaran.cetak');
 });
 
 // ==========================================
@@ -94,6 +114,14 @@ Route::middleware(['auth', 'role:owner,kasir'])->prefix('admin')->name('admin.')
 
     // Kelola Riwayat Transaksi
     Route::get('/transaksi', [KasirController::class, 'riwayat'])->name('transaksi.index');
+    Route::get('/transaksi/{id}', [KasirController::class, 'detail'])->name('transaksi.show');
+    Route::get('/transaksi/{id}/struk', [KasirController::class, 'struk'])->name('transaksi.struk');
+});
+
+// Input Pesanan Langsung Kasir (POS) - Khusus Role Kasir
+Route::middleware(['auth', 'role:kasir'])->prefix('admin')->name('admin.')->group(function () {
+    Route::get('/pesanan-baru', [KasirController::class, 'createPesananBaru'])->name('pesanan-baru');
+    Route::post('/pesanan-baru', [KasirController::class, 'storePesananBaru'])->name('pesanan-baru.store');
 });
 
 // ==========================================

@@ -249,8 +249,11 @@
                     <a href="{{ route('owner.dashboard') }}" class="{{ request()->routeIs('owner.dashboard') ? 'active' : '' }}"><i class="fa-solid fa-chart-line"></i> Dashboard Owner</a>
                     <a href="{{ route('owner.karyawan.index') }}" class="{{ request()->routeIs('owner.karyawan.*') ? 'active' : '' }}"><i class="fa-solid fa-users-gear"></i> Kelola Kasir & User</a>
                     <a href="{{ route('owner.meja.index') }}" class="{{ request()->routeIs('owner.meja.*') ? 'active' : '' }}"><i class="fa-solid fa-qrcode"></i> Data Meja / QR</a>
+                    <a href="{{ route('owner.pendapatan.index') }}" class="{{ request()->routeIs('owner.pendapatan.*') ? 'active' : '' }}"><i class="fa-solid fa-wallet"></i> Pendapatan</a>
+                    <a href="{{ route('owner.pengeluaran.index') }}" class="{{ request()->routeIs('owner.pengeluaran.*') ? 'active' : '' }}"><i class="fa-solid fa-money-bill-wave"></i> Pengeluaran</a>
                 @elseif(Auth::user()->role === 'kasir')
                     <a href="{{ route('kasir.dashboard') }}" class="{{ request()->routeIs('kasir.dashboard') ? 'active' : '' }}"><i class="fa-solid fa-bell-concierge"></i> Antrean Aktif</a>
+                    <a href="{{ route('admin.pesanan-baru') }}" class="{{ request()->routeIs('admin.pesanan-baru*') ? 'active' : '' }}"><i class="fa-solid fa-cash-register"></i> Input Pesanan</a>
                     <a href="{{ route('admin.transaksi.index') }}" class="{{ request()->routeIs('admin.transaksi.*') ? 'active' : '' }}"><i class="fa-solid fa-clock-rotate-left"></i> Riwayat Transaksi</a>
                     <a href="{{ route('admin.kategori.index') }}" class="{{ request()->routeIs('admin.kategori.*') ? 'active' : '' }}"><i class="fa-solid fa-tags"></i> Kategori Produk</a>
                     <a href="{{ route('admin.produk.index') }}" class="{{ request()->routeIs('admin.produk.*') ? 'active' : '' }}"><i class="fa-solid fa-box-open"></i> Barang Penjualan</a>
@@ -288,7 +291,7 @@
                         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                     </div>
                 @endif
-                @if($errors->any())
+                @if(isset($errors) && $errors->any())
                     <div class="alert alert-danger border-0 shadow-sm rounded-3 mb-4">
                         <ul class="mb-0">
                             @foreach($errors->all() as $error)

@@ -113,7 +113,7 @@
                                     <td class="fw-bold text-primary">#{{ $t->kode_transaksi }}</td>
                                     <td>
                                         <div class="fw-semibold text-dark">{{ $t->nama_pemesan }}</div>
-                                        <small class="text-muted">Meja/Spot: {{ $t->meja_id ?? '-' }}</small>
+                                        <small class="text-muted">Meja/Spot: {{ $t->meja ? ('Meja #' . ($t->meja->nomor_meja ?? $t->meja->id)) : ($t->meja_id ? 'Meja #' . $t->meja_id : '-') }}</small>
                                     </td>
                                     <td>
                                         <span class="badge bg-light text-dark border text-uppercase">{{ $t->metode_pembayaran }}</span>

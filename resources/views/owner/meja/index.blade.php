@@ -14,19 +14,6 @@
     </form>
 </div>
 
-@if(session('success'))
-    <div class="alert alert-success alert-dismissible fade show" role="alert">
-        <i class="fa-solid fa-circle-check me-2"></i> {{ session('success') }}
-        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-    </div>
-@endif
-@if(session('error'))
-    <div class="alert alert-danger alert-dismissible fade show" role="alert">
-        <i class="fa-solid fa-circle-exclamation me-2"></i> {{ session('error') }}
-        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-    </div>
-@endif
-
 <div class="card border-0 shadow-sm rounded-4 overflow-hidden bg-white">
     <div class="card-body p-0">
         <div class="table-responsive">
@@ -48,11 +35,11 @@
                     @endphp
                     <tr>
                         <td class="fw-bold fs-5 text-dark">
-                            <span class="badge bg-light text-dark border px-3 py-2 rounded-3">Meja #{{ $m->id }}</span>
+                            <span class="badge bg-light text-dark border px-3 py-2 rounded-3">Meja #{{ $m->nomor_meja ?? $m->id }}</span>
                         </td>
                         <td>
                             <div class="p-1 bg-white border rounded-3 d-inline-block shadow-sm">
-                                <img src="{{ $qrImageApi }}" alt="QR Meja #{{ $m->id }}" width="80" height="80" class="rounded-2">
+                                <img src="{{ $qrImageApi }}" alt="QR Meja #{{ $m->nomor_meja ?? $m->id }}" width="80" height="80" class="rounded-2">
                             </div>
                         </td>
                         <td class="text-start">
@@ -75,10 +62,10 @@
                         </td>
                         <td class="text-end pe-4">
                             <div class="d-flex justify-content-end gap-2">
-                                <button type="button" class="btn btn-sm btn-outline-primary fw-bold d-flex align-items-center gap-1" onclick="cetakStikerQR('{{ $m->id }}', '{{ $m->qr_token }}', '{{ $qrImageApi }}', '{{ $qrUrl }}')">
+                                <button type="button" class="btn btn-sm btn-outline-primary fw-bold d-flex align-items-center gap-1" onclick="cetakStikerQR('{{ $m->nomor_meja ?? $m->id }}', '{{ $m->qr_token }}', '{{ $qrImageApi }}', '{{ $qrUrl }}')">
                                     <i class="fa-solid fa-print"></i> Cetak QR
                                 </button>
-                                <form action="{{ route('owner.meja.destroy', $m->id) }}" method="POST" onsubmit="return confirm('Hapus Meja #{{ $m->id }} secara permanen?');" class="m-0">
+                                <form action="{{ route('owner.meja.destroy', $m->id) }}" method="POST" onsubmit="return confirm('Hapus Meja #{{ $m->nomor_meja ?? $m->id }} secara permanen?');" class="m-0">
                                     @csrf @method('DELETE')
                                     <button type="submit" class="btn btn-sm btn-outline-danger"><i class="fa-solid fa-trash"></i></button>
                                 </form>

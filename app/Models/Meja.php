@@ -9,6 +9,7 @@ class Meja extends Model
     protected $table = 'meja';
 
     protected $fillable = [
+        'nomor_meja',
         'qr_token',
         'qr_code_url',
         'is_active',

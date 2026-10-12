@@ -34,7 +34,7 @@ class DashboardController extends Controller
         $pendapatanBersih = $pendapatan - $pengeluaran;
 
         // 5. Transaksi Terbaru (5 teratas)
-        $transaksiTerbaru = Transaksi::with(['detailTransaksi.produk'])
+        $transaksiTerbaru = Transaksi::with(['detailTransaksi.produk', 'meja'])
             ->orderBy('created_at', 'desc')
             ->take(5)
             ->get();

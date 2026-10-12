@@ -61,7 +61,7 @@
         <div class="left-side">
             <div class="d-flex justify-content-between align-items-center mb-3">
                 <h4 class="fw-bold m-0"><i class="fa-solid fa-shapes text-light"></i> Asa Jaya Playground</h4>
-                <span class="badge bg-secondary">Meja/Spot: {{ $meja_id }}</span>
+                <span class="badge bg-secondary">Meja/Spot: {{ $nomor_meja ?? $meja_id }}</span>
             </div>
 
             @if(session('success'))
@@ -166,7 +166,15 @@
                 <form action="{{ route('checkout') }}" method="POST">
                     @csrf
                     <input type="text" name="nama_pemesan" class="form-control mb-2" placeholder="Nama Pemesan (Wajib)" required>
-                    <input type="hidden" name="metode_pembayaran" value="tunai">
+                    @if(\App\Services\MidtransService::isConfigured())
+                        <input type="hidden" name="metode_pembayaran" value="payment_gateway">
+                        <div class="p-2 mb-2 bg-light rounded border d-flex align-items-center justify-content-between">
+                            <span class="small fw-bold text-dark"><i class="fa-solid fa-qrcode text-primary me-1"></i> Pembayaran QRIS</span>
+                            <span class="badge bg-success-subtle text-success">Otomatis</span>
+                        </div>
+                    @else
+                        <input type="hidden" name="metode_pembayaran" value="tunai">
+                    @endif
                     <button type="submit" class="btn-tambah" style="font-size: 1rem; padding: 12px;">Pesan Sekarang</button>
                 </form>
             </div>

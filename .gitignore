@@ -25,3 +25,7 @@ _ide_helper.php
 Homestead.json
 Homestead.yaml
 Thumbs.db
+backup_sebelum_struk.sql
+backup_sebelum_qris.sql
+backup_sebelum_nomor_meja.sql
+

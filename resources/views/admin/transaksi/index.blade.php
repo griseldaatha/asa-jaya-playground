@@ -39,18 +39,19 @@
             <table class="table table-hover align-middle mb-0" style="min-width: 900px;">
                 <thead class="table-light">
                     <tr>
-                        <th class="ps-4" style="width: 14%;">Waktu Transaksi</th>
-                        <th style="width: 18%;">Kode & Meja</th>
-                        <th style="width: 20%;">Pelanggan & Status</th>
-                        <th style="width: 15%;">Kasir</th>
-                        <th style="width: 20%;">Detail Item</th>
-                        <th class="text-end pe-4" style="width: 13%;">Total Bayar</th>
+                        <th class="ps-4" style="width: 13%;">Waktu Transaksi</th>
+                        <th style="width: 16%;">Kode & Meja</th>
+                        <th style="width: 18%;">Pelanggan & Status</th>
+                        <th style="width: 13%;">Kasir</th>
+                        <th style="width: 18%;">Detail Item</th>
+                        <th class="text-end" style="width: 11%;">Total Bayar</th>
+                        <th class="text-center pe-4" style="width: 11%;">Aksi</th>
                     </tr>
                 </thead>
                 <tbody>
                     @forelse($transaksi as $t)
                     <tr class="transaksi-row" 
-                        data-search="{{ strtolower($t->kode_transaksi . ' ' . $t->nama_pemesan . ' ' . ($t->meja_id ?? '')) }}"
+                        data-search="{{ strtolower($t->kode_transaksi . ' ' . $t->nama_pemesan . ' ' . ($t->meja ? ('meja ' . ($t->meja->nomor_meja ?? $t->meja->id)) : ($t->meja_id ? 'meja ' . $t->meja_id : 'kasir'))) }}"
                         data-pembayaran="{{ strtolower($t->status_pembayaran) }}"
                         data-pesanan="{{ strtolower($t->status_pesanan) }}">
                         
@@ -64,7 +65,7 @@
                         <td>
                             <div class="fw-bold text-primary mb-1">#{{ $t->kode_transaksi }}</div>
                             <span class="badge bg-light text-dark border fw-medium small">
-                                <i class="fa-solid fa-chair text-warning me-1"></i>{{ $t->meja ? $t->meja->nama_meja : ($t->meja_id ? 'Meja '.$t->meja_id : 'Meja -') }}
+                                <i class="fa-solid {{ $t->meja_id ? 'fa-chair text-warning' : 'fa-cash-register text-info' }} me-1"></i>{{ $t->meja ? ('Meja #' . ($t->meja->nomor_meja ?? $t->meja->id)) : ($t->meja_id ? 'Meja #' . $t->meja_id : 'Kasir / Langsung') }}
                             </span>
                         </td>
 
@@ -75,15 +76,19 @@
                                 <!-- Payment Badge -->
                                 @if($t->status_pembayaran == 'lunas')
                                     <span class="badge bg-success-subtle text-success border border-success-subtle rounded-pill px-2 py-1" style="font-size: 11px;">
-                                        <i class="fa-solid fa-circle-check me-1"></i>Lunas ({{ strtoupper($t->metode_pembayaran) }})
+                                        <i class="fa-solid fa-circle-check me-1"></i>Lunas ({{ $t->metode_pembayaran === 'payment_gateway' ? 'QRIS' : 'Tunai' }})
                                     </span>
                                 @elseif($t->status_pembayaran == 'batal')
                                     <span class="badge bg-danger-subtle text-danger border border-danger-subtle rounded-pill px-2 py-1" style="font-size: 11px;">
                                         <i class="fa-solid fa-circle-xmark me-1"></i>Batal
                                     </span>
+                                @elseif($t->status_pembayaran == 'kadaluarsa')
+                                    <span class="badge bg-secondary-subtle text-secondary border border-secondary-subtle rounded-pill px-2 py-1" style="font-size: 11px;">
+                                        <i class="fa-solid fa-clock-rotate-left me-1"></i>Kadaluarsa
+                                    </span>
                                 @else
                                     <span class="badge bg-warning-subtle text-dark border border-warning-subtle rounded-pill px-2 py-1" style="font-size: 11px;">
-                                        <i class="fa-solid fa-clock me-1"></i>Pending
+                                        <i class="fa-solid fa-clock me-1"></i>Pending ({{ $t->metode_pembayaran === 'payment_gateway' ? 'QRIS' : 'Tunai' }})
                                     </span>
                                 @endif
 
@@ -129,13 +134,27 @@
                         </td>
 
                         <!-- Column 6: Total -->
-                        <td class="text-end pe-4 fw-bold text-primary fs-6">
+                        <td class="text-end fw-bold text-primary fs-6">
                             Rp {{ number_format($t->total_harga, 0, ',', '.') }}
+                        </td>
+
+                        <!-- Column 7: Aksi -->
+                        <td class="text-center pe-4">
+                            <div class="d-flex justify-content-center align-items-center gap-1">
+                                <a href="{{ route('admin.transaksi.show', $t->id) }}" class="btn btn-sm btn-outline-primary px-2.5" title="Lihat Detail Transaksi">
+                                    <i class="fa-solid fa-eye me-1"></i>Detail
+                                </a>
+                                @if($t->status_pembayaran === 'lunas')
+                                    <a href="{{ route('admin.transaksi.struk', $t->id) }}" target="_blank" class="btn btn-sm btn-outline-secondary px-2" title="Cetak Struk">
+                                        <i class="fa-solid fa-print"></i>
+                                    </a>
+                                @endif
+                            </div>
                         </td>
                     </tr>
                     @empty
                     <tr>
-                        <td colspan="6">
+                        <td colspan="7">
                             <div class="empty-state">
                                 <div class="empty-state-icon">
                                     <i class="fa-solid fa-clock-rotate-left"></i>
