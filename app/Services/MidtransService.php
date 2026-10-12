@@ -40,6 +40,23 @@ class MidtransService
     }
 
     /**
+     * Membangun HTTP Client dengan konfigurasi SSL yang aman untuk Windows/Laragon
+     */
+    protected function buildHttpClient(): \Illuminate\Http\Client\PendingRequest
+    {
+        $client = Http::withBasicAuth($this->getServerKey(), '')
+            ->timeout(15);
+
+        if (file_exists('C:/laragon/etc/ssl/cacert.pem')) {
+            $client = $client->withOptions(['verify' => 'C:/laragon/etc/ssl/cacert.pem']);
+        } elseif (config('app.env') === 'local') {
+            $client = $client->withOptions(['verify' => false]);
+        }
+
+        return $client;
+    }
+
+    /**
      * Membuat pembayaran QRIS via Midtrans Core API (/v2/charge)
      */
     public function chargeQris(Transaksi $t): array
@@ -86,8 +103,7 @@ class MidtransService
         }
 
         try {
-            $response = Http::withBasicAuth($serverKey, '')
-                ->timeout(15)
+            $response = $this->buildHttpClient()
                 ->post("{$baseUrl}/v2/charge", $payload);
         } catch (\Throwable $e) {
             Log::error('Midtrans Charge Connection Error: ' . $e->getMessage(), [
@@ -176,8 +192,7 @@ class MidtransService
         $baseUrl = $this->getBaseUrl();
 
         try {
-            $response = Http::withBasicAuth($serverKey, '')
-                ->timeout(15)
+            $response = $this->buildHttpClient()
                 ->get("{$baseUrl}/v2/{$orderId}/status");
 
             return $response->json() ?? [];
@@ -198,11 +213,9 @@ class MidtransService
             if (!self::isConfigured()) {
                 return false;
             }
-            $serverKey = $this->getServerKey();
             $baseUrl = $this->getBaseUrl();
 
-            $response = Http::withBasicAuth($serverKey, '')
-                ->timeout(15)
+            $response = $this->buildHttpClient()
                 ->post("{$baseUrl}/v2/{$orderId}/cancel");
 
             Log::info("Midtrans Cancel Request for {$orderId}", [
