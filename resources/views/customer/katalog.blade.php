@@ -534,6 +534,181 @@
                 display: none;
             }
         }
+
+        /* ================= MOBILE RESPONSIVE TWEAKS (<= 768px & <= 576px) ================= */
+        @media (max-width: 768px) {
+            .katalog-header {
+                padding: 12px 16px;
+                gap: 10px;
+                flex-wrap: wrap;
+            }
+
+            .brand-title {
+                font-size: 1.15rem;
+            }
+
+            .brand-shapes {
+                gap: 3px;
+            }
+
+            .shape-triangle {
+                border-left-width: 7px;
+                border-right-width: 7px;
+                border-bottom-width: 13px;
+            }
+
+            .shape-circle {
+                width: 13px;
+                height: 13px;
+            }
+
+            .shape-square {
+                width: 12px;
+                height: 12px;
+            }
+
+            .header-actions {
+                gap: 8px;
+            }
+
+            .spot-badge {
+                font-size: 0.78rem;
+                padding: 6px 12px;
+            }
+
+            .btn-pesanan-toggle {
+                font-size: 0.82rem;
+                padding: 6px 14px;
+            }
+
+            .content-area {
+                padding: 0 16px 80px 16px; /* Extra bottom padding for mobile */
+            }
+
+            .category-container {
+                margin-bottom: 16px;
+                gap: 8px;
+            }
+
+            .btn-category-tab {
+                font-size: 0.82rem;
+                padding: 6px 15px;
+            }
+
+            .section-category-title {
+                font-size: 1.1rem;
+                margin-bottom: 12px;
+            }
+
+            /* Ticket pass card mobile refinement */
+            .ticket-card {
+                border-radius: 18px;
+                min-height: 160px;
+            }
+
+            .ticket-left {
+                width: 110px;
+            }
+
+            .ticket-notch-top {
+                left: 100px;
+                width: 20px;
+                height: 20px;
+                top: -10px;
+            }
+
+            .ticket-notch-bottom {
+                left: 100px;
+                width: 20px;
+                height: 20px;
+                bottom: -10px;
+            }
+
+            .wristband-sun {
+                width: 65px;
+                height: 65px;
+            }
+
+            .wristband-tag {
+                font-size: 0.68rem;
+                padding: 4px 8px;
+                letter-spacing: 1px;
+            }
+
+            .ticket-right {
+                padding: 12px 14px;
+            }
+
+            .ticket-title {
+                font-size: 0.95rem;
+                margin-bottom: 2px;
+            }
+
+            .ticket-price {
+                font-size: 1.15rem;
+                margin-bottom: 8px;
+            }
+
+            .ticket-stepper-box {
+                max-width: 145px;
+                padding: 2px;
+            }
+
+            .btn-stepper {
+                width: 30px;
+                height: 30px;
+                font-size: 0.85rem;
+            }
+
+            .stepper-val {
+                min-width: 30px;
+                font-size: 0.85rem;
+            }
+
+            /* Cart panel on mobile as a bottom sheet / full slide drawer */
+            .cart-sidebar-panel {
+                width: 100%;
+                border-radius: 20px 20px 0 0;
+                max-height: 90vh;
+                top: auto;
+                bottom: 0;
+                transform: translateY(100%);
+            }
+
+            .cart-sidebar-panel.open {
+                transform: translateY(0);
+            }
+
+            .cart-panel-header {
+                padding: 16px 20px;
+            }
+
+            .cart-panel-body {
+                padding: 16px 20px;
+            }
+
+            .cart-panel-footer {
+                padding: 16px 20px 24px 20px;
+            }
+        }
+
+        @media (max-width: 420px) {
+            .ticket-left {
+                width: 95px;
+            }
+
+            .ticket-notch-top, .ticket-notch-bottom {
+                left: 85px;
+            }
+
+            .ticket-title {
+                font-size: 0.88rem;
+            }
+
+            .ticket-price {
+                font-size: 1.05rem;
+            }
+        }
     </style>
 </head>
 <body class="{{ !empty($items) ? 'with-sidebar-desktop' : '' }}">
