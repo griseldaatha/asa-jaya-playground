@@ -200,25 +200,43 @@
         }
 
         .btn-action-secondary {
-            background-color: #ffffff !important;
-            border: 1px solid #cbd5e1 !important;
-            color: #334155 !important;
+            background-color: #f8fafc !important;
+            border: 1px solid #e2e8f0 !important;
+            color: #475569 !important;
             border-radius: 12px;
             font-weight: 600;
-            padding: 8px 12px;
-            font-size: 0.85rem;
-            transition: all 0.2s ease;
+            padding: 9px 14px;
+            font-size: 0.84rem;
+            letter-spacing: 0.2px;
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
             text-decoration: none;
             display: inline-flex;
             align-items: center;
             justify-content: center;
+            gap: 8px;
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
         }
 
         .btn-action-secondary:hover {
-            background-color: #f8fafc !important;
-            color: #0f172a !important;
-            border-color: #94a3b8 !important;
+            background-color: #ffffff !important;
+            color: #1e293b !important;
+            border-color: #cbd5e1 !important;
+            box-shadow: 0 3px 8px rgba(0, 0, 0, 0.06);
             transform: translateY(-1px);
+        }
+
+        .btn-action-secondary:active {
+            transform: translateY(0);
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
+        }
+
+        .btn-action-secondary i {
+            font-size: 0.92rem;
+            transition: transform 0.2s ease;
+        }
+
+        .btn-action-secondary:hover i {
+            transform: scale(1.1);
         }
 
         .btn-action-cancel {
@@ -953,12 +971,14 @@
                                     <div class="row g-2 mb-2">
                                         <div class="col-6">
                                             <button type="button" onclick="bukaModalDetail(${p.id})" class="btn-action-secondary w-100" title="Lihat Detail Transaksi">
-                                                <i class="fa-solid fa-receipt me-1.5 text-primary"></i> Detail
+                                                <i class="fa-solid fa-receipt text-primary"></i>
+                                                <span>Detail</span>
                                             </button>
                                         </div>
                                         <div class="col-6">
                                             <a href="/admin/transaksi/${p.id}/struk" target="_blank" class="btn-action-secondary w-100" title="Cetak Struk Transaksi">
-                                                <i class="fa-solid fa-print me-1.5 text-secondary"></i> Struk
+                                                <i class="fa-solid fa-print text-secondary"></i>
+                                                <span>Struk</span>
                                             </a>
                                         </div>
                                     </div>
