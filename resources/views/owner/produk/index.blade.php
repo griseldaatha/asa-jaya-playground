@@ -177,8 +177,8 @@
         }
 
         .upload-area-dashed:hover {
-            border-color: #4f46e5;
-            background: #f0f3ff;
+            border-color: #43557A;
+            background: #f1f5f9;
         }
     </style>
 
@@ -254,59 +254,114 @@
     </div>
 
     <!-- Modal Tambah Produk -->
-    <div class="modal fade" id="modalTambah" tabindex="-1" aria-hidden="true">
-        <div class="modal-dialog modal-lg modal-dialog-centered">
-            <div class="modal-content border-0 rounded-4 overflow-hidden shadow-lg">
-                <div class="modal-header modal-header-gradient">
-                    <h5 class="modal-title fw-bold"><i class="fa-solid fa-cart-plus me-2"></i>Tambah Produk Baru</h5>
-                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+    <div class="modal fade" id="modalTambah" tabindex="-1" aria-labelledby="modalTambahTitle" aria-hidden="true" data-bs-backdrop="static">
+        <div class="modal-dialog modal-dialog-centered" style="max-width: 620px;">
+            <div class="modal-content border-0 rounded-4 overflow-hidden shadow-lg" style="background-color: #ffffff;">
+                <!-- Header Modal Bersih & Modern -->
+                <div class="modal-header border-0 pb-0 pt-4 px-4 bg-white d-flex align-items-center justify-content-between">
+                    <div class="d-flex align-items-center gap-3">
+                        <div class="rounded-3 d-flex align-items-center justify-content-center shadow-sm" style="width: 44px; height: 44px; background: linear-gradient(135deg, #5B6D92 0%, #43557A 100%); color: #ffffff;">
+                            <i class="fa-solid fa-cart-plus fs-5"></i>
+                        </div>
+                        <div>
+                            <h5 class="modal-title fw-bold text-dark mb-0" id="modalTambahTitle" style="font-size: 1.2rem; letter-spacing: -0.3px;">
+                                Tambah Produk Baru
+                            </h5>
+                            <span class="text-muted small" style="font-size: 0.8rem;">Tambahkan item tiket atau menu baru ke katalog kasir</span>
+                        </div>
+                    </div>
+                    <button type="button" class="btn-close shadow-none" data-bs-dismiss="modal" aria-label="Close" style="font-size: 0.85rem;"></button>
                 </div>
+
                 <form action="{{ route('admin.produk.store') }}" method="POST" enctype="multipart/form-data">
                     @csrf
-                    <div class="modal-body p-4">
+                    <div class="modal-body p-4 pt-3 bg-white">
                         <div class="row g-3">
+                            <!-- Kategori Produk -->
                             <div class="col-md-6">
-                                <label class="form-label fw-semibold small text-secondary">Kategori Produk <span class="text-danger">*</span></label>
-                                <select name="kategori_produk_id" class="form-select" required>
-                                    <option value="">-- Pilih Kategori --</option>
-                                    @foreach($kategori as $k)
-                                        <option value="{{ $k->id }}">{{ $k->nama_kategori }}</option>
-                                    @endforeach
-                                </select>
-                            </div>
-                            <div class="col-md-6">
-                                <label class="form-label fw-semibold small text-secondary">Nama Produk <span class="text-danger">*</span></label>
-                                <input type="text" name="nama_produk" class="form-control" placeholder="Contoh: Tiket Wahana Playland" required maxlength="100">
-                            </div>
-                            <div class="col-md-6">
-                                <label class="form-label fw-semibold small text-secondary">Harga Jual (Rp) <span class="text-danger">*</span></label>
-                                <div class="input-group">
-                                    <span class="input-group-text bg-light fw-bold text-success">Rp</span>
-                                    <input type="number" name="harga" class="form-control" placeholder="0" required min="0">
+                                <label class="form-label fw-bold small text-dark mb-1" style="font-size: 0.82rem;">
+                                    Kategori Produk <span class="text-danger">*</span>
+                                </label>
+                                <div class="input-group shadow-sm rounded-3 overflow-hidden border" style="border-color: #e2e8f0 !important;">
+                                    <span class="input-group-text border-0 bg-light text-secondary px-3">
+                                        <i class="fa-solid fa-shapes"></i>
+                                    </span>
+                                    <select name="kategori_produk_id" class="form-select border-0 ps-2 fw-semibold text-dark bg-white" required style="font-size: 0.92rem; box-shadow: none;">
+                                        <option value="">-- Pilih Kategori --</option>
+                                        @foreach($kategori as $k)
+                                            <option value="{{ $k->id }}">{{ $k->nama_kategori }}</option>
+                                        @endforeach
+                                    </select>
                                 </div>
                             </div>
+
+                            <!-- Nama Produk -->
                             <div class="col-md-6">
-                                <label class="form-label fw-semibold small text-secondary">Stok Awal <span class="text-danger">*</span></label>
-                                <input type="number" name="stok" class="form-control" placeholder="0" required min="0">
+                                <label class="form-label fw-bold small text-dark mb-1" style="font-size: 0.82rem;">
+                                    Nama Produk <span class="text-danger">*</span>
+                                </label>
+                                <div class="input-group shadow-sm rounded-3 overflow-hidden border" style="border-color: #e2e8f0 !important;">
+                                    <span class="input-group-text border-0 bg-light text-secondary px-3">
+                                        <i class="fa-solid fa-tag"></i>
+                                    </span>
+                                    <input type="text" name="nama_produk" class="form-control border-0 ps-2 fw-semibold text-dark bg-white" placeholder="Contoh: Tiket Terusan" required maxlength="100" style="font-size: 0.92rem; box-shadow: none;">
+                                </div>
                             </div>
-                            <div class="col-md-12">
-                                <label class="form-label fw-semibold small text-secondary">Foto Produk (Opsional)</label>
+
+                            <!-- Harga Jual -->
+                            <div class="col-md-6">
+                                <label class="form-label fw-bold small text-dark mb-1" style="font-size: 0.82rem;">
+                                    Harga Jual (Rp) <span class="text-danger">*</span>
+                                </label>
+                                <div class="input-group shadow-sm rounded-3 overflow-hidden border" style="border-color: #e2e8f0 !important;">
+                                    <span class="input-group-text border-0 bg-light text-secondary px-3 fw-bold" style="font-size: 0.88rem;">
+                                        Rp
+                                    </span>
+                                    <input type="number" name="harga" class="form-control border-0 ps-2 fw-semibold text-dark bg-white" placeholder="0" required min="0" style="font-size: 0.92rem; box-shadow: none;">
+                                </div>
+                            </div>
+
+                            <!-- Stok Awal -->
+                            <div class="col-md-6">
+                                <label class="form-label fw-bold small text-dark mb-1" style="font-size: 0.82rem;">
+                                    Stok Awal <span class="text-danger">*</span>
+                                </label>
+                                <div class="input-group shadow-sm rounded-3 overflow-hidden border" style="border-color: #e2e8f0 !important;">
+                                    <span class="input-group-text border-0 bg-light text-secondary px-3">
+                                        <i class="fa-solid fa-boxes-stacked"></i>
+                                    </span>
+                                    <input type="number" name="stok" class="form-control border-0 ps-2 fw-semibold text-dark bg-white" placeholder="0" required min="0" style="font-size: 0.92rem; box-shadow: none;">
+                                </div>
+                            </div>
+
+                            <!-- Foto Produk -->
+                            <div class="col-12">
+                                <label class="form-label fw-bold small text-dark mb-1" style="font-size: 0.82rem;">
+                                    Foto Produk <span class="text-muted fw-normal">(Opsional)</span>
+                                </label>
                                 <div class="upload-area-dashed d-flex align-items-center gap-3">
-                                    <div id="previewContainerAdd" class="rounded-3 border d-flex align-items-center justify-content-center bg-white text-muted overflow-hidden shadow-sm" style="width: 70px; height: 70px; flex-shrink: 0;">
-                                        <i class="fa-solid fa-cloud-arrow-up fs-3 text-primary"></i>
+                                    <div id="previewContainerAdd" class="rounded-3 border d-flex align-items-center justify-content-center bg-white text-secondary overflow-hidden shadow-sm" style="width: 68px; height: 68px; flex-shrink: 0; border-color: #e2e8f0 !important;">
+                                        <i class="fa-solid fa-cloud-arrow-up fs-4 text-muted"></i>
                                     </div>
                                     <div class="flex-grow-1">
-                                        <input type="file" name="foto" class="form-control" accept="image/*" onchange="previewImageAdd(event)">
-                                        <div class="form-text small text-muted">Format: JPG, PNG, WEBP. Maksimal 2MB.</div>
+                                        <input type="file" name="foto" class="form-control form-control-sm border shadow-2xs rounded-3" accept="image/*" onchange="previewImageAdd(event)" style="border-color: #e2e8f0 !important; font-size: 0.85rem;">
+                                        <div class="form-text small text-muted mt-1" style="font-size: 0.75rem;">
+                                            <i class="fa-solid fa-circle-info me-1"></i> Format: JPG, PNG, WEBP. Maksimal 2MB.
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <div class="modal-footer bg-light px-4 py-3">
-                        <button type="button" class="btn btn-light px-4 rounded-3 fw-semibold" data-bs-dismiss="modal">Batal</button>
-                        <button type="submit" class="btn btn-primary px-4 rounded-3 fw-bold shadow-sm" style="background: var(--primary-gradient); border: none;">
-                            <i class="fa-solid fa-floppy-disk me-1.5"></i> Simpan Produk
+
+                    <!-- Footer Tombol Aksi -->
+                    <div class="modal-footer border-top-0 pt-0 pb-4 px-4 bg-white d-flex justify-content-end gap-2">
+                        <button type="button" class="btn btn-light text-secondary px-3 py-2 rounded-3 border fw-semibold" data-bs-dismiss="modal">
+                            Batal
+                        </button>
+                        <button type="submit" class="btn text-white px-4 py-2 rounded-3 fw-bold shadow-sm d-flex align-items-center gap-2" style="background-color: #43557A; border-color: #43557A;">
+                            <i class="fa-solid fa-floppy-disk"></i>
+                            <span>Simpan Produk</span>
                         </button>
                     </div>
                 </form>
