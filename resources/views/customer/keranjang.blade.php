@@ -18,16 +18,53 @@
         .bottom-bar { position: fixed; bottom: 0; left: 0; width: 100%; background: white; padding: 15px 20px; box-shadow: 0 -4px 15px rgba(0,0,0,0.05); border-radius: 20px 20px 0 0; }
         .payment-method-card {
             background-color: #ffffff;
-            border-color: #cbd5e1 !important;
+            border: 1.5px solid #e2e8f0;
+            border-radius: 12px;
+            padding: 11px 14px;
+            cursor: pointer;
+            transition: all 0.2s ease;
             user-select: none;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .payment-method-card:hover {
+            border-color: #cbd5e1;
+            background-color: #f8fafc;
         }
         .payment-method-card:has(input:checked) {
             border-color: #5B6D92 !important;
-            background-color: #f1f5f9;
-            box-shadow: 0 0 0 1px #5B6D92;
+            background-color: #f0f4f9;
+            box-shadow: 0 2px 8px rgba(91, 109, 146, 0.12);
         }
-        .payment-method-card:hover {
-            border-color: #94a3b8 !important;
+        .payment-radio-indicator {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            border: 2px solid #cbd5e1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            transition: all 0.2s ease;
+            background: #ffffff;
+        }
+        .payment-method-card:has(input:checked) .payment-radio-indicator {
+            border-color: #5B6D92;
+            background-color: #5B6D92;
+        }
+        .payment-radio-dot {
+            width: 7px;
+            height: 7px;
+            border-radius: 50%;
+            background-color: #ffffff;
+            opacity: 0;
+            transform: scale(0.5);
+            transition: all 0.2s ease;
+        }
+        .payment-method-card:has(input:checked) .payment-radio-dot {
+            opacity: 1;
+            transform: scale(1);
         }
     </style>
 </head>
@@ -77,33 +114,43 @@
                             <label class="fw-bold small text-muted mb-1.5">METODE PEMBAYARAN</label>
                             <div class="d-flex flex-column gap-2">
                                 <!-- QRIS -->
-                                <label class="payment-method-card d-flex align-items-center justify-content-between p-3 rounded-3 border" for="pay_qris_keranjang" style="cursor: pointer; transition: all 0.2s ease;">
-                                    <div class="d-flex align-items-center gap-3">
-                                        <input type="radio" name="metode_pembayaran" id="pay_qris_keranjang" value="payment_gateway" class="form-check-input m-0" checked>
+                                <label class="payment-method-card" for="pay_qris_keranjang">
+                                    <input type="radio" name="metode_pembayaran" id="pay_qris_keranjang" value="payment_gateway" class="d-none" checked>
+                                    <div class="d-flex align-items-center gap-2.5">
+                                        <div class="rounded-3 d-flex align-items-center justify-content-center shadow-2xs" style="width: 38px; height: 38px; background-color: #e0e7ff; color: #3730a3; flex-shrink: 0;">
+                                            <i class="fa-solid fa-qrcode fs-6"></i>
+                                        </div>
                                         <div>
-                                            <div class="fw-bold text-dark small d-flex align-items-center gap-1.5">
-                                                <i class="fa-solid fa-qrcode text-primary"></i>
-                                                <span>QRIS (Scan & Bayar Otomatis)</span>
+                                            <div class="d-flex align-items-center gap-1.5">
+                                                <span class="fw-bold text-dark small" style="font-size: 0.88rem;">QRIS</span>
+                                                <span class="badge bg-success-subtle text-success border border-success-subtle rounded-pill" style="font-size: 0.65rem; padding: 2px 7px;">Otomatis</span>
                                             </div>
                                             <div class="text-muted" style="font-size: 0.725rem;">GoPay, OVO, DANA, BCA, ShopeePay, dll.</div>
                                         </div>
                                     </div>
-                                    <span class="badge bg-success-subtle text-success border border-success-subtle rounded-pill px-2.5 py-1">Otomatis</span>
+                                    <div class="payment-radio-indicator">
+                                        <div class="payment-radio-dot"></div>
+                                    </div>
                                 </label>
 
                                 <!-- Tunai -->
-                                <label class="payment-method-card d-flex align-items-center justify-content-between p-3 rounded-3 border" for="pay_tunai_keranjang" style="cursor: pointer; transition: all 0.2s ease;">
-                                    <div class="d-flex align-items-center gap-3">
-                                        <input type="radio" name="metode_pembayaran" id="pay_tunai_keranjang" value="tunai" class="form-check-input m-0">
+                                <label class="payment-method-card" for="pay_tunai_keranjang">
+                                    <input type="radio" name="metode_pembayaran" id="pay_tunai_keranjang" value="tunai" class="d-none">
+                                    <div class="d-flex align-items-center gap-2.5">
+                                        <div class="rounded-3 d-flex align-items-center justify-content-center shadow-2xs" style="width: 38px; height: 38px; background-color: #dcfce7; color: #166534; flex-shrink: 0;">
+                                            <i class="fa-solid fa-money-bill-wave fs-6"></i>
+                                        </div>
                                         <div>
-                                            <div class="fw-bold text-dark small d-flex align-items-center gap-1.5">
-                                                <i class="fa-solid fa-money-bill-wave text-success"></i>
-                                                <span>Tunai</span>
+                                            <div class="d-flex align-items-center gap-1.5">
+                                                <span class="fw-bold text-dark small" style="font-size: 0.88rem;">Tunai</span>
+                                                <span class="badge bg-secondary-subtle text-secondary border border-secondary-subtle rounded-pill" style="font-size: 0.65rem; padding: 2px 7px;">Di Kasir</span>
                                             </div>
-                                            <div class="text-muted" style="font-size: 0.725rem;">Bayar langsung di meja kasir</div>
+                                            <div class="text-muted" style="font-size: 0.725rem;">Bayar langsung di kasir</div>
                                         </div>
                                     </div>
-                                    <span class="badge bg-secondary-subtle text-secondary border border-secondary-subtle rounded-pill px-2.5 py-1">Di Kasir</span>
+                                    <div class="payment-radio-indicator">
+                                        <div class="payment-radio-dot"></div>
+                                    </div>
                                 </label>
                             </div>
                         </div>
