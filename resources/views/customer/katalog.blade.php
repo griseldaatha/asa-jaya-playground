@@ -871,7 +871,7 @@
             @foreach($kategori_produk as $kat)
                 @if($kat->produk->where('is_active', true)->count() > 0)
                     <a href="#kat-{{ $kat->id }}" class="btn-category-tab">
-                        <i class="fa-solid fa-ticket-simple"></i> {{ $kat->nama_kategori }}
+                        {{ $kat->nama_kategori }}
                     </a>
                 @endif
             @endforeach
