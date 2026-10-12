@@ -7,10 +7,15 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
     <style>
-        body { background-color: #F0E2D2; font-family: sans-serif; }
+        body {
+            background-color: #EFE1D1;
+            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="86" height="86" viewBox="0 0 86 86"><rect width="86" height="86" fill="%23EFE1D1"/><g transform="translate(6, 3) rotate(35)"><rect x="-6" y="-2.5" width="12" height="5" rx="2.5" fill="%23EF9B88"/></g><g transform="translate(92, 3) rotate(35)"><rect x="-6" y="-2.5" width="12" height="5" rx="2.5" fill="%23EF9B88"/></g><g transform="translate(6, 89) rotate(35)"><rect x="-6" y="-2.5" width="12" height="5" rx="2.5" fill="%23EF9B88"/></g><g transform="translate(92, 89) rotate(35)"><rect x="-6" y="-2.5" width="12" height="5" rx="2.5" fill="%23EF9B88"/></g><circle cx="47" cy="6" r="3.8" fill="%2384A8E8"/><circle cx="47" cy="92" r="3.8" fill="%2384A8E8"/><circle cx="33" cy="45" r="3.5" fill="%23F3D063"/><rect x="-6" y="62.5" width="12" height="5" rx="2.5" fill="%23C58DE8"/><rect x="80" y="62.5" width="12" height="5" rx="2.5" fill="%23C58DE8"/></svg>');
+            background-repeat: repeat;
+            font-family: sans-serif;
+        }
         .ticket { background: white; border-radius: 20px; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.1); margin-top: 40px; }
         .ticket-header { background: #5B6D92; color: white; padding: 30px 20px; text-align: center; position: relative; }
-        .ticket-header::after { content: ''; position: absolute; bottom: -15px; left: 0; right: 0; border-bottom: 30px dotted #F0E2D2; }
+        .ticket-header::after { content: ''; position: absolute; bottom: -15px; left: 0; right: 0; border-bottom: 30px dotted #EFE1D1; }
         .ticket-body { padding: 40px 30px 30px; }
         .status-badge { display: inline-block; padding: 8px 20px; border-radius: 30px; font-weight: bold; margin-bottom: 20px; }
         .bg-pending { background-color: #fff3cd; color: #856404; }
