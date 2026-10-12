@@ -1,15 +1,8 @@
 @extends('layouts.admin')
 
 @section('content')
-<!-- Header Section -->
-<div class="d-flex flex-wrap justify-content-between align-items-center mb-4 gap-3">
-    <div>
-        <h3 class="page-title"><i class="fa-solid fa-clock-rotate-left text-primary me-2"></i>Riwayat Seluruh Transaksi</h3>
-        <p class="page-subtitle mb-0">Pantau seluruh catatan transaksi penjualan dan pembayaran playground</p>
-    </div>
-    
-    <!-- Search & Filter Controls -->
-    <div class="d-flex flex-wrap align-items-center gap-2">
+<!-- Filter Controls Section -->
+<div class="d-flex flex-wrap justify-content-end align-items-center mb-4 gap-2">
         <div class="position-relative" style="min-width: 220px;">
             <i class="fa-solid fa-magnifying-glass position-absolute top-50 start-0 translate-middle-y ms-3 text-muted"></i>
             <input type="text" id="searchTransaksi" class="form-control ps-5 shadow-sm" placeholder="Cari kode / pemesan..." onkeyup="filterTransaksi()">

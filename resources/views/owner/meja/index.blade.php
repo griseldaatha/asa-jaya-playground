@@ -237,18 +237,8 @@
     }
 </style>
 
-<!-- Top Header Section -->
-<div class="d-flex flex-wrap justify-content-between align-items-center mb-3 gap-3">
-    <div class="d-flex align-items-center gap-3">
-        <div class="meja-header-icon shadow-sm">
-            <i class="fa-solid fa-qrcode"></i>
-        </div>
-        <div>
-            <h3 class="fw-bold mb-0 text-dark" style="font-size: 1.35rem; letter-spacing: -0.3px;">Kelola Data Meja & QR Code</h3>
-            <p class="text-muted small mb-0">Generate Meja baru, tampilkan QR Code, dan cetak stiker QR untuk ditempel di meja.</p>
-        </div>
-    </div>
-    
+<!-- Top Action Button -->
+<div class="d-flex justify-content-end align-items-center mb-3">
     <form action="{{ route('owner.meja.store') }}" method="POST">
         @csrf
         <button type="submit" class="btn-generate-meja">

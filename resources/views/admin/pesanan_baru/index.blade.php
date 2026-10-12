@@ -93,16 +93,7 @@
         }
     </style>
 
-    <!-- Header Section -->
-    <div class="d-flex flex-wrap justify-content-between align-items-center mb-4 gap-3">
-        <div>
-            <h3 class="page-title d-flex align-items-center gap-2">
-                <i class="fa-solid fa-cash-register text-primary"></i>
-                Input Pesanan Langsung (Kasir)
-            </h3>
-            <p class="page-subtitle mb-0">Pilih produk, masukkan data pelanggan, dan proses pembayaran tunai langsung di tempat.</p>
-        </div>
-    </div>
+
 
     <div class="row g-4">
         <!-- Kolom Kiri: Katalog & Pencarian Produk -->

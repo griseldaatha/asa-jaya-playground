@@ -2,19 +2,12 @@
 
 @section('content')
 <div class="transaksi-detail-page">
-    <!-- Header Section -->
+    <!-- Actions Header Section -->
     <div class="d-flex flex-wrap justify-content-between align-items-center mb-4 gap-3">
         <div>
-            <div class="mb-2">
-                <a href="{{ route('admin.transaksi.index') }}" class="btn btn-outline-secondary btn-sm rounded-pill px-3">
-                    <i class="fa-solid fa-arrow-left me-1"></i> Kembali ke Riwayat
-                </a>
-            </div>
-            <h3 class="page-title d-flex align-items-center gap-2">
-                <i class="fa-solid fa-receipt text-primary"></i>
-                Detail Transaksi #{{ $transaksi->kode_transaksi }}
-            </h3>
-            <p class="page-subtitle mb-0">Informasi lengkap transaksi pesanan dan rincian pembayaran</p>
+            <a href="{{ route('admin.transaksi.index') }}" class="btn btn-outline-secondary btn-sm rounded-pill px-3">
+                <i class="fa-solid fa-arrow-left me-1"></i> Kembali ke Riwayat
+            </a>
         </div>
 
         <div class="d-flex gap-2">

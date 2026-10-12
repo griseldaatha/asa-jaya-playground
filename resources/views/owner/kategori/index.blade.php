@@ -1,13 +1,7 @@
 @extends('layouts.admin')
 
 @section('content')
-<!-- Page Header -->
-<div class="d-flex justify-content-between align-items-center mb-4">
-    <div>
-        <h3 class="page-title"><i class="fa-solid fa-tags text-primary me-2"></i>Kelola Kategori Produk</h3>
-        <p class="page-subtitle mb-0">Kelompokkan produk dan barang penjualan ke dalam kategori</p>
-    </div>
-</div>
+
 
 <!-- Forms Update & Delete (HTML5 form attribute binding) -->
 @foreach($kategori as $k)

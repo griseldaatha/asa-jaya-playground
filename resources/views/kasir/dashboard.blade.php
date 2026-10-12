@@ -216,23 +216,11 @@
         }
     </style>
 
-    <!-- Header Section -->
-    <div class="d-flex flex-wrap justify-content-between align-items-center mb-4 gap-3">
-        <div class="d-flex align-items-center gap-2">
-            <div class="bg-primary text-white rounded-3 p-2.5 d-flex align-items-center justify-content-center shadow-sm" style="width: 44px; height: 44px;">
-                <i class="fa-solid fa-bell-concierge fs-5"></i>
-            </div>
-            <div>
-                <h3 class="fw-bold mb-0 text-dark" style="letter-spacing: -0.5px;">Antrean Pesanan Aktif</h3>
-                <span class="text-muted small">Kelola dan proses pesanan masuk secara real-time</span>
-            </div>
-        </div>
-
-        <div class="d-flex align-items-center gap-2">
-            <span id="order-count-badge" class="badge bg-primary rounded-pill px-3 py-2 fs-6 shadow-sm fw-bold">
-                0 Pesanan
-            </span>
-        </div>
+    <!-- Header Badge Section -->
+    <div class="d-flex justify-content-end align-items-center mb-4">
+        <span id="order-count-badge" class="badge bg-primary rounded-pill px-3 py-2 fs-6 shadow-sm fw-bold">
+            0 Pesanan
+        </span>
     </div>
 
     <!-- Cards Grid Container -->

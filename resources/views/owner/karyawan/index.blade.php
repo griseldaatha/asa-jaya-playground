@@ -168,19 +168,9 @@
         }
     </style>
 
-    <!-- Hero Header Banner -->
-    <div class="karyawan-hero d-flex flex-wrap justify-content-between align-items-center gap-3">
-        <div class="d-flex align-items-center gap-3">
-            <div class="karyawan-hero-icon">
-                <i class="fa-solid fa-users-gear"></i>
-            </div>
-            <div>
-                <h3 class="fw-bold mb-1" style="letter-spacing: -0.5px;">Kelola Akun Kasir</h3>
-                <p class="mb-0 opacity-90 small">Atur akun karyawan yang bisa masuk dan bertransaksi di Portal Kasir</p>
-            </div>
-        </div>
-
-        <button class="btn btn-hero-add d-flex align-items-center gap-2" data-bs-toggle="modal" data-bs-target="#modalTambah">
+    <!-- Action Button -->
+    <div class="d-flex justify-content-end align-items-center mb-4">
+        <button class="btn btn-primary d-flex align-items-center gap-2 shadow-sm rounded-3 px-3 py-2 fw-semibold" data-bs-toggle="modal" data-bs-target="#modalTambah">
             <i class="fa-solid fa-user-plus fs-6"></i>
             <span>Tambah Karyawan Baru</span>
         </button>

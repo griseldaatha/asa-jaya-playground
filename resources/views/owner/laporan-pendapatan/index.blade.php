@@ -71,20 +71,12 @@
         }
     </style>
 
-    <!-- Header Halaman -->
-    <div class="d-flex flex-wrap justify-content-between align-items-center mb-4 gap-3">
-        <div>
-            <h4 class="fw-bold text-dark mb-1">
-                <i class="fa-solid fa-wallet text-primary me-2"></i>Pendapatan
-            </h4>
-            <p class="text-muted small mb-0">Laporan pemasukan dan rincian transaksi penjualan yang telah lunas</p>
-        </div>
-        <div>
-            <a href="{{ route('owner.pendapatan.cetak', ['dari' => $dari, 'sampai' => $sampai]) }}" target="_blank" class="btn btn-primary d-inline-flex align-items-center gap-2 shadow-sm">
-                <i class="fa-solid fa-print"></i>
-                <span>Cetak / Simpan PDF</span>
-            </a>
-        </div>
+    <!-- Header Action Button -->
+    <div class="d-flex justify-content-end align-items-center mb-4">
+        <a href="{{ route('owner.pendapatan.cetak', ['dari' => $dari, 'sampai' => $sampai]) }}" target="_blank" class="btn btn-primary d-inline-flex align-items-center gap-2 shadow-sm">
+            <i class="fa-solid fa-print"></i>
+            <span>Cetak / Simpan PDF</span>
+        </a>
     </div>
 
     <!-- Alert Notifikasi Flash Error -->

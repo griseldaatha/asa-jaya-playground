@@ -182,19 +182,9 @@
         }
     </style>
 
-    <!-- Hero Header Banner -->
-    <div class="produk-hero d-flex flex-wrap justify-content-between align-items-center gap-3">
-        <div class="d-flex align-items-center gap-3">
-            <div class="produk-hero-icon">
-                <i class="fa-solid fa-shapes"></i>
-            </div>
-            <div>
-                <h3 class="fw-bold mb-1" style="letter-spacing: -0.5px;">Kelola Barang Penjualan</h3>
-                <p class="mb-0 opacity-90 small">Kelola katalog produk, harga jual, stok barang, dan foto untuk kasir</p>
-            </div>
-        </div>
-
-        <button class="btn btn-hero-add d-flex align-items-center gap-2" data-bs-toggle="modal" data-bs-target="#modalTambah">
+    <!-- Action Button -->
+    <div class="d-flex justify-content-end align-items-center mb-4">
+        <button class="btn btn-primary d-flex align-items-center gap-2 shadow-sm rounded-3 px-3 py-2 fw-semibold" data-bs-toggle="modal" data-bs-target="#modalTambah">
             <i class="fa-solid fa-plus-circle fs-6"></i>
             <span>Tambah Produk Baru</span>
         </button>

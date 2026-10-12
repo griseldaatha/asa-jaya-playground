@@ -1,12 +1,8 @@
 @extends('layouts.admin')
 
 @section('content')
-<!-- Header Section -->
-<div class="d-flex flex-wrap justify-content-between align-items-center mb-4 gap-3">
-    <div>
-        <h3 class="page-title"><i class="fa-solid fa-money-bill-trend-up text-primary me-2"></i>Buku Pengeluaran Harian</h3>
-        <p class="page-subtitle mb-0">Catat dan pantau seluruh biaya operasional playground</p>
-    </div>
+<!-- Header Action -->
+<div class="d-flex justify-content-end align-items-center mb-4">
     <button class="btn btn-primary shadow-sm px-3 d-flex align-items-center gap-2" data-bs-toggle="modal" data-bs-target="#modalTambah">
         <i class="fa-solid fa-plus"></i>
         <span>Catat Pengeluaran</span>
