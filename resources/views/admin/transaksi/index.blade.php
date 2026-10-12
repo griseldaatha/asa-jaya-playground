@@ -1,29 +1,79 @@
 @extends('layouts.admin')
 
 @section('content')
+<style>
+    /* Styling Pagination Modern & Elegan */
+    .pagination {
+        margin-bottom: 0;
+        gap: 4px;
+    }
+    .page-item .page-link {
+        color: #475569;
+        border-radius: 8px !important;
+        border: 1px solid #e2e8f0;
+        padding: 6px 12px;
+        font-size: 0.85rem;
+        font-weight: 600;
+        transition: all 0.2s ease;
+        background-color: #ffffff;
+    }
+    .page-item .page-link:hover {
+        background-color: #FAF5EF;
+        color: #5B6D92;
+        border-color: #D5E3E6;
+    }
+    .page-item.active .page-link {
+        background-color: #5B6D92 !important;
+        border-color: #5B6D92 !important;
+        color: #ffffff !important;
+        box-shadow: 0 2px 6px rgba(91, 109, 146, 0.25);
+    }
+    .page-item.disabled .page-link {
+        color: #94a3b8;
+        background-color: #f8fafc;
+        border-color: #f1f5f9;
+    }
+</style>
+
 <!-- Filter Controls Section -->
-<div class="d-flex flex-wrap justify-content-end align-items-center mb-4 gap-2">
+<form method="GET" action="{{ route('transaksi.index') }}" class="d-flex flex-wrap justify-content-between align-items-center mb-4 gap-2">
+    <div>
+        <h5 class="fw-bold text-dark mb-0">Riwayat Transaksi</h5>
+        <small class="text-muted">Total {{ number_format($transaksi->total()) }} transaksi tercatat di sistem</small>
+    </div>
+
+    <div class="d-flex flex-wrap align-items-center gap-2">
         <div class="position-relative" style="min-width: 220px;">
             <i class="fa-solid fa-magnifying-glass position-absolute top-50 start-0 translate-middle-y ms-3 text-muted"></i>
-            <input type="text" id="searchTransaksi" class="form-control ps-5 shadow-sm" placeholder="Cari kode / pemesan..." onkeyup="filterTransaksi()">
+            <input type="text" name="search" value="{{ request('search') }}" class="form-control ps-5 shadow-sm rounded-3" placeholder="Cari kode / pemesan...">
         </div>
         
-        <select id="filterPembayaran" class="form-select shadow-sm" onchange="filterTransaksi()" style="width: auto;">
-            <option value="">-- Status Pembayaran --</option>
-            <option value="lunas">Lunas</option>
-            <option value="pending">Pending</option>
-            <option value="batal">Batal</option>
+        <select name="pembayaran" class="form-select shadow-sm rounded-3" style="width: auto;" onchange="this.form.submit()">
+            <option value="">Semua Pembayaran</option>
+            <option value="lunas" {{ request('pembayaran') == 'lunas' ? 'selected' : '' }}>Lunas</option>
+            <option value="pending" {{ request('pembayaran') == 'pending' ? 'selected' : '' }}>Pending</option>
+            <option value="batal" {{ request('pembayaran') == 'batal' ? 'selected' : '' }}>Batal</option>
         </select>
         
-        <select id="filterPesanan" class="form-select shadow-sm" onchange="filterTransaksi()" style="width: auto;">
-            <option value="">-- Status Pesanan --</option>
-            <option value="menunggu">Menunggu</option>
-            <option value="diproses">Diproses</option>
-            <option value="selesai">Selesai</option>
-            <option value="dibatalkan">Dibatalkan</option>
+        <select name="pesanan" class="form-select shadow-sm rounded-3" style="width: auto;" onchange="this.form.submit()">
+            <option value="">Semua Status Pesanan</option>
+            <option value="menunggu" {{ request('pesanan') == 'menunggu' ? 'selected' : '' }}>Menunggu</option>
+            <option value="diproses" {{ request('pesanan') == 'diproses' ? 'selected' : '' }}>Diproses</option>
+            <option value="selesai" {{ request('pesanan') == 'selesai' ? 'selected' : '' }}>Selesai</option>
+            <option value="dibatalkan" {{ request('pesanan') == 'dibatalkan' ? 'selected' : '' }}>Dibatalkan</option>
         </select>
+
+        <button type="submit" class="btn text-white shadow-sm px-3 rounded-3 fw-semibold" style="background-color: #5B6D92; border-color: #5B6D92;">
+            <i class="fa-solid fa-filter me-1"></i> Cari
+        </button>
+
+        @if(request('search') || request('pembayaran') || request('pesanan'))
+            <a href="{{ route('transaksi.index') }}" class="btn btn-light border shadow-sm px-2.5 rounded-3 text-secondary" title="Reset Filter">
+                <i class="fa-solid fa-rotate-left"></i>
+            </a>
+        @endif
     </div>
-</div>
+</form>
 
 <!-- Main Table Card -->
 <div class="card shadow-sm border-0">
@@ -161,33 +211,18 @@
                 </tbody>
             </table>
         </div>
+
+        <!-- Footer Pagination -->
+        <div class="p-3 border-top d-flex justify-content-between align-items-center flex-wrap gap-2 bg-white rounded-bottom">
+            <small class="text-muted fw-medium">
+                Menampilkan <span class="fw-bold text-dark">{{ $transaksi->firstItem() ?? 0 }}</span> - <span class="fw-bold text-dark">{{ $transaksi->lastItem() ?? 0 }}</span> dari <span class="fw-bold text-dark">{{ number_format($transaksi->total()) }}</span> transaksi
+            </small>
+            @if($transaksi->hasPages())
+                <div>
+                    {{ $transaksi->links('pagination::bootstrap-5') }}
+                </div>
+            @endif
+        </div>
     </div>
 </div>
-@endsection
-
-@section('scripts')
-<script>
-    function filterTransaksi() {
-        const query = document.getElementById('searchTransaksi').value.toLowerCase().trim();
-        const bayarFilter = document.getElementById('filterPembayaran').value.toLowerCase();
-        const pesananFilter = document.getElementById('filterPesanan').value.toLowerCase();
-
-        const rows = document.querySelectorAll('.transaksi-row');
-        rows.forEach(row => {
-            const searchData = row.getAttribute('data-search') || '';
-            const bayarData = row.getAttribute('data-pembayaran') || '';
-            const pesananData = row.getAttribute('data-pesanan') || '';
-
-            const matchesQuery = !query || searchData.includes(query);
-            const matchesBayar = !bayarFilter || bayarData === bayarFilter;
-            const matchesPesanan = !pesananFilter || pesananData === pesananFilter;
-
-            if (matchesQuery && matchesBayar && matchesPesanan) {
-                row.style.display = '';
-            } else {
-                row.style.display = 'none';
-            }
-        });
-    }
-</script>
 @endsection

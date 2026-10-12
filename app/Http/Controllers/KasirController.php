@@ -40,10 +40,35 @@ class KasirController extends Controller
     /**
      * Halaman Riwayat Transaksi (Untuk Kasir & Owner)
      */
-    public function riwayat()
+    public function riwayat(Request $request)
     {
-        // Tampilkan semua transaksi, diurutkan dari yang terbaru
-        $transaksi = Transaksi::with(['detailTransaksi.produk', 'kasir', 'meja'])->orderBy('created_at', 'desc')->get();
+        $query = Transaksi::with(['detailTransaksi.produk', 'kasir', 'meja'])
+            ->orderBy('created_at', 'desc');
+
+        // Filter pencarian kode transaksi, nama pemesan, atau nomor meja
+        if ($request->filled('search')) {
+            $search = trim($request->input('search'));
+            $query->where(function ($q) use ($search) {
+                $q->where('kode_transaksi', 'like', "%{$search}%")
+                  ->orWhere('nama_pemesan', 'like', "%{$search}%")
+                  ->orWhereHas('meja', function ($mq) use ($search) {
+                      $mq->where('nomor_meja', 'like', "%{$search}%");
+                  });
+            });
+        }
+
+        // Filter status pembayaran
+        if ($request->filled('pembayaran')) {
+            $query->where('status_pembayaran', $request->input('pembayaran'));
+        }
+
+        // Filter status pesanan
+        if ($request->filled('pesanan')) {
+            $query->where('status_pesanan', $request->input('pesanan'));
+        }
+
+        // Bagi 10 transaksi per halaman
+        $transaksi = $query->paginate(10)->withQueryString();
 
         return view('admin.transaksi.index', compact('transaksi'));
     }
