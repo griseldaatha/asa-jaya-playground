@@ -268,41 +268,48 @@
 
     <!-- Modal Sukses Transaksi Kasir -->
     <div class="modal fade" id="modalSuksesPesanan" tabindex="-1" aria-labelledby="modalSuksesTitle" aria-hidden="true" data-bs-backdrop="static">
-        <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content border-0 shadow">
-                <div class="modal-body p-4 text-center">
-                    <div class="mx-auto mb-3 text-success bg-success-subtle rounded-circle d-flex align-items-center justify-content-center shadow-sm" style="width: 76px; height: 76px;">
-                        <i class="fa-solid fa-circle-check fs-1"></i>
-                    </div>
-                    <h4 class="fw-bold text-dark mb-1">Pesanan Berhasil Disimpan!</h4>
-                    <p class="text-muted small mb-4">Transaksi langsung telah dicatat dan masuk ke antrean aktif.</p>
-
-                    <div class="p-3 bg-light rounded-4 border mb-4 text-start shadow-sm">
-                        <div class="d-flex justify-content-between text-muted small mb-1">
-                            <span>Kode Transaksi:</span>
-                            <span class="fw-bold text-dark" id="suksesKasirKodeTrx">-</span>
-                        </div>
-                        <div class="d-flex justify-content-between text-muted small mb-1">
-                            <span>Total Tagihan:</span>
-                            <span class="fw-bold text-dark" id="suksesKasirTotalTagihan">Rp 0</span>
-                        </div>
-                        <div class="d-flex justify-content-between text-muted small mb-2">
-                            <span>Uang Diterima:</span>
-                            <span class="fw-bold text-dark" id="suksesKasirUangDiterima">Rp 0</span>
-                        </div>
-                        <hr class="my-2">
-                        <div class="d-flex justify-content-between align-items-center">
-                            <span class="fw-bold text-dark fs-6">Kembalian:</span>
-                            <span class="fs-2 fw-bold text-success" id="suksesKasirKembalianText">Rp 0</span>
+        <div class="modal-dialog modal-dialog-centered" style="max-width: 410px;">
+            <div class="modal-content border-0 shadow-lg rounded-4 overflow-hidden bg-white">
+                <div class="modal-body p-4 pt-4 text-center">
+                    <!-- Icon Centang Cantik -->
+                    <div class="mx-auto mb-3 rounded-circle d-flex align-items-center justify-content-center shadow-2xs" style="width: 72px; height: 72px; background: linear-gradient(135deg, #dcfce7 0%, #bbf7d0 100%);">
+                        <div class="rounded-circle d-flex align-items-center justify-content-center shadow-sm" style="width: 48px; height: 48px; background-color: #16a34a; color: #ffffff;">
+                            <i class="fa-solid fa-check fs-4"></i>
                         </div>
                     </div>
+                    
+                    <h4 class="fw-bold text-dark mb-1" style="font-size: 1.25rem; letter-spacing: -0.3px;">Pesanan Berhasil Disimpan!</h4>
+                    <p class="text-muted small mb-3.5">Transaksi langsung telah dicatat dan masuk ke antrean aktif.</p>
 
+                    <!-- Card Ringkasan Pembayaran -->
+                    <div class="p-3.5 rounded-4 mb-4 text-start shadow-2xs" style="background-color: #f8fafc; border: 1px solid #e2e8f0;">
+                        <div class="d-flex justify-content-between align-items-center text-muted small mb-2">
+                            <span style="font-size: 0.82rem;">Kode Transaksi:</span>
+                            <span class="fw-bold text-dark font-monospace" id="suksesKasirKodeTrx" style="font-size: 0.85rem;">-</span>
+                        </div>
+                        <div class="d-flex justify-content-between align-items-center text-muted small mb-2">
+                            <span style="font-size: 0.82rem;">Total Tagihan:</span>
+                            <span class="fw-bold text-dark" id="suksesKasirTotalTagihan" style="font-size: 0.88rem;">Rp 0</span>
+                        </div>
+                        <div class="d-flex justify-content-between align-items-center text-muted small mb-2.5">
+                            <span style="font-size: 0.82rem;">Uang Diterima:</span>
+                            <span class="fw-bold text-dark" id="suksesKasirUangDiterima" style="font-size: 0.88rem;">Rp 0</span>
+                        </div>
+                        <div class="border-top pt-2.5 d-flex justify-content-between align-items-baseline" style="border-color: #e2e8f0 !important;">
+                            <span class="fw-bold text-dark" style="font-size: 0.92rem;">Kembalian:</span>
+                            <span class="fw-bold text-success" id="suksesKasirKembalianText" style="font-size: 1.85rem; letter-spacing: -0.5px; line-height: 1;">Rp 0</span>
+                        </div>
+                    </div>
+
+                    <!-- Tombol Aksi -->
                     <div class="d-grid gap-2">
-                        <a id="btnCetakStrukKasir" href="#" target="_blank" class="btn btn-primary btn-lg fw-bold shadow-sm">
-                            <i class="fa-solid fa-print me-2"></i> Cetak Struk
+                        <a id="btnCetakStrukKasir" href="#" target="_blank" class="btn text-white py-2.5 fw-bold rounded-3 shadow-sm d-flex align-items-center justify-content-center gap-2" style="background-color: #5B6D92; border-color: #5B6D92; font-size: 0.95rem; transition: all 0.2s;">
+                            <i class="fa-solid fa-print"></i>
+                            <span>Cetak Struk</span>
                         </a>
-                        <button type="button" class="btn btn-outline-secondary py-2" data-bs-dismiss="modal" onclick="resetPesananBaru()">
-                            <i class="fa-solid fa-plus me-1"></i> Pesanan Baru
+                        <button type="button" class="btn btn-light border py-2.5 fw-semibold rounded-3 text-secondary d-flex align-items-center justify-content-center gap-2 shadow-2xs" data-bs-dismiss="modal" onclick="resetPesananBaru()" style="font-size: 0.9rem; background-color: #ffffff; border-color: #cbd5e1; transition: all 0.2s;">
+                            <i class="fa-solid fa-plus text-primary"></i>
+                            <span class="text-dark">Pesanan Baru</span>
                         </button>
                     </div>
                 </div>
