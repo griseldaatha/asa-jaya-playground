@@ -164,17 +164,21 @@
             margin-top: 8px;
         }
 
-        /* Print Media Styles */
+        /* Print Media Styles: Thermal POS Paper & Standard Paper */
         @page {
-            size: 80mm auto;
-            margin: 0;
+            size: 58mm auto; /* Default printer thermal 58mm / 80mm roll */
+            margin: 0mm;
         }
 
         @media print {
-            body {
+            html, body {
                 background: #ffffff !important;
                 margin: 0 !important;
                 padding: 0 !important;
+                width: 100% !important;
+                color: #000000 !important;
+                -webkit-print-color-adjust: exact !important;
+                print-color-adjust: exact !important;
             }
 
             .no-print, .no-print-bar {
@@ -182,12 +186,20 @@
             }
 
             .struk-card {
-                max-width: 80mm !important;
-                width: 80mm !important;
-                margin: 0 !important;
-                padding: 4mm !important;
+                width: 100% !important;
+                max-width: 58mm !important; /* Pas di kertas struk mini/standar kasir */
+                margin: 0 auto !important;
+                padding: 3mm 2mm !important;
                 box-shadow: none !important;
                 border: none !important;
+            }
+
+            .header-title {
+                font-size: 13px !important;
+            }
+
+            .meta-row, .item-main, .total-row {
+                font-size: 11px !important;
             }
         }
     </style>
