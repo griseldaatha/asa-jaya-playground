@@ -36,7 +36,7 @@
 </style>
 
 <!-- Filter Controls Section -->
-<form method="GET" action="{{ route('transaksi.index') }}" class="d-flex flex-wrap justify-content-between align-items-center mb-4 gap-2">
+<form method="GET" action="{{ route('admin.transaksi.index') }}" class="d-flex flex-wrap justify-content-between align-items-center mb-4 gap-2">
     <div>
         <h5 class="fw-bold text-dark mb-0">Riwayat Transaksi</h5>
         <small class="text-muted">Total {{ number_format($transaksi->total()) }} transaksi tercatat di sistem</small>
@@ -68,7 +68,7 @@
         </button>
 
         @if(request('search') || request('pembayaran') || request('pesanan'))
-            <a href="{{ route('transaksi.index') }}" class="btn btn-light border shadow-sm px-2.5 rounded-3 text-secondary" title="Reset Filter">
+            <a href="{{ route('admin.transaksi.index') }}" class="btn btn-light border shadow-sm px-2.5 rounded-3 text-secondary" title="Reset Filter">
                 <i class="fa-solid fa-rotate-left"></i>
             </a>
         @endif
