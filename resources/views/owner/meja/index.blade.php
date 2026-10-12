@@ -252,7 +252,7 @@
     <form action="{{ route('owner.meja.store') }}" method="POST">
         @csrf
         <button type="submit" class="btn-generate-meja">
-            <i class="fa-regular fa-circle-plus fs-5"></i>
+            <i class="fa-solid fa-circle-plus fs-5"></i>
             <span>Generate Meja Baru</span>
         </button>
     </form>
