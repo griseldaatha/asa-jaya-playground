@@ -490,14 +490,9 @@
 
                             <!-- Column 6: Round Action Buttons -->
                             <td class="text-end pe-4">
-                                <div class="d-flex justify-content-end gap-1.5">
-                                    <button type="submit" form="form-produk-{{ $p->id }}" class="btn btn-success btn-action-round shadow-sm" title="Simpan Perubahan">
-                                        <i class="fa-solid fa-check fs-6"></i>
-                                    </button>
-                                    <button type="submit" form="form-delete-{{ $p->id }}" class="btn btn-outline-danger btn-action-round shadow-sm" title="Nonaktifkan Produk">
-                                        <i class="fa-solid fa-ban fs-6"></i>
-                                    </button>
-                                </div>
+                                <button type="submit" form="form-produk-{{ $p->id }}" class="btn btn-success btn-action-round shadow-sm" title="Simpan Perubahan">
+                                    <i class="fa-solid fa-check fs-6"></i>
+                                </button>
                             </td>
                         </tr>
                         @empty
