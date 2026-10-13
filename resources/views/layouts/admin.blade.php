@@ -265,25 +265,7 @@
         <!-- Page Content -->
         <div id="content">
             <div class="topbar">
-                <div class="d-flex align-items-center flex-wrap gap-2">
-                    <span class="badge rounded-pill px-2.5 py-1.5 text-uppercase fw-bold" style="background-color: #D5E3E6; color: #5B6D92; font-size: 0.75rem;">
-                        <i class="fa-solid fa-shield-halved me-1"></i> Mode: {{ ucfirst(Auth::user()->role) }}
-                    </span>
-
-                    @if(Auth::user()->role === 'owner')
-                        <a href="{{ route('kasir.dashboard') }}" target="_blank" class="btn btn-sm btn-outline-success rounded-pill px-2.5 py-1 shadow-2xs fw-semibold" style="font-size: 0.78rem;" title="Buka Dashboard Kasir di Tab Baru">
-                            <i class="fa-solid fa-up-right-from-square me-1"></i> Buka Tab Kasir
-                        </a>
-                    @else
-                        <a href="{{ route('owner.dashboard') }}" target="_blank" class="btn btn-sm btn-outline-primary rounded-pill px-2.5 py-1 shadow-2xs fw-semibold" style="font-size: 0.78rem;" title="Buka Dashboard Owner di Tab Baru">
-                            <i class="fa-solid fa-up-right-from-square me-1"></i> Buka Tab Owner
-                        </a>
-                    @endif
-
-                    <a href="{{ route('katalog') }}" target="_blank" class="btn btn-sm btn-outline-secondary rounded-pill px-2.5 py-1 shadow-2xs fw-semibold" style="font-size: 0.78rem;" title="Buka Menu Pemesanan Customer di Tab Baru">
-                        <i class="fa-solid fa-store me-1"></i> Buka Tab Customer
-                    </a>
-                </div>
+                <div></div>
                 <div class="d-flex align-items-center">
                     <span class="me-3 fw-medium text-dark small"><i class="fa-regular fa-circle-user text-primary me-1"></i> Halo, {{ Auth::user()->nama }}</span>
                     <form action="{{ route('logout') }}" method="POST" class="m-0">
