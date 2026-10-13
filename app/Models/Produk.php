@@ -17,6 +17,10 @@ class Produk extends Model
         'is_active',
     ];
 
+    protected $casts = [
+        'is_active' => 'boolean',
+    ];
+
     /**
      * Relasi ke Kategori Produk
      */
