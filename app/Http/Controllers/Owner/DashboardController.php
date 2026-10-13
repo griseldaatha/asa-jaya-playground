@@ -45,10 +45,10 @@ class DashboardController extends Controller
 
         // 7. Produk Terlaris
         $produkTerlaris = DetailTransaksi::select('produk_id', DB::raw('SUM(jumlah) as total_terjual'))
-            ->with('produk')
+            ->with(['produk.kategori'])
             ->groupBy('produk_id')
             ->orderBy('total_terjual', 'desc')
-            ->take(4)
+            ->take(5)
             ->get();
 
         return view('owner.dashboard', compact(
