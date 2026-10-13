@@ -484,20 +484,7 @@
             </div>
 
             <!-- Judul -->
-            <h1 class="brand-title-login mb-3">ASA JAYA PLAYGROUND</h1>
-
-            <!-- Pilihan Cepat Role untuk Simulasi Multi-Tab -->
-            <div class="d-flex justify-content-center gap-2 mb-4 flex-wrap">
-                <button type="button" class="btn btn-sm btn-outline-primary rounded-pill px-3 py-1 fw-bold shadow-2xs" onclick="isiAkun('owner')" style="font-size: 0.8rem; background-color: #ffffff;">
-                    <i class="fa-solid fa-crown me-1 text-primary"></i> Login Owner
-                </button>
-                <button type="button" class="btn btn-sm btn-outline-success rounded-pill px-3 py-1 fw-bold shadow-2xs" onclick="isiAkun('kasir')" style="font-size: 0.8rem; background-color: #ffffff;">
-                    <i class="fa-solid fa-cash-register me-1 text-success"></i> Login Kasir
-                </button>
-                <a href="{{ route('katalog') }}" target="_blank" class="btn btn-sm btn-outline-secondary rounded-pill px-3 py-1 fw-bold shadow-2xs" style="font-size: 0.8rem; background-color: #ffffff;">
-                    <i class="fa-solid fa-store me-1 text-secondary"></i> Buka Customer
-                </a>
-            </div>
+            <h1 class="brand-title-login mb-4">ASA JAYA PLAYGROUND</h1>
 
             <!-- Pesan Notifikasi & Validasi -->
             @if (session('warning'))
@@ -564,16 +551,6 @@
             } else {
                 passInput.type = 'password';
                 eyeIcon.classList.replace('fa-eye-slash', 'fa-eye');
-            }
-        }
-
-        function isiAkun(role) {
-            const userInp = document.getElementById('username');
-            const passInp = document.getElementById('password');
-            if (userInp) userInp.value = role;
-            if (passInp) {
-                passInp.value = '';
-                passInp.focus();
             }
         }
 
