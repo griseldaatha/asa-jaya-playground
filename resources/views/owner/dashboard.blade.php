@@ -89,49 +89,118 @@
 
     <!-- Main Content Section: Recent Transactions & Quick Insights -->
     <div class="row g-4">
-        <!-- Left Side: Recent Transactions Table (Live Stream) -->
+        <!-- Left Side: Grafik Pendapatan & Produk Hampir Habis -->
         <div class="col-12 col-lg-8">
+            <!-- Kartu Grafik Pendapatan Mingguan -->
+            <div class="card border-0 shadow-sm rounded-4 overflow-hidden bg-white mb-4">
+                <div class="card-header bg-white py-3 d-flex flex-wrap justify-content-between align-items-center border-bottom gap-2">
+                    <h6 class="fw-bold mb-0 text-dark">
+                        <i class="fa-solid fa-chart-column me-2 text-primary"></i>Grafik Pendapatan
+                    </h6>
+                    <!-- Tab Pilihan -->
+                    <div class="btn-group btn-group-sm" role="group" aria-label="Pilihan Periode Grafik">
+                        <button type="button" class="btn btn-primary" id="btnTab7Days" onclick="switchChartTab('7days')">
+                            7 Hari Terakhir
+                        </button>
+                        <button type="button" class="btn btn-outline-primary" id="btnTab8Weeks" onclick="switchChartTab('8weeks')">
+                            8 Minggu Terakhir
+                        </button>
+                    </div>
+                </div>
+                <div class="card-body p-4">
+                    <!-- Ringkasan Periode di Atas Grafik -->
+                    <div class="row g-3 mb-3 p-3 rounded-3" style="background-color: #f8fafc; border: 1px solid #edf2f7;">
+                        <div class="col-12 col-sm-6 border-end-sm">
+                            <small class="text-muted d-block text-uppercase fw-semibold" style="font-size: 0.75rem;" id="chartSummaryLabelTotal">Total Pendapatan (7 Hari Terakhir)</small>
+                            <h4 class="fw-bold mb-0 text-success mt-1" id="chartTotalText">Rp 0</h4>
+                        </div>
+                        <div class="col-12 col-sm-6">
+                            <small class="text-muted d-block text-uppercase fw-semibold" style="font-size: 0.75rem;" id="chartSummaryLabelAvg">Rata-rata Pendapatan / Hari</small>
+                            <h4 class="fw-bold mb-0 text-primary mt-1" id="chartAverageText">Rp 0</h4>
+                        </div>
+                    </div>
+
+                    <!-- Alert CDN Error Fallback -->
+                    <div id="chartCdnError" class="alert alert-warning border-0 rounded-3 mb-0" style="display: none;">
+                        <div class="d-flex align-items-center">
+                            <i class="fa-solid fa-triangle-exclamation fs-4 me-3 text-warning"></i>
+                            <div>
+                                <h6 class="fw-bold mb-1">Gagal Memuat Pustaka Grafik</h6>
+                                <p class="small mb-0 text-muted">Pustaka Chart.js gagal dimuat dari CDN. Silakan periksa koneksi internet Anda atau muat ulang halaman.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Empty State saat Seluruh Nilai 0 -->
+                    <div id="chartEmptyState" class="text-center py-5" style="display: none;">
+                        <i class="fa-solid fa-chart-column fs-1 opacity-25 text-muted mb-2 d-block"></i>
+                        <h6 class="fw-bold text-dark mb-1">Belum Ada Transaksi Lunas</h6>
+                        <p class="text-muted small mb-0">Tidak ada catatan pendapatan transaksi lunas pada periode terpilih.</p>
+                    </div>
+
+                    <!-- Canvas Wrapper Chart.js -->
+                    <div id="chartCanvasWrapper" style="position: relative; height: 280px; width: 100%;">
+                        <canvas id="weeklyRevenueChart"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Kartu Daftar Produk Hampir Habis -->
             <div class="card border-0 shadow-sm rounded-4 overflow-hidden bg-white">
-                <div class="card-header bg-white py-3 d-flex justify-content-between align-items-center border-bottom">
-                    <h6 class="fw-bold mb-0 text-dark"><i class="fa-solid fa-clock-rotate-left me-2 text-primary"></i>Transaksi Terbaru</h6>
+                <div class="card-header bg-white py-3 border-bottom d-flex justify-content-between align-items-center">
+                    <div>
+                        <h6 class="fw-bold mb-0 text-dark">
+                            <i class="fa-solid fa-triangle-exclamation text-warning me-2"></i>Daftar Produk Hampir Habis
+                        </h6>
+                        <small class="text-muted">Stok ≤ {{ $lowStockThreshold }} unit (urut stok tersedikit)</small>
+                    </div>
+                    <a href="{{ route('admin.produk.index') }}" class="btn btn-sm btn-outline-secondary rounded-pill px-2.5">
+                        <i class="fa-solid fa-boxes-stacked me-1"></i> Kelola
+                    </a>
                 </div>
                 <div class="card-body p-0">
                     <div class="table-responsive">
                         <table class="table align-middle mb-0">
                             <thead>
                                 <tr>
-                                    <th>KODE</th>
-                                    <th>PEMESAN</th>
-                                    <th>METODE</th>
-                                    <th>TOTAL</th>
-                                    <th>STATUS</th>
+                                    <th>NAMA PRODUK</th>
+                                    <th>KATEGORI</th>
+                                    <th class="text-center">SISA STOK</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                @forelse($transaksiTerbaru as $t)
+                                @forelse($produkHampirHabis as $ph)
                                 <tr>
-                                    <td class="fw-bold text-primary">#{{ $t->kode_transaksi }}</td>
                                     <td>
-                                        <div class="fw-semibold text-dark">{{ $t->nama_pemesan }}</div>
-                                        <small class="text-muted">Meja/Spot: {{ $t->meja ? ('Meja #' . ($t->meja->nomor_meja ?? $t->meja->id)) : ($t->meja_id ? 'Meja #' . $t->meja_id : '-') }}</small>
+                                        <div class="fw-semibold text-dark">{{ $ph->nama_produk }}</div>
+                                        <small class="text-muted">Rp {{ number_format($ph->harga, 0, ',', '.') }}</small>
                                     </td>
                                     <td>
-                                        <span class="badge bg-light text-dark border text-uppercase">{{ $t->metode_pembayaran }}</span>
+                                        <span class="badge bg-light text-dark border">
+                                            {{ $ph->kategori->nama_kategori ?? '-' }}
+                                        </span>
                                     </td>
-                                    <td class="fw-bold">Rp {{ number_format($t->total_harga, 0, ',', '.') }}</td>
-                                    <td>
-                                        @if($t->status_pembayaran == 'lunas')
-                                            <span class="badge bg-success"><i class="fa-solid fa-check me-1"></i>Lunas</span>
+                                    <td class="text-center">
+                                        @if($ph->stok == 0)
+                                            <span class="badge bg-danger rounded-pill px-2.5 py-1">
+                                                <i class="fa-solid fa-circle-xmark me-1"></i>Habis
+                                            </span>
+                                        @elseif($ph->stok <= 5)
+                                            <span class="badge rounded-pill px-2.5 py-1 text-white" style="background-color: #ea580c;">
+                                                <i class="fa-solid fa-triangle-exclamation me-1"></i>Sisa {{ $ph->stok }}
+                                            </span>
                                         @else
-                                            <span class="badge bg-warning text-dark"><i class="fa-solid fa-clock me-1"></i>Pending</span>
+                                            <span class="badge bg-warning text-dark rounded-pill px-2.5 py-1">
+                                                <i class="fa-solid fa-clock-rotate-left me-1"></i>Sisa {{ $ph->stok }}
+                                            </span>
                                         @endif
                                     </td>
                                 </tr>
                                 @empty
                                 <tr>
-                                    <td colspan="5" class="text-center py-4 text-muted">
-                                        <i class="fa-solid fa-inbox fs-2 opacity-25 mb-2 d-block"></i>
-                                        Belum ada transaksi tercatat hari ini.
+                                    <td colspan="3" class="text-center py-4 text-muted">
+                                        <i class="fa-solid fa-circle-check text-success fs-3 opacity-50 mb-2 d-block"></i>
+                                        Semua stok produk dalam kondisi aman (> {{ $lowStockThreshold }} unit).
                                     </td>
                                 </tr>
                                 @endforelse
@@ -199,4 +268,168 @@
         </div>
     </div>
 </div>
+@endsection
+
+@section('scripts')
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+<script>
+    const data7Days = @json($chart7Days);
+    const data8Weeks = @json($chart8Weeks);
+
+    let activeChart = null;
+    let currentPeriod = '7days';
+
+    function formatRupiahShort(value) {
+        if (value === 0) return 'Rp 0';
+        if (value >= 1000000000) {
+            return 'Rp ' + (value / 1000000000).toLocaleString('id-ID', { maximumFractionDigits: 1 }) + ' M';
+        }
+        if (value >= 1000000) {
+            return 'Rp ' + (value / 1000000).toLocaleString('id-ID', { maximumFractionDigits: 1 }) + ' jt';
+        }
+        if (value >= 1000) {
+            return 'Rp ' + (value / 1000).toLocaleString('id-ID', { maximumFractionDigits: 1 }) + ' rb';
+        }
+        return 'Rp ' + value.toLocaleString('id-ID');
+    }
+
+    function formatRupiahFull(value) {
+        return 'Rp ' + Number(value || 0).toLocaleString('id-ID');
+    }
+
+    function renderRevenueChart(period) {
+        const cdnErrorEl = document.getElementById('chartCdnError');
+        const emptyStateEl = document.getElementById('chartEmptyState');
+        const canvasWrapperEl = document.getElementById('chartCanvasWrapper');
+        const totalTextEl = document.getElementById('chartTotalText');
+        const avgTextEl = document.getElementById('chartAverageText');
+        const summaryLabelTotal = document.getElementById('chartSummaryLabelTotal');
+        const summaryLabelAvg = document.getElementById('chartSummaryLabelAvg');
+
+        const dataset = (period === '8weeks') ? data8Weeks : data7Days;
+
+        // Update Summary Texts
+        totalTextEl.textContent = formatRupiahFull(dataset.total);
+        avgTextEl.textContent = formatRupiahFull(dataset.average);
+
+        if (period === '8weeks') {
+            summaryLabelTotal.textContent = 'Total Pendapatan (8 Minggu Terakhir)';
+            summaryLabelAvg.textContent = 'Rata-rata Pendapatan / Minggu';
+        } else {
+            summaryLabelTotal.textContent = 'Total Pendapatan (7 Hari Terakhir)';
+            summaryLabelAvg.textContent = 'Rata-rata Pendapatan / Hari';
+        }
+
+        // Check if Chart.js is loaded
+        if (typeof Chart === 'undefined') {
+            cdnErrorEl.style.display = 'block';
+            emptyStateEl.style.display = 'none';
+            canvasWrapperEl.style.display = 'none';
+            return;
+        }
+        cdnErrorEl.style.display = 'none';
+
+        // Check if all values are 0
+        if (dataset.all_zero || dataset.total === 0) {
+            emptyStateEl.style.display = 'block';
+            canvasWrapperEl.style.display = 'none';
+            if (activeChart) {
+                activeChart.destroy();
+                activeChart = null;
+            }
+            return;
+        }
+
+        // Show canvas and hide empty state
+        emptyStateEl.style.display = 'none';
+        canvasWrapperEl.style.display = 'block';
+
+        const ctx = document.getElementById('weeklyRevenueChart').getContext('2d');
+
+        if (activeChart) {
+            activeChart.destroy();
+        }
+
+        activeChart = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: dataset.labels,
+                datasets: [{
+                    label: 'Pendapatan Lunas',
+                    data: dataset.data,
+                    backgroundColor: '#5B6D92',
+                    hoverBackgroundColor: '#4A5978',
+                    borderRadius: 6,
+                    borderSkipped: false,
+                    maxBarThickness: 42
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        display: false
+                    },
+                    tooltip: {
+                        backgroundColor: '#1e2227',
+                        titleFont: { size: 12, weight: 'bold' },
+                        bodyFont: { size: 12 },
+                        padding: 10,
+                        cornerRadius: 8,
+                        callbacks: {
+                            label: function(context) {
+                                return ' Pendapatan: ' + formatRupiahFull(context.parsed.y);
+                            }
+                        }
+                    }
+                },
+                scales: {
+                    x: {
+                        grid: {
+                            display: false
+                        },
+                        ticks: {
+                            font: { size: 11, weight: '500' },
+                            color: '#64748b'
+                        }
+                    },
+                    y: {
+                        beginAtZero: true,
+                        grid: {
+                            color: '#f1f5f9'
+                        },
+                        ticks: {
+                            font: { size: 11 },
+                            color: '#64748b',
+                            callback: function(value) {
+                                return formatRupiahShort(value);
+                            }
+                        }
+                    }
+                }
+            }
+        });
+    }
+
+    function switchChartTab(period) {
+        currentPeriod = period;
+        const btn7Days = document.getElementById('btnTab7Days');
+        const btn8Weeks = document.getElementById('btnTab8Weeks');
+
+        if (period === '8weeks') {
+            btn8Weeks.className = 'btn btn-primary';
+            btn7Days.className = 'btn btn-outline-primary';
+        } else {
+            btn7Days.className = 'btn btn-primary';
+            btn8Weeks.className = 'btn btn-outline-primary';
+        }
+
+        renderRevenueChart(period);
+    }
+
+    document.addEventListener('DOMContentLoaded', function() {
+        switchChartTab('7days');
+    });
+</script>
 @endsection

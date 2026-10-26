@@ -144,9 +144,9 @@ class CustomerController extends Controller
             }
         }
 
-        $is_qris_available = MidtransService::isConfigured();
+        $is_transfer_available = MidtransService::isConfigured();
 
-        return view('customer.keranjang', compact('items', 'total', 'is_qris_available'));
+        return view('customer.keranjang', compact('items', 'total', 'is_transfer_available'));
     }
 
     /**
@@ -216,6 +216,7 @@ class CustomerController extends Controller
         $request->validate([
             'nama_pemesan' => 'required|string|max:100',
             'metode_pembayaran' => 'required|in:tunai,payment_gateway',
+            'channel' => 'required_if:metode_pembayaran,payment_gateway|nullable|in:bca_va,bni_va,bri_va,gopay,shopeepay',
         ]);
 
         $meja_id = $request->session()->get('meja_id');
@@ -225,9 +226,9 @@ class CustomerController extends Controller
             return redirect()->route('katalog')->with('error', 'Keranjang kosong atau meja tidak valid.');
         }
 
-        // Jika memilih QRIS tapi belum dikonfigurasi, tolak ramah tanpa mengosongkan keranjang
+        // Jika memilih Non-Tunai tapi belum dikonfigurasi, tolak ramah tanpa mengosongkan keranjang
         if ($request->metode_pembayaran === 'payment_gateway' && ! MidtransService::isConfigured()) {
-            return back()->with('error', 'Metode pembayaran QRIS belum dikonfigurasi. Silakan pilih opsi Tunai.');
+            return back()->with('error', 'Metode pembayaran non-tunai belum dikonfigurasi. Silakan pilih opsi Tunai.');
         }
 
         try {
@@ -297,16 +298,10 @@ class CustomerController extends Controller
                 $update['produk']->save();
             }
 
-            // 4. Integrasi Midtrans jika metode payment_gateway
+            // 4. Integrasi Midtrans jika metode payment_gateway (Snap Non-Tunai)
             if ($request->metode_pembayaran === 'payment_gateway') {
                 $midtransService = app(MidtransService::class);
-                $transaksi->load('detailTransaksi.produk');
-                $qrisData = $midtransService->chargeQris($transaksi);
-
-                $transaksi->midtrans_transaction_id = $qrisData['transaction_id'];
-                $transaksi->qris_url = $qrisData['qris_url'];
-                $transaksi->qris_expired_at = $qrisData['qris_expired_at'];
-                $transaksi->save();
+                $midtransService->createSnapTransaction($transaksi, $request->input('channel'));
             }
 
             DB::commit();
@@ -325,13 +320,14 @@ class CustomerController extends Controller
 
             Log::error('Checkout Error: ' . $e->getMessage(), [
                 'metode' => $request->metode_pembayaran,
+                'channel' => $request->input('channel'),
                 'meja_id' => $meja_id,
                 'trace' => $e->getTraceAsString(),
             ]);
 
             $friendlyMessage = 'Checkout gagal: ' . $e->getMessage();
             if ($request->metode_pembayaran === 'payment_gateway' && !str_contains($e->getMessage(), 'Stok') && !str_contains($e->getMessage(), 'tidak aktif') && !str_contains($e->getMessage(), 'belum dikonfigurasi')) {
-                $friendlyMessage = 'Gagal memproses pembayaran QRIS. Silakan coba beberapa saat lagi atau pilih metode Tunai.';
+                $friendlyMessage = 'Gagal memproses pembayaran non-tunai. Silakan coba beberapa saat lagi atau pilih metode Tunai.';
             }
 
             return redirect()->route('keranjang.lihat')->with('error', $friendlyMessage);
@@ -356,8 +352,8 @@ class CustomerController extends Controller
 
         $is_sandbox = ! (bool) config('midtrans.is_production', false);
         $sisa_detik = 0;
-        if ($transaksi->qris_expired_at) {
-            $sisa_detik = (int) max(0, now()->diffInSeconds(Carbon::parse($transaksi->qris_expired_at), false));
+        if ($transaksi->payment_expired_at) {
+            $sisa_detik = (int) max(0, now()->diffInSeconds(Carbon::parse($transaksi->payment_expired_at), false));
         }
 
         return view('customer.status', compact('transaksi', 'is_sandbox', 'sisa_detik'));
@@ -378,6 +374,8 @@ class CustomerController extends Controller
             abort(404, 'Pesanan tidak ditemukan atau akses ditolak.');
         }
 
+        $statusData = null;
+
         // Jika metode payment_gateway dan status masih pending, cek ke Midtrans dengan throttle cache 3 detik
         if ($transaksi->metode_pembayaran === 'payment_gateway' && $transaksi->status_pembayaran === 'pending') {
             $cacheKey = 'midtrans_check_' . $transaksi->kode_transaksi;
@@ -394,23 +392,37 @@ class CustomerController extends Controller
                     $midtrans->applyStatus(
                         $transaksi,
                         $statusData['transaction_status'],
-                        $statusData['fraud_status'] ?? null
+                        $statusData['fraud_status'] ?? null,
+                        $statusData
                     );
                     $transaksi->refresh();
                 }
             }
         }
 
-        // Hitung sisa detik masa berlaku QRIS
+        // Hitung sisa detik masa berlaku pembayaran
         $sisaDetik = 0;
-        if ($transaksi->qris_expired_at) {
-            $expiredAt = Carbon::parse($transaksi->qris_expired_at);
+        if ($transaksi->payment_expired_at) {
+            $expiredAt = Carbon::parse($transaksi->payment_expired_at);
             $sisaDetik = (int) max(0, now()->diffInSeconds($expiredAt, false));
-            // Jika waktu sudah lewat dan masih pending, tandai expire
+
+            // Aturan timeout lokal:
+            // Jika sekarang melewati payment_expired_at dan status masih pending:
+            // Jika Midtrans menjawab 404 atau expire, ubah ke kadaluarsa + dibatalkan dan kembalikan stok.
+            // Jika Midtrans menjawab pending (customer sudah punya VA/QR yang masih berlaku), JANGAN dibatalkan lebih awal.
             if ($sisaDetik <= 0 && $transaksi->status_pembayaran === 'pending') {
                 $midtrans = app(MidtransService::class);
-                $midtrans->applyStatus($transaksi, 'expire');
-                $transaksi->refresh();
+                if ($statusData === null && MidtransService::isConfigured()) {
+                    $statusData = $midtrans->getStatus($transaksi->kode_transaksi);
+                }
+
+                $midtransStatus = $statusData['transaction_status'] ?? null;
+                $statusCode = $statusData['status_code'] ?? null;
+
+                if ($statusCode === '404' || $midtransStatus === null || $midtransStatus === 'expire') {
+                    $midtrans->applyStatus($transaksi, 'expire');
+                    $transaksi->refresh();
+                }
             }
         }
 
@@ -423,5 +435,6 @@ class CustomerController extends Controller
             'is_expired' => $transaksi->status_pembayaran === 'kadaluarsa',
             'is_batal' => in_array($transaksi->status_pembayaran, ['batal', 'kadaluarsa']),
         ]);
+
     }
 }

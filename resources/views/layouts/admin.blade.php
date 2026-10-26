@@ -252,7 +252,8 @@
                     <a href="{{ route('owner.pendapatan.index') }}" class="{{ request()->routeIs('owner.pendapatan.*') ? 'active' : '' }}"><i class="fa-solid fa-wallet"></i> Pendapatan</a>
                     <a href="{{ route('owner.pengeluaran.index') }}" class="{{ request()->routeIs('owner.pengeluaran.*') ? 'active' : '' }}"><i class="fa-solid fa-money-bill-wave"></i> Pengeluaran</a>
                 @elseif(Auth::user()->role === 'kasir')
-                    <a href="{{ route('kasir.dashboard') }}" class="{{ request()->routeIs('kasir.dashboard') ? 'active' : '' }}"><i class="fa-solid fa-bell-concierge"></i> Antrean Aktif</a>
+                    <a href="{{ route('kasir.dashboard') }}" class="{{ request()->routeIs('kasir.dashboard') ? 'active' : '' }}"><i class="fa-solid fa-chart-line"></i> Dashboard</a>
+                    <a href="{{ route('kasir.antrean') }}" class="{{ request()->routeIs('kasir.antrean') ? 'active' : '' }}"><i class="fa-solid fa-bell-concierge"></i> Antrean Aktif (Live)</a>
                     <a href="{{ route('admin.pesanan-baru') }}" class="{{ request()->routeIs('admin.pesanan-baru*') ? 'active' : '' }}"><i class="fa-solid fa-cash-register"></i> Input Pesanan</a>
                     <a href="{{ route('admin.transaksi.index') }}" class="{{ request()->routeIs('admin.transaksi.*') ? 'active' : '' }}"><i class="fa-solid fa-clock-rotate-left"></i> Riwayat Transaksi</a>
                     <a href="{{ route('admin.kategori.index') }}" class="{{ request()->routeIs('admin.kategori.*') ? 'active' : '' }}"><i class="fa-solid fa-tags"></i> Kategori Produk</a>

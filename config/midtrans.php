@@ -7,4 +7,9 @@ return [
     'base_url' => env('MIDTRANS_IS_PRODUCTION', false)
         ? 'https://api.midtrans.com'
         : 'https://api.sandbox.midtrans.com',
+    'snap_base_url' => env('MIDTRANS_IS_PRODUCTION', false)
+        ? 'https://app.midtrans.com'
+        : 'https://app.sandbox.midtrans.com',
+    'payment_expiry_minutes' => (int) env('MIDTRANS_PAYMENT_EXPIRY_MINUTES', 60),
 ];
+

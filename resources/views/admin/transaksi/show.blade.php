@@ -68,7 +68,7 @@
                         <small class="text-muted d-block fw-semibold text-uppercase mb-1" style="font-size: 11px;">Status Pembayaran</small>
                         @if($transaksi->status_pembayaran === 'lunas')
                             <span class="badge bg-success-subtle text-success border border-success-subtle rounded-pill px-3 py-1.5 fw-bold">
-                                <i class="fa-solid fa-circle-check me-1"></i>LUNAS ({{ $transaksi->metode_pembayaran === 'payment_gateway' ? 'QRIS' : 'TUNAI' }})
+                                <i class="fa-solid fa-circle-check me-1"></i>LUNAS ({{ strtoupper($transaksi->metode_label) }})
                             </span>
                         @elseif($transaksi->status_pembayaran === 'batal')
                             <span class="badge bg-danger-subtle text-danger border border-danger-subtle rounded-pill px-3 py-1.5 fw-bold">
@@ -80,7 +80,7 @@
                             </span>
                         @else
                             <span class="badge bg-warning-subtle text-dark border border-warning-subtle rounded-pill px-3 py-1.5 fw-bold">
-                                <i class="fa-solid fa-clock me-1"></i>PENDING ({{ $transaksi->metode_pembayaran === 'payment_gateway' ? 'QRIS' : 'TUNAI' }})
+                                <i class="fa-solid fa-clock me-1"></i>PENDING ({{ strtoupper($transaksi->metode_label) }})
                             </span>
                         @endif
                     </div>
@@ -172,7 +172,7 @@
                                 <span class="small text-muted fw-bold text-uppercase d-block mb-1">Metode Pembayaran</span>
                                 <span class="fw-bold text-dark fs-5">
                                     @if($transaksi->metode_pembayaran === 'payment_gateway')
-                                        <i class="fa-solid fa-qrcode text-primary me-1.5"></i>QRIS
+                                        <i class="fa-solid fa-credit-card text-primary me-1.5"></i>{{ strtoupper($transaksi->metode_label) }}
                                     @else
                                         <i class="fa-solid fa-money-bill-wave text-success me-1.5"></i>TUNAI
                                     @endif
@@ -189,35 +189,47 @@
                             </div>
                         </div>
 
-                        <div class="col-sm-6">
-                            <div class="p-3 bg-light rounded-3 border">
-                                <span class="small text-muted fw-bold text-uppercase d-block mb-1">Uang Diterima</span>
-                                <span class="fw-bold text-dark fs-5">
-                                    @if($transaksi->metode_pembayaran === 'payment_gateway')
-                                        <span class="text-primary fs-6 fw-bold"><i class="fa-solid fa-circle-check me-1"></i>Dibayar via QRIS</span>
-                                    @elseif($transaksi->uang_diterima !== null)
-                                        Rp {{ number_format($transaksi->uang_diterima, 0, ',', '.') }}
-                                    @else
-                                        -
-                                    @endif
-                                </span>
+                        @if($transaksi->metode_pembayaran === 'payment_gateway')
+                            <div class="col-sm-6">
+                                <div class="p-3 bg-light rounded-3 border">
+                                    <span class="small text-muted fw-bold text-uppercase d-block mb-1">Channel Pembayaran</span>
+                                    <span class="fw-bold text-dark fs-5">
+                                        {{ $transaksi->metode_label }}
+                                    </span>
+                                </div>
                             </div>
-                        </div>
 
-                        <div class="col-sm-6">
-                            <div class="p-3 bg-light rounded-3 border">
-                                <span class="small text-muted fw-bold text-uppercase d-block mb-1">Uang Kembalian</span>
-                                <span class="fw-bold text-success fs-5">
-                                    @if($transaksi->metode_pembayaran === 'payment_gateway')
-                                        <span class="text-primary fs-6 fw-bold"><i class="fa-solid fa-circle-check me-1"></i>Dibayar via QRIS</span>
-                                    @elseif($transaksi->uang_kembalian !== null)
-                                        Rp {{ number_format($transaksi->uang_kembalian, 0, ',', '.') }}
+                            <div class="col-sm-6">
+                                <div class="p-3 bg-light rounded-3 border">
+                                    <span class="small text-muted fw-bold text-uppercase d-block mb-1">Tautan Pembayaran Snap</span>
+                                    @if($transaksi->payment_url)
+                                        <a href="{{ $transaksi->payment_url }}" target="_blank" class="btn btn-sm btn-outline-primary d-inline-flex align-items-center gap-1 mt-1">
+                                            <i class="fa-solid fa-arrow-up-right-from-square"></i> Buka Halaman Pembayaran
+                                        </a>
                                     @else
-                                        -
+                                        <span class="text-muted fs-6">-</span>
                                     @endif
-                                </span>
+                                </div>
                             </div>
-                        </div>
+                        @else
+                            <div class="col-sm-6">
+                                <div class="p-3 bg-light rounded-3 border">
+                                    <span class="small text-muted fw-bold text-uppercase d-block mb-1">Uang Diterima</span>
+                                    <span class="fw-bold text-dark fs-5">
+                                        {{ $transaksi->uang_diterima !== null ? 'Rp ' . number_format($transaksi->uang_diterima, 0, ',', '.') : '-' }}
+                                    </span>
+                                </div>
+                            </div>
+
+                            <div class="col-sm-6">
+                                <div class="p-3 bg-light rounded-3 border">
+                                    <span class="small text-muted fw-bold text-uppercase d-block mb-1">Uang Kembalian</span>
+                                    <span class="fw-bold text-success fs-5">
+                                        {{ $transaksi->uang_kembalian !== null ? 'Rp ' . number_format($transaksi->uang_kembalian, 0, ',', '.') : '-' }}
+                                    </span>
+                                </div>
+                            </div>
+                        @endif
                     </div>
                 </div>
             </div>

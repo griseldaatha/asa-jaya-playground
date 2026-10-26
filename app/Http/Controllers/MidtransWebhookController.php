@@ -48,7 +48,7 @@ class MidtransWebhookController extends Controller
         }
 
         // 4. Terapkan status transaksi secara idempoten
-        $midtrans->applyStatus($transaksi, $transactionStatus, $fraudStatus);
+        $midtrans->applyStatus($transaksi, $transactionStatus, $fraudStatus, $payload);
 
         // 5. Catat log ringkas tanpa data sensitif
         Log::info("Midtrans Webhook berhasil diproses: Order [{$orderId}], Status: [{$transactionStatus}], Waktu: " . now()->toDateTimeString());

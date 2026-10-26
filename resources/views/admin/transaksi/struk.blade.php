@@ -270,7 +270,7 @@
         <div class="divider"></div>
 
         @php
-            $isQris = ($transaksi->metode_pembayaran === 'payment_gateway');
+            $isNonTunai = ($transaksi->metode_pembayaran === 'payment_gateway');
         @endphp
 
         <!-- Total Tagihan -->
@@ -280,11 +280,11 @@
         </div>
         <div class="meta-row">
             <span>Metode:</span>
-            <span class="bold">{{ $isQris ? 'QRIS' : 'TUNAI' }}</span>
+            <span class="bold">{{ strtoupper($transaksi->metode_label) }}</span>
         </div>
 
         @if($transaksi->status_pembayaran === 'lunas')
-            @if($isQris)
+            @if($isNonTunai)
                 <div class="badge-status">
                     *** LUNAS ***
                 </div>

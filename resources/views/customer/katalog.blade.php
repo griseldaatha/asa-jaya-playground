@@ -1009,19 +1009,19 @@
                         <div class="mb-3">
                             <label class="form-label fw-bold small text-muted mb-1.5" style="font-size: 0.78rem; letter-spacing: 0.3px;">METODE PEMBAYARAN</label>
                             <div class="d-flex flex-column gap-2">
-                                <!-- Opsi QRIS -->
-                                <label class="payment-method-card" for="pay_qris">
-                                    <input type="radio" name="metode_pembayaran" id="pay_qris" value="payment_gateway" class="d-none" checked>
+                                <!-- Opsi Bayar Non-Tunai -->
+                                <label class="payment-method-card" for="pay_nontunai_katalog">
+                                    <input type="radio" name="metode_pembayaran" id="pay_nontunai_katalog" value="payment_gateway" class="d-none" checked onchange="toggleKatalogChannelOptions()">
                                     <div class="d-flex align-items-center gap-2.5">
                                         <div class="rounded-3 d-flex align-items-center justify-content-center shadow-2xs" style="width: 36px; height: 36px; background-color: #e0e7ff; color: #3730a3; flex-shrink: 0;">
-                                            <i class="fa-solid fa-qrcode fs-6"></i>
+                                            <i class="fa-solid fa-credit-card fs-6"></i>
                                         </div>
                                         <div>
                                             <div class="d-flex align-items-center gap-1.5">
-                                                <span class="fw-bold text-dark small" style="font-size: 0.86rem;">QRIS</span>
-                                                <span class="badge bg-success-subtle text-success border border-success-subtle rounded-pill" style="font-size: 0.65rem; padding: 2px 6px;">Otomatis</span>
+                                                <span class="fw-bold text-dark small" style="font-size: 0.86rem;">Bayar Non-Tunai</span>
+                                                <span class="badge bg-primary-subtle text-primary border border-primary-subtle rounded-pill" style="font-size: 0.65rem; padding: 2px 6px;">Midtrans Snap</span>
                                             </div>
-                                            <div class="text-muted" style="font-size: 0.72rem; line-height: 1.2;">GoPay, OVO, Dana, BCA, dll.</div>
+                                            <div class="text-muted" style="font-size: 0.72rem; line-height: 1.2;">Bank & E-Wallet (Otomatis)</div>
                                         </div>
                                     </div>
                                     <div class="payment-radio-indicator">
@@ -1029,9 +1029,77 @@
                                     </div>
                                 </label>
 
+                                <!-- Pilihan Channel Non-Tunai (BCA, BNI, BRI, GoPay, ShopeePay) -->
+                                <div id="katalogChannelContainer" class="p-2.5 bg-light rounded-3 border">
+                                    <label class="fw-bold text-muted small d-block mb-1.5" style="font-size: 0.75rem;">PILIH METODE PEMBAYARAN:</label>
+                                    
+                                    <!-- Transfer Bank -->
+                                    <div class="text-muted small fw-bold mb-1" style="font-size: 0.68rem; letter-spacing: 0.5px;">TRANSFER BANK</div>
+                                    <div class="d-flex flex-column gap-1.5 mb-2">
+                                        <label class="payment-method-card bg-white" for="katalog_channel_bca" style="padding: 7px 10px;">
+                                            <input type="radio" name="channel" id="katalog_channel_bca" value="bca_va" class="d-none" checked>
+                                            <div class="d-flex align-items-center gap-2">
+                                                <span class="badge bg-primary px-2 py-0.5 fw-bold text-white" style="font-size: 0.7rem;">BCA</span>
+                                                <span class="fw-bold text-dark small" style="font-size: 0.82rem;">Transfer BCA</span>
+                                            </div>
+                                            <div class="payment-radio-indicator" style="width: 16px; height: 16px;">
+                                                <div class="payment-radio-dot" style="width: 6px; height: 6px;"></div>
+                                            </div>
+                                        </label>
+
+                                        <label class="payment-method-card bg-white" for="katalog_channel_bni" style="padding: 7px 10px;">
+                                            <input type="radio" name="channel" id="katalog_channel_bni" value="bni_va" class="d-none">
+                                            <div class="d-flex align-items-center gap-2">
+                                                <span class="badge bg-warning px-2 py-0.5 fw-bold text-dark" style="font-size: 0.7rem;">BNI</span>
+                                                <span class="fw-bold text-dark small" style="font-size: 0.82rem;">Transfer BNI</span>
+                                            </div>
+                                            <div class="payment-radio-indicator" style="width: 16px; height: 16px;">
+                                                <div class="payment-radio-dot" style="width: 6px; height: 6px;"></div>
+                                            </div>
+                                        </label>
+
+                                        <label class="payment-method-card bg-white" for="katalog_channel_bri" style="padding: 7px 10px;">
+                                            <input type="radio" name="channel" id="katalog_channel_bri" value="bri_va" class="d-none">
+                                            <div class="d-flex align-items-center gap-2">
+                                                <span class="badge bg-info px-2 py-0.5 fw-bold text-white" style="font-size: 0.7rem;">BRI</span>
+                                                <span class="fw-bold text-dark small" style="font-size: 0.82rem;">Transfer BRI</span>
+                                            </div>
+                                            <div class="payment-radio-indicator" style="width: 16px; height: 16px;">
+                                                <div class="payment-radio-dot" style="width: 6px; height: 6px;"></div>
+                                            </div>
+                                        </label>
+                                    </div>
+
+                                    <!-- E-Wallet -->
+                                    <div class="text-muted small fw-bold mb-1" style="font-size: 0.68rem; letter-spacing: 0.5px;">E-WALLET</div>
+                                    <div class="d-flex flex-column gap-1.5">
+                                        <label class="payment-method-card bg-white" for="katalog_channel_gopay" style="padding: 7px 10px;">
+                                            <input type="radio" name="channel" id="katalog_channel_gopay" value="gopay" class="d-none">
+                                            <div class="d-flex align-items-center gap-2">
+                                                <span class="badge bg-success px-2 py-0.5 fw-bold text-white" style="font-size: 0.7rem;">GoPay</span>
+                                                <span class="fw-bold text-dark small" style="font-size: 0.82rem;">GoPay</span>
+                                            </div>
+                                            <div class="payment-radio-indicator" style="width: 16px; height: 16px;">
+                                                <div class="payment-radio-dot" style="width: 6px; height: 6px;"></div>
+                                            </div>
+                                        </label>
+
+                                        <label class="payment-method-card bg-white" for="katalog_channel_shopeepay" style="padding: 7px 10px;">
+                                            <input type="radio" name="channel" id="katalog_channel_shopeepay" value="shopeepay" class="d-none">
+                                            <div class="d-flex align-items-center gap-2">
+                                                <span class="badge px-2 py-0.5 fw-bold text-white" style="background-color: #ee4d2d; font-size: 0.7rem;">ShopeePay</span>
+                                                <span class="fw-bold text-dark small" style="font-size: 0.82rem;">ShopeePay</span>
+                                            </div>
+                                            <div class="payment-radio-indicator" style="width: 16px; height: 16px;">
+                                                <div class="payment-radio-dot" style="width: 6px; height: 6px;"></div>
+                                            </div>
+                                        </label>
+                                    </div>
+                                </div>
+
                                 <!-- Opsi Tunai -->
-                                <label class="payment-method-card" for="pay_tunai">
-                                    <input type="radio" name="metode_pembayaran" id="pay_tunai" value="tunai" class="d-none">
+                                <label class="payment-method-card" for="pay_tunai_katalog">
+                                    <input type="radio" name="metode_pembayaran" id="pay_tunai_katalog" value="tunai" class="d-none" onchange="toggleKatalogChannelOptions()">
                                     <div class="d-flex align-items-center gap-2.5">
                                         <div class="rounded-3 d-flex align-items-center justify-content-center shadow-2xs" style="width: 36px; height: 36px; background-color: #dcfce7; color: #166534; flex-shrink: 0;">
                                             <i class="fa-solid fa-money-bill-wave fs-6"></i>
@@ -1098,6 +1166,21 @@
             input.value = newVal;
             form.submit();
         }
+
+        function toggleKatalogChannelOptions() {
+            const nonTunaiRadio = document.getElementById('pay_nontunai_katalog');
+            const channelContainer = document.getElementById('katalogChannelContainer');
+            if (nonTunaiRadio && channelContainer) {
+                const isNonTunai = nonTunaiRadio.checked;
+                channelContainer.style.display = isNonTunai ? 'block' : 'none';
+                const channelInputs = channelContainer.querySelectorAll('input[name="channel"]');
+                channelInputs.forEach(input => {
+                    input.disabled = !isNonTunai;
+                });
+            }
+        }
+        document.addEventListener('DOMContentLoaded', toggleKatalogChannelOptions);
     </script>
+
 </body>
 </html>

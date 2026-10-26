@@ -131,6 +131,7 @@ Route::middleware(['auth', 'role:kasir'])->prefix('admin')->name('admin.')->grou
 
 Route::middleware(['auth', 'role:kasir'])->prefix('kasir')->group(function () {
     Route::get('/dashboard', [KasirController::class, 'dashboard'])->name('kasir.dashboard');
+    Route::get('/antrean', [KasirController::class, 'antrean'])->name('kasir.antrean');
     Route::get('/api/pesanan-aktif', [KasirController::class, 'getPesananAktif']);
     Route::post('/pesanan/{id}/update', [KasirController::class, 'updateStatus'])->name('kasir.pesanan.update');
 });

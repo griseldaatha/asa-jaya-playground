@@ -13,14 +13,42 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 
+use App\Services\DashboardStatService;
+
 class KasirController extends Controller
 {
     /**
-     * Menampilkan halaman dashboard utama kasir
+     * Menampilkan halaman statistik dashboard kasir
      */
-    public function dashboard()
+    public function dashboard(DashboardStatService $statService)
     {
-        return view('kasir.dashboard');
+        $totalTransaksiHariIni = $statService->getTotalTransaksiHariIni();
+        $totalAntrean = $statService->getTotalAntrean();
+        $pesananDiproses = $statService->getPesananDiproses();
+        $pendapatanHariIni = $statService->getPendapatanHariIni();
+        $transaksiTerbaru = $statService->getTransaksiTerbaru(10);
+        $produkTerlaris = $statService->getProdukTerlaris30Hari(5);
+        $produkHampirHabis = $statService->getProdukHampirHabis();
+        $lowStockThreshold = DashboardStatService::LOW_STOCK_THRESHOLD;
+
+        return view('kasir.dashboard', compact(
+            'totalTransaksiHariIni',
+            'totalAntrean',
+            'pesananDiproses',
+            'pendapatanHariIni',
+            'transaksiTerbaru',
+            'produkTerlaris',
+            'produkHampirHabis',
+            'lowStockThreshold'
+        ));
+    }
+
+    /**
+     * Menampilkan halaman antrean aktif kasir (Live Stream)
+     */
+    public function antrean()
+    {
+        return view('kasir.antrean');
     }
 
     /**
@@ -109,7 +137,7 @@ class KasirController extends Controller
             if ($transaksi->metode_pembayaran === 'payment_gateway') {
                 return response()->json([
                     'success' => false,
-                    'message' => 'Pembayaran QRIS dikonfirmasi otomatis.',
+                    'message' => 'Pembayaran non-tunai dikonfirmasi otomatis melalui payment gateway.',
                 ], 422);
             }
 

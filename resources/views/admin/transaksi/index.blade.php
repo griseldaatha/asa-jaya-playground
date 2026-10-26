@@ -119,7 +119,7 @@
                                 <!-- Payment Badge -->
                                 @if($t->status_pembayaran == 'lunas')
                                     <span class="badge bg-success-subtle text-success border border-success-subtle rounded-pill px-2 py-1" style="font-size: 11px;">
-                                        <i class="fa-solid fa-circle-check me-1"></i>Lunas ({{ $t->metode_pembayaran === 'payment_gateway' ? 'QRIS' : 'Tunai' }})
+                                        <i class="fa-solid fa-circle-check me-1"></i>Lunas ({{ $t->metode_label }})
                                     </span>
                                 @elseif($t->status_pembayaran == 'batal')
                                     <span class="badge bg-danger-subtle text-danger border border-danger-subtle rounded-pill px-2 py-1" style="font-size: 11px;">
@@ -131,7 +131,7 @@
                                     </span>
                                 @else
                                     <span class="badge bg-warning-subtle text-dark border border-warning-subtle rounded-pill px-2 py-1" style="font-size: 11px;">
-                                        <i class="fa-solid fa-clock me-1"></i>Pending ({{ $t->metode_pembayaran === 'payment_gateway' ? 'QRIS' : 'Tunai' }})
+                                        <i class="fa-solid fa-clock me-1"></i>Pending ({{ $t->metode_label }})
                                     </span>
                                 @endif
 

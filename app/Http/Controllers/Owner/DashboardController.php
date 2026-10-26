@@ -11,9 +11,11 @@ use App\Models\DetailTransaksi;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 
+use App\Services\DashboardStatService;
+
 class DashboardController extends Controller
 {
-    public function index()
+    public function index(DashboardStatService $statService)
     {
         $hariIni = Carbon::today();
 
@@ -33,11 +35,9 @@ class DashboardController extends Controller
         // 4. Pendapatan Bersih
         $pendapatanBersih = $pendapatan - $pengeluaran;
 
-        // 5. Transaksi Terbaru (5 teratas)
-        $transaksiTerbaru = Transaksi::with(['detailTransaksi.produk', 'meja'])
-            ->orderBy('created_at', 'desc')
-            ->take(5)
-            ->get();
+        // 5. Data Grafik Pendapatan Mingguan (Chart.js)
+        $chart7Days = $statService->getWeeklyRevenue7Days();
+        $chart8Weeks = $statService->getWeeklyRevenue8Weeks();
 
         // 6. Ringkasan Kasir & Meja
         $totalKasir = User::where('role', 'kasir')->count();
@@ -51,15 +51,22 @@ class DashboardController extends Controller
             ->take(4)
             ->get();
 
+        // 8. Produk Hampir Habis (Service Bersama)
+        $produkHampirHabis = $statService->getProdukHampirHabis();
+        $lowStockThreshold = DashboardStatService::LOW_STOCK_THRESHOLD;
+
         return view('owner.dashboard', compact(
             'totalTransaksi',
             'pendapatan',
             'pengeluaran',
             'pendapatanBersih',
-            'transaksiTerbaru',
+            'chart7Days',
+            'chart8Weeks',
             'totalKasir',
             'totalMeja',
-            'produkTerlaris'
+            'produkTerlaris',
+            'produkHampirHabis',
+            'lowStockThreshold'
         ));
     }
 }

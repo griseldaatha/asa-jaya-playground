@@ -1,11 +1,41 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# Asa Jaya Playground
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+Aplikasi POS & Manajemen Wahana Permainan Anak dengan integrasi pembayaran Midtrans Snap.
+
+## Panduan Setup Database
+
+Ikuti langkah berikut untuk setup atau pembaruan database aplikasi:
+
+1. **Setup Instalasi Baru**:
+   - Buat database MySQL dengan nama `playground`:
+     ```sql
+     CREATE DATABASE playground CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+     ```
+   - Impor file dump database awal:
+     ```bash
+     mysql -u root playground < database_playground.sql
+     ```
+   - Jalankan migration untuk memperbarui skema ke versi terbaru:
+     ```bash
+     php artisan migrate
+     ```
+
+2. **Database yang Sudah Ada (Update Tim / Rekan Kerja)**:
+   - Cukup tarik perubahan terbaru dan jalankan migration:
+     ```bash
+     git pull
+     php artisan migrate
+     ```
+
+3. **Peringatan Penting (Dilarang Reset Database)**:
+   - **JANGAN** pernah menjalankan perintah `php artisan migrate:fresh`, `migrate:refresh`, atau `migrate:reset` pada database produksi atau database yang sudah berisi data, karena akan menghapus seluruh data transaksi, produk, dan laporan secara permanen!
+
+4. **Penanganan Kendala**:
+   - Jika saat menjalankan `php artisan migrate` muncul pesan error:
+     > *"Tabel transaksi belum ada. Impor database_playground.sql terlebih dahulu, lalu jalankan php artisan migrate lagi."*
+     maka pastikan Anda sudah mengimpor file `database_playground.sql` ke database `playground` terlebih dahulu sebelum menjalankan migrasi.
+
+---
 
 ## About Laravel
 

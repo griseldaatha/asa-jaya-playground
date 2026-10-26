@@ -82,10 +82,31 @@ class PendapatanController extends Controller
         $totalTunai = (int) (clone $baseTransaksiQuery)->where('metode_pembayaran', 'tunai')->sum('total_harga');
         $countTunai = (int) (clone $baseTransaksiQuery)->where('metode_pembayaran', 'tunai')->count();
 
-        $totalQris = (int) (clone $baseTransaksiQuery)->where('metode_pembayaran', 'payment_gateway')->sum('total_harga');
-        $countQris = (int) (clone $baseTransaksiQuery)->where('metode_pembayaran', 'payment_gateway')->count();
+        $totalTransfer = (int) (clone $baseTransaksiQuery)
+            ->where('metode_pembayaran', 'payment_gateway')
+            ->where(function ($q) {
+                $q->where('payment_channel', 'like', '%va%')
+                  ->orWhereNull('payment_channel');
+            })
+            ->sum('total_harga');
+        $countTransfer = (int) (clone $baseTransaksiQuery)
+            ->where('metode_pembayaran', 'payment_gateway')
+            ->where(function ($q) {
+                $q->where('payment_channel', 'like', '%va%')
+                  ->orWhereNull('payment_channel');
+            })
+            ->count();
 
-        // Rekap Per Hari (Tanggal | Jumlah Transaksi | Tunai | QRIS | Total Pendapatan)
+        $totalEwallet = (int) (clone $baseTransaksiQuery)
+            ->where('metode_pembayaran', 'payment_gateway')
+            ->whereIn('payment_channel', ['gopay', 'shopeepay'])
+            ->sum('total_harga');
+        $countEwallet = (int) (clone $baseTransaksiQuery)
+            ->where('metode_pembayaran', 'payment_gateway')
+            ->whereIn('payment_channel', ['gopay', 'shopeepay'])
+            ->count();
+
+        // Rekap Per Hari (Tanggal | Jumlah Transaksi | Tunai | Transfer | E-Wallet | Total Pendapatan)
         $dailyData = Transaksi::where('status_pembayaran', 'lunas')
             ->whereRaw('COALESCE(waktu_transaksi, created_at) BETWEEN ? AND ?', [
                 $start->toDateTimeString(),
@@ -95,7 +116,8 @@ class PendapatanController extends Controller
                 DATE(COALESCE(waktu_transaksi, created_at)) as tgl,
                 COUNT(*) as jml_transaksi,
                 SUM(CASE WHEN metode_pembayaran = 'tunai' THEN total_harga ELSE 0 END) as total_tunai,
-                SUM(CASE WHEN metode_pembayaran = 'payment_gateway' THEN total_harga ELSE 0 END) as total_qris,
+                SUM(CASE WHEN metode_pembayaran = 'payment_gateway' AND (payment_channel LIKE '%va%' OR payment_channel IS NULL) THEN total_harga ELSE 0 END) as total_transfer,
+                SUM(CASE WHEN metode_pembayaran = 'payment_gateway' AND payment_channel IN ('gopay', 'shopeepay') THEN total_harga ELSE 0 END) as total_ewallet,
                 SUM(total_harga) as total_pendapatan
             ")
             ->groupByRaw('DATE(COALESCE(waktu_transaksi, created_at))')
@@ -108,7 +130,8 @@ class PendapatanController extends Controller
                 'raw_date' => $row->tgl,
                 'jml_transaksi' => (int) $row->jml_transaksi,
                 'total_tunai' => (int) $row->total_tunai,
-                'total_qris' => (int) $row->total_qris,
+                'total_transfer' => (int) $row->total_transfer,
+                'total_ewallet' => (int) $row->total_ewallet,
                 'total_pendapatan' => (int) $row->total_pendapatan,
             ];
         });
@@ -120,11 +143,14 @@ class PendapatanController extends Controller
             'rataRataPerTransaksi' => $rataRataPerTransaksi,
             'totalTunai' => $totalTunai,
             'countTunai' => $countTunai,
-            'totalQris' => $totalQris,
-            'countQris' => $countQris,
+            'totalTransfer' => $totalTransfer,
+            'countTransfer' => $countTransfer,
+            'totalEwallet' => $totalEwallet,
+            'countEwallet' => $countEwallet,
             'rekapHarian' => $rekapHarian,
         ];
     }
+
 
     /**
      * Halaman layar pendapatan (dengan pagination 15 baris)

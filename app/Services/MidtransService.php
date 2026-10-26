@@ -20,11 +20,19 @@ class MidtransService
     }
 
     /**
-     * Base URL Midtrans API
+     * Base URL Midtrans Core API (untuk status & cancel)
      */
     protected function getBaseUrl(): string
     {
         return rtrim(config('midtrans.base_url', 'https://api.sandbox.midtrans.com'), '/');
+    }
+
+    /**
+     * Base URL Midtrans Snap
+     */
+    protected function getSnapBaseUrl(): string
+    {
+        return rtrim(config('midtrans.snap_base_url', 'https://app.sandbox.midtrans.com'), '/');
     }
 
     /**
@@ -34,7 +42,7 @@ class MidtransService
     {
         $key = config('midtrans.server_key');
         if (empty($key)) {
-            throw new Exception('QRIS belum dikonfigurasi di sistem.');
+            throw new Exception('Midtrans belum dikonfigurasi di sistem.');
         }
         return $key;
     }
@@ -57,143 +65,108 @@ class MidtransService
     }
 
     /**
-     * Membuat pembayaran QRIS via Midtrans Core API (/v2/charge)
+     * Membuat transaksi Snap Midtrans untuk channel terpilih
+     *
+     * @param Transaksi $t
+     * @param string $channel bca_va, bni_va, bri_va, gopay, shopeepay
+     * @return array
+     * @throws Exception
      */
-    public function chargeQris(Transaksi $t): array
+    public function createSnapTransaction(Transaksi $t, string $channel): array
     {
-        $serverKey = $this->getServerKey();
-        $baseUrl = $this->getBaseUrl();
+        $validChannels = ['bca_va', 'bni_va', 'bri_va', 'gopay', 'shopeepay'];
+        $channel = strtolower(trim($channel));
+        if (!in_array($channel, $validChannels, true)) {
+            throw new Exception("Metode pembayaran non-tunai '{$channel}' tidak valid.");
+        }
+
+        $snapBase = $this->getSnapBaseUrl();
+        $durationMinutes = (int) config('midtrans.payment_expiry_minutes', 60);
+
+        $finishUrl = route('status.pesanan', [
+            'kode_transaksi' => $t->kode_transaksi,
+            'token' => $t->access_token,
+        ]);
 
         $payload = [
-            'payment_type' => 'qris',
             'transaction_details' => [
                 'order_id' => $t->kode_transaksi,
                 'gross_amount' => (int) $t->total_harga,
             ],
-            'qris' => [
-                'acquirer' => 'gopay',
-            ],
             'customer_details' => [
                 'first_name' => substr($t->nama_pemesan ?? 'Pelanggan', 0, 50),
             ],
-            'custom_expiry' => [
-                'expiry_duration' => 15,
-                'unit' => 'minute',
+            'enabled_payments' => [$channel],
+            'expiry' => [
+                'unit' => 'minutes',
+                'duration' => $durationMinutes,
+            ],
+            'callbacks' => [
+                'finish' => $finishUrl,
             ],
         ];
 
-        // Item details (opsional namun baik jika totalnya cocok persis)
-        if ($t->detailTransaksi && $t->detailTransaksi->count() > 0) {
-            $itemDetails = [];
-            $itemsSum = 0;
-            foreach ($t->detailTransaksi as $dt) {
-                $nama = substr($dt->produk->nama_produk ?? 'Item', 0, 50);
-                $itemDetails[] = [
-                    'id' => (string) $dt->produk_id,
-                    'price' => (int) $dt->harga_satuan,
-                    'quantity' => (int) $dt->jumlah,
-                    'name' => $nama,
-                ];
-                $itemsSum += ((int) $dt->harga_satuan * (int) $dt->jumlah);
-            }
-
-            if ($itemsSum === (int) $t->total_harga) {
-                $payload['item_details'] = $itemDetails;
-            }
-        }
-
         try {
             $response = $this->buildHttpClient()
-                ->post("{$baseUrl}/v2/charge", $payload);
+                ->post("{$snapBase}/snap/v1/transactions", $payload);
         } catch (\Throwable $e) {
-            Log::error('Midtrans Charge Connection Error: ' . $e->getMessage(), [
+            Log::error('Midtrans Snap Connection Error: ' . $e->getMessage(), [
                 'order_id' => $t->kode_transaksi,
+                'channel' => $channel,
             ]);
-            throw new Exception('Gagal terhubung ke layanan pembayaran QRIS.');
+            throw new Exception('Gagal terhubung ke layanan pembayaran Snap Midtrans.');
         }
 
         $body = $response->json();
         $statusCode = $response->status();
 
-        if (! $response->successful() || ! isset($body['status_code']) || $body['status_code'] !== '201') {
-            $msg = $body['status_message'] ?? 'Respons tidak sesuai dari penyedia pembayaran.';
-            Log::error('Midtrans Charge Failed', [
+        if (!$response->successful() || empty($body['redirect_url'])) {
+            Log::error('Midtrans Snap Transaction Failed', [
                 'order_id' => $t->kode_transaksi,
+                'channel' => $channel,
                 'status_code' => $statusCode,
                 'response' => $body,
             ]);
-            throw new Exception('Gagal membuat transaksi QRIS: ' . $msg);
+            $msg = $body['error_messages'][0] ?? ($body['status_message'] ?? 'Tidak ada tautan pembayaran dari penyedia.');
+            throw new Exception('Gagal membuat transaksi pembayaran: ' . $msg);
         }
 
-        $transactionId = $body['transaction_id'] ?? null;
-        $qrisUrl = null;
-        $actionsMap = [];
+        $redirectUrl = $body['redirect_url'];
+        $expiredAt = now()->addMinutes($durationMinutes);
 
-        // Ambil URL aksi: prioritas 'generate-qr-code-v2', fallback 'generate-qr-code'
-        if (isset($body['actions']) && is_array($body['actions'])) {
-            foreach ($body['actions'] as $action) {
-                if (isset($action['name'], $action['url'])) {
-                    $actionsMap[$action['name']] = $action['url'];
-                }
-            }
-        }
-
-        $qrisUrl = $actionsMap['generate-qr-code-v2'] ?? $actionsMap['generate-qr-code'] ?? null;
-
-        // Fallback jika url ada di qr_string / url langsung
-        if (!$qrisUrl && isset($body['qr_string'])) {
-            $qrisUrl = $body['qr_string'];
-        }
-
-        if (!$qrisUrl) {
-            Log::error('Midtrans QRIS URL not found in actions', [
-                'order_id' => $t->kode_transaksi,
-                'response' => $body,
-            ]);
-            throw new Exception('QR Code tidak ditemukan dari respons penyedia pembayaran.');
-        }
-
-        if (strlen($qrisUrl) > 255) {
-            Log::warning('QRIS URL length exceeds 255 characters: ' . strlen($qrisUrl), [
-                'order_id' => $t->kode_transaksi,
-                'url' => $qrisUrl,
-            ]);
-        }
-
-        // Parse expiry_time (Zona Asia/Jakarta)
-        $qrisExpiredAt = null;
-        if (!empty($body['expiry_time'])) {
-            try {
-                $qrisExpiredAt = Carbon::createFromFormat('Y-m-d H:i:s', $body['expiry_time'], 'Asia/Jakarta')
-                    ->setTimezone(config('app.timezone', 'UTC'));
-            } catch (\Throwable $e) {
-                $qrisExpiredAt = now()->addMinutes(15);
-            }
-        } else {
-            $qrisExpiredAt = now()->addMinutes(15);
-        }
+        $t->payment_url = $redirectUrl;
+        $t->payment_channel = $channel;
+        $t->payment_expired_at = $expiredAt;
+        $t->save();
 
         return [
-            'transaction_id' => $transactionId,
-            'qris_url' => $qrisUrl,
-            'qris_url_v1' => $actionsMap['generate-qr-code'] ?? null,
-            'qris_url_v2' => $actionsMap['generate-qr-code-v2'] ?? null,
-            'qris_expired_at' => $qrisExpiredAt,
+            'redirect_url' => $redirectUrl,
+            'payment_channel' => $channel,
+            'payment_expired_at' => $expiredAt,
+            'token' => $body['token'] ?? null,
             'raw_response' => $body,
         ];
     }
 
     /**
      * Cek status transaksi ke Midtrans GET /v2/{order_id}/status
+     * Catatan: Sebelum customer memilih/membayar di Snap, Midtrans mengembalikan 404.
+     * Perlakukan 404 sebagai "belum ada pembayaran", bukan error dan tidak mengubah status.
      */
     public function getStatus(string $orderId): array
     {
-        $serverKey = $this->getServerKey();
         $baseUrl = $this->getBaseUrl();
 
         try {
             $response = $this->buildHttpClient()
                 ->get("{$baseUrl}/v2/{$orderId}/status");
+
+            if ($response->status() === 404) {
+                return [
+                    'status_code' => '404',
+                    'transaction_status' => null,
+                ];
+            }
 
             return $response->json() ?? [];
         } catch (\Throwable $e) {
@@ -206,6 +179,7 @@ class MidtransService
 
     /**
      * Membatalkan transaksi di Midtrans POST /v2/{order_id}/cancel (Best Effort)
+     * Error 404 diabaikan karena customer mungkin belum menyelesaikan alur di Midtrans.
      */
     public function cancel(string $orderId): bool
     {
@@ -217,6 +191,10 @@ class MidtransService
 
             $response = $this->buildHttpClient()
                 ->post("{$baseUrl}/v2/{$orderId}/cancel");
+
+            if ($response->status() === 404) {
+                return true;
+            }
 
             Log::info("Midtrans Cancel Request for {$orderId}", [
                 'status' => $response->status(),
@@ -256,13 +234,30 @@ class MidtransService
     /**
      * Menerapkan status transaksi dari Midtrans secara idempoten
      */
-    public function applyStatus(Transaksi $t, string $transactionStatus, ?string $fraudStatus = null): bool
+    public function applyStatus(Transaksi $t, string $transactionStatus, ?string $fraudStatus = null, array $payload = []): bool
     {
-        return DB::transaction(function () use ($t, $transactionStatus, $fraudStatus) {
+        return DB::transaction(function () use ($t, $transactionStatus, $fraudStatus, $payload) {
             $transaksi = Transaksi::lockForUpdate()->with('detailTransaksi.produk')->find($t->id);
 
             if (!$transaksi || $transaksi->status_pembayaran !== 'pending') {
                 return false; // Idempoten: hanya proses jika masih pending
+            }
+
+            // Simpan midtrans_transaction_id jika ada dalam payload
+            if (!empty($payload['transaction_id'])) {
+                $transaksi->midtrans_transaction_id = $payload['transaction_id'];
+            }
+
+            // Simpan payment_channel dari payload jika terdeteksi
+            if (!empty($payload['payment_type'])) {
+                $pt = strtolower($payload['payment_type']);
+                if ($pt === 'bank_transfer') {
+                    if (!empty($payload['va_numbers'][0]['bank'])) {
+                        $transaksi->payment_channel = strtolower($payload['va_numbers'][0]['bank']) . '_va';
+                    }
+                } elseif (in_array($pt, ['gopay', 'shopeepay'], true)) {
+                    $transaksi->payment_channel = $pt;
+                }
             }
 
             // Settlement atau capture accept -> Lunas & Diproses
@@ -273,8 +268,9 @@ class MidtransService
                 return true;
             }
 
-            // Pending -> tidak berubah
+            // Pending -> tetap simpan perubahan id/channel jika ada
             if ($transactionStatus === 'pending') {
+                $transaksi->save();
                 return true;
             }
 

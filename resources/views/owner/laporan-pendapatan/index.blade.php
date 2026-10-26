@@ -179,7 +179,7 @@
             </div>
         </div>
 
-        <!-- Card 4: Rincian Tunai vs QRIS -->
+        <!-- Card 4: Rincian Tunai vs Transfer -->
         <div class="col-12 col-sm-6 col-xl-3">
             <div class="stat-card-pro">
                 <div class="d-flex justify-content-between align-items-center mb-2">
@@ -191,9 +191,13 @@
                         <span><i class="fa-solid fa-money-bill text-success me-1"></i>Tunai:</span>
                         <strong class="text-dark">Rp {{ number_format($totalTunai, 0, ',', '.') }} <span class="text-muted fw-normal">({{ $countTunai }})</span></strong>
                     </div>
+                    <div class="d-flex justify-content-between align-items-center mb-1">
+                        <span><i class="fa-solid fa-building-columns text-primary me-1"></i>Transfer:</span>
+                        <strong class="text-dark">Rp {{ number_format($totalTransfer, 0, ',', '.') }} <span class="text-muted fw-normal">({{ $countTransfer }})</span></strong>
+                    </div>
                     <div class="d-flex justify-content-between align-items-center">
-                        <span><i class="fa-solid fa-qrcode text-primary me-1"></i>QRIS:</span>
-                        <strong class="text-dark">Rp {{ number_format($totalQris, 0, ',', '.') }} <span class="text-muted fw-normal">({{ $countQris }})</span></strong>
+                        <span><i class="fa-solid fa-wallet text-warning me-1"></i>E-Wallet:</span>
+                        <strong class="text-dark">Rp {{ number_format($totalEwallet, 0, ',', '.') }} <span class="text-muted fw-normal">({{ $countEwallet }})</span></strong>
                     </div>
                 </div>
             </div>
@@ -215,10 +219,11 @@
             <table class="table table-hover table-laporan mb-0 align-middle">
                 <thead>
                     <tr>
-                        <th style="width: 180px;">Tanggal</th>
-                        <th class="text-center" style="width: 150px;">Jumlah Transaksi</th>
-                        <th class="text-end" style="width: 170px;">Tunai</th>
-                        <th class="text-end" style="width: 170px;">QRIS</th>
+                        <th style="width: 170px;">Tanggal</th>
+                        <th class="text-center" style="width: 130px;">Jumlah Transaksi</th>
+                        <th class="text-end" style="width: 150px;">Tunai</th>
+                        <th class="text-end" style="width: 150px;">Transfer</th>
+                        <th class="text-end" style="width: 150px;">E-Wallet</th>
                         <th class="text-end">Total Pendapatan</th>
                     </tr>
                 </thead>
@@ -228,12 +233,13 @@
                             <td class="fw-semibold text-dark">{{ $row['tanggal'] }}</td>
                             <td class="text-center">{{ number_format($row['jml_transaksi']) }}</td>
                             <td class="text-end text-dark">Rp {{ number_format($row['total_tunai'], 0, ',', '.') }}</td>
-                            <td class="text-end text-dark">Rp {{ number_format($row['total_qris'], 0, ',', '.') }}</td>
+                            <td class="text-end text-dark">Rp {{ number_format($row['total_transfer'], 0, ',', '.') }}</td>
+                            <td class="text-end text-dark">Rp {{ number_format($row['total_ewallet'], 0, ',', '.') }}</td>
                             <td class="text-end text-success fw-bold">Rp {{ number_format($row['total_pendapatan'], 0, ',', '.') }}</td>
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="5" class="text-center py-5">
+                            <td colspan="6" class="text-center py-5">
                                 <div class="empty-state-icon mb-2">
                                     <i class="fa-solid fa-calendar-xmark text-muted"></i>
                                 </div>
@@ -249,7 +255,8 @@
                             <th>TOTAL</th>
                             <th class="text-center">{{ number_format($countTransaksi) }}</th>
                             <th class="text-end">Rp {{ number_format($totalTunai, 0, ',', '.') }}</th>
-                            <th class="text-end">Rp {{ number_format($totalQris, 0, ',', '.') }}</th>
+                            <th class="text-end">Rp {{ number_format($totalTransfer, 0, ',', '.') }}</th>
+                            <th class="text-end">Rp {{ number_format($totalEwallet, 0, ',', '.') }}</th>
                             <th class="text-end text-success">Rp {{ number_format($totalPendapatan, 0, ',', '.') }}</th>
                         </tr>
                     </tfoot>
@@ -314,7 +321,7 @@
                                     </span>
                                 @elseif($trx->metode_pembayaran === 'payment_gateway')
                                     <span class="badge bg-icy text-primary">
-                                        <i class="fa-solid fa-qrcode me-1"></i>QRIS
+                                        <i class="fa-solid fa-credit-card me-1"></i>{{ $trx->metode_label }}
                                     </span>
                                 @else
                                     <span class="badge bg-secondary">{{ ucfirst($trx->metode_pembayaran ?? '-') }}</span>
