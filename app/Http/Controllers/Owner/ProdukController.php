@@ -43,12 +43,12 @@ class ProdukController extends Controller
     public function update(Request $request, $id)
     {
         $request->validate([
-            'kategori_produk_id' => 'required|exists:kategori_produk,id',
-            'nama_produk' => 'required|string|max:100',
-            'harga' => 'required|integer|min:0',
-            'stok' => 'required|integer|min:0',
+            'kategori_produk_id' => 'sometimes|required|exists:kategori_produk,id',
+            'nama_produk' => 'sometimes|required|string|max:100',
+            'harga' => 'sometimes|required|integer|min:0',
+            'stok' => 'sometimes|required|integer|min:0',
             'foto' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
-            'is_active' => 'required|boolean',
+            'is_active' => 'required|in:0,1,true,false',
         ]);
 
         $produk = Produk::findOrFail($id);
@@ -64,6 +64,19 @@ class ProdukController extends Controller
         }
 
         $produk->update($data);
+
+        if ($request->expectsJson() || $request->ajax()) {
+            $totalAktif = Produk::where('is_active', true)->count();
+            $totalNonaktif = Produk::where('is_active', false)->count();
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Status produk berhasil diubah menjadi ' . ($produk->is_active ? 'Aktif' : 'Nonaktif') . '.',
+                'is_active' => (bool) $produk->is_active,
+                'total_aktif' => $totalAktif,
+                'total_nonaktif' => $totalNonaktif,
+            ]);
+        }
 
         return back()->with('success', 'Produk berhasil diperbarui.');
     }

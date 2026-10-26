@@ -29,6 +29,89 @@
         .bg-soft-green { background-color: #d1fae5; color: #059669; }
         .bg-soft-red { background-color: #fee2e2; color: #dc2626; }
         .bg-soft-gold { background-color: #fef3c7; color: #d97706; }
+
+        /* Produk Terlaris Card Styles */
+        .top-product-card {
+            background: #ffffff;
+            border-radius: 16px;
+            border: 1px solid #e2e8f0;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.03);
+            overflow: hidden;
+        }
+        .top-product-item {
+            padding: 12px 14px;
+            border-radius: 12px;
+            border: 1px solid #f1f5f9;
+            background: #ffffff;
+            transition: all 0.2s ease;
+        }
+        .top-product-item:hover {
+            background-color: #f8fafc;
+            border-color: #e2e8f0;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
+        }
+        .rank-badge {
+            width: 26px;
+            height: 26px;
+            border-radius: 8px;
+            font-weight: 700;
+            font-size: 0.72rem;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+        .rank-badge-1 {
+            background: #fef9c3;
+            color: #a16207;
+            border: 1px solid #fde047;
+        }
+        .rank-badge-2 {
+            background: #f1f5f9;
+            color: #475569;
+            border: 1px solid #cbd5e1;
+        }
+        .rank-badge-3 {
+            background: #ffedd5;
+            color: #c2410c;
+            border: 1px solid #fed7aa;
+        }
+        .rank-badge-other {
+            background: #f8fafc;
+            color: #64748b;
+            border: 1px solid #e2e8f0;
+        }
+        .product-thumb {
+            width: 44px;
+            height: 44px;
+            border-radius: 10px;
+            object-fit: cover;
+            border: 1px solid #e2e8f0;
+            flex-shrink: 0;
+        }
+        .product-thumb-placeholder {
+            width: 44px;
+            height: 44px;
+            border-radius: 10px;
+            background: #eef2ff;
+            color: #4f46e5;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            border: 1px solid #e0e7ff;
+        }
+        .sales-pill {
+            background-color: #f1f5f9;
+            color: #1e293b;
+            font-weight: 700;
+            font-size: 0.8rem;
+            padding: 4px 10px;
+            border-radius: 20px;
+            border: 1px solid #e2e8f0;
+            white-space: nowrap;
+        }
     </style>
 
     <!-- Date Only Header -->
@@ -243,26 +326,81 @@
             </div>
 
             <!-- Top Wahana / Produk Card -->
-            <div class="card border-0 shadow-sm rounded-4 bg-white">
-                <div class="card-header bg-white py-3 border-bottom">
-                    <h6 class="fw-bold mb-0 text-dark"><i class="fa-solid fa-trophy me-2 text-warning"></i>Produk / Wahana Terlaris</h6>
+            <div class="top-product-card">
+                <div class="card-header bg-white py-3 px-3 d-flex align-items-center justify-content-between border-bottom">
+                    <div>
+                        <h6 class="fw-bold mb-0 text-dark d-flex align-items-center gap-2">
+                            <i class="fa-solid fa-chart-line text-primary"></i>
+                            Produk / Wahana Terlaris
+                        </h6>
+                        <small class="text-muted" style="font-size: 0.72rem;">Berdasarkan total unit terjual</small>
+                    </div>
+                    <span class="badge bg-light text-primary border px-2.5 py-1 rounded-pill fw-semibold" style="font-size: 0.7rem;">Top 5</span>
                 </div>
                 <div class="card-body p-3">
-                    <ul class="list-group list-group-flush">
-                        @forelse($produkTerlaris as $pt)
-                        <li class="list-group-item d-flex justify-content-between align-items-center px-0 border-0 mb-2">
-                            <div class="d-flex align-items-center gap-2">
-                                <span class="badge bg-primary rounded-circle p-2" style="width: 28px; height: 28px; display: flex; align-items: center; justify-content: center;"><i class="fa-solid fa-shapes"></i></span>
-                                <span class="fw-bold small text-dark">{{ $pt->produk->nama_produk ?? 'Produk' }}</span>
+                    @php
+                        $maxTerjual = $produkTerlaris->first()->total_terjual ?? 1;
+                        $maxTerjual = $maxTerjual > 0 ? $maxTerjual : 1;
+                    @endphp
+
+                    <div class="d-flex flex-column gap-2">
+                        @forelse($produkTerlaris as $index => $pt)
+                            @php
+                                $rank = $index + 1;
+                                $rankClass = match($rank) {
+                                    1 => 'rank-badge-1',
+                                    2 => 'rank-badge-2',
+                                    3 => 'rank-badge-3',
+                                    default => 'rank-badge-other',
+                                };
+                                $percentage = min(100, max(8, round(($pt->total_terjual / $maxTerjual) * 100)));
+                            @endphp
+                            <div class="top-product-item">
+                                <div class="d-flex align-items-center justify-content-between gap-2">
+                                    <div class="d-flex align-items-center gap-2 min-w-0" style="overflow: hidden;">
+                                        <!-- Rank Number Badge -->
+                                        <span class="rank-badge {{ $rankClass }}">#{{ $rank }}</span>
+
+                                        <!-- Product Thumbnail -->
+                                        @if($pt->produk && $pt->produk->foto_produk)
+                                            <img src="{{ asset('storage/' . $pt->produk->foto_produk) }}" alt="{{ $pt->produk->nama_produk }}" class="product-thumb">
+                                        @else
+                                            <div class="product-thumb-placeholder">
+                                                <i class="fa-solid fa-box"></i>
+                                            </div>
+                                        @endif
+
+                                        <!-- Product Info -->
+                                        <div class="text-truncate">
+                                            <div class="fw-bold text-dark text-truncate" style="font-size: 0.86rem;" title="{{ $pt->produk->nama_produk ?? 'Produk' }}">
+                                                {{ $pt->produk->nama_produk ?? 'Produk' }}
+                                            </div>
+                                            <div class="text-muted text-truncate" style="font-size: 0.72rem;">
+                                                {{ $pt->produk->kategori->nama_kategori ?? 'Umum' }} &bull; Rp {{ number_format($pt->produk->harga ?? 0, 0, ',', '.') }}
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Quantity Sold -->
+                                    <div class="text-end flex-shrink-0">
+                                        <span class="sales-pill">
+                                            {{ number_format($pt->total_terjual) }} <span class="fw-normal text-muted" style="font-size: 0.72rem;">terjual</span>
+                                        </span>
+                                    </div>
+                                </div>
+
+                                <!-- Progress Bar -->
+                                <div class="progress mt-2" style="height: 4px; background-color: #f1f5f9; border-radius: 4px;">
+                                    <div class="progress-bar" role="progressbar" style="width: {{ $percentage }}%; background-color: {{ $rank === 1 ? '#eab308' : '#5B6D92' }}; border-radius: 4px;"></div>
+                                </div>
                             </div>
-                            <span class="badge bg-light text-primary border fw-bold">{{ $pt->total_terjual }} Terjual</span>
-                        </li>
                         @empty
-                        <li class="list-group-item px-0 border-0 text-center text-muted small py-3">
-                            Belum ada data penjualan produk.
-                        </li>
+                            <div class="text-center py-4 text-muted">
+                                <i class="fa-solid fa-inbox fs-2 opacity-25 mb-2 d-block"></i>
+                                <span class="small">Belum ada data penjualan produk.</span>
+                            </div>
                         @endforelse
-                    </ul>
+                    </div>
                 </div>
             </div>
         </div>

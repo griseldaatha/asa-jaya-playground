@@ -213,7 +213,7 @@
                 <div class="d-flex align-items-center justify-content-between">
                     <div>
                         <span class="text-uppercase fw-bold text-muted" style="font-size: 11px; letter-spacing: 0.5px;">Produk Aktif</span>
-                        <h3 class="fw-bold mb-0 text-success mt-1">{{ $produk->where('is_active', 1)->count() }}</h3>
+                        <h3 class="fw-bold mb-0 text-success mt-1" id="statProdukAktif">{{ $produk->where('is_active', true)->count() }}</h3>
                     </div>
                     <div class="stat-icon-wrapper">
                         <i class="fa-solid fa-circle-check"></i>
@@ -228,7 +228,7 @@
                 <div class="d-flex align-items-center justify-content-between">
                     <div>
                         <span class="text-uppercase fw-bold text-muted" style="font-size: 11px; letter-spacing: 0.5px;">Produk Nonaktif</span>
-                        <h3 class="fw-bold mb-0 text-danger mt-1">{{ $produk->where('is_active', 0)->count() }}</h3>
+                        <h3 class="fw-bold mb-0 text-danger mt-1" id="statProdukNonaktif">{{ $produk->where('is_active', false)->count() }}</h3>
                     </div>
                     <div class="stat-icon-wrapper">
                         <i class="fa-solid fa-circle-xmark"></i>
@@ -430,7 +430,7 @@
                                 $stockClass = 'stock-medium';
                             }
                         @endphp
-                        <tr class="produk-row {{ !$p->is_active ? 'non-aktif' : '' }}" data-nama="{{ $p->nama_produk }}">
+                        <tr class="produk-row {{ !$p->is_active ? 'non-aktif' : '' }}" id="row-produk-{{ $p->id }}" data-nama="{{ $p->nama_produk }}">
                             <!-- Column 1: Foto & Nama Produk -->
                             <td class="ps-4">
                                 <div class="d-flex align-items-center gap-3">
@@ -482,7 +482,7 @@
 
                             <!-- Column 5: Status Select -->
                             <td>
-                                <select name="is_active" form="form-produk-{{ $p->id }}" class="form-select form-select-sm fw-bold {{ $p->is_active ? 'text-success bg-success-subtle border-success-subtle' : 'text-danger bg-danger-subtle border-danger-subtle' }}">
+                                <select name="is_active" form="form-produk-{{ $p->id }}" class="form-select form-select-sm fw-bold {{ $p->is_active ? 'text-success bg-success-subtle border-success-subtle' : 'text-danger bg-danger-subtle border-danger-subtle' }}" onchange="ubahStatusProduk({{ $p->id }}, this.value, this)">
                                     <option value="1" {{ $p->is_active ? 'selected' : '' }}>Aktif</option>
                                     <option value="0" {{ !$p->is_active ? 'selected' : '' }}>Nonaktif</option>
                                 </select>
@@ -490,14 +490,9 @@
 
                             <!-- Column 6: Round Action Buttons -->
                             <td class="text-end pe-4">
-                                <div class="d-flex justify-content-end gap-1.5">
-                                    <button type="submit" form="form-produk-{{ $p->id }}" class="btn btn-success btn-action-round shadow-sm" title="Simpan Perubahan">
-                                        <i class="fa-solid fa-check fs-6"></i>
-                                    </button>
-                                    <button type="submit" form="form-delete-{{ $p->id }}" class="btn btn-outline-danger btn-action-round shadow-sm" title="Nonaktifkan Produk">
-                                        <i class="fa-solid fa-ban fs-6"></i>
-                                    </button>
-                                </div>
+                                <button type="submit" form="form-produk-{{ $p->id }}" class="btn btn-success btn-action-round shadow-sm" title="Simpan Perubahan">
+                                    <i class="fa-solid fa-check fs-6"></i>
+                                </button>
                             </td>
                         </tr>
                         @empty
@@ -543,6 +538,62 @@
         rows.forEach(row => {
             const nama = row.getAttribute('data-nama') || '';
             row.style.display = nama.toLowerCase().includes(query) ? '' : 'none';
+        });
+    }
+
+    function ubahStatusProduk(produkId, statusValue, selectEl) {
+        const isAktif = (statusValue === '1' || statusValue === 1 || statusValue === true);
+
+        // Update styling dropdown secara langsung
+        if (isAktif) {
+            selectEl.className = 'form-select form-select-sm fw-bold text-success bg-success-subtle border-success-subtle';
+        } else {
+            selectEl.className = 'form-select form-select-sm fw-bold text-danger bg-danger-subtle border-danger-subtle';
+        }
+
+        // Update styling baris tabel secara langsung
+        const row = document.getElementById('row-produk-' + produkId);
+        if (row) {
+            if (isAktif) {
+                row.classList.remove('non-aktif');
+            } else {
+                row.classList.add('non-aktif');
+            }
+        }
+
+        const csrfMeta = document.querySelector('meta[name="csrf-token"]');
+        const csrfToken = csrfMeta ? csrfMeta.content : '';
+
+        // Kirim request update via AJAX
+        fetch(`/admin/produk/${produkId}`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json',
+                'X-CSRF-TOKEN': csrfToken
+            },
+            body: JSON.stringify({
+                _method: 'PUT',
+                is_active: statusValue
+            })
+        })
+        .then(res => res.json())
+        .then(data => {
+            if (data.success) {
+                const statAktif = document.getElementById('statProdukAktif');
+                const statNonaktif = document.getElementById('statProdukNonaktif');
+                if (statAktif && data.total_aktif !== undefined) {
+                    statAktif.textContent = data.total_aktif;
+                }
+                if (statNonaktif && data.total_nonaktif !== undefined) {
+                    statNonaktif.textContent = data.total_nonaktif;
+                }
+            } else {
+                alert(data.message || 'Gagal mengubah status produk.');
+            }
+        })
+        .catch(err => {
+            console.error('Error ubah status:', err);
         });
     }
 </script>
