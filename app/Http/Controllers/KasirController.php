@@ -54,13 +54,28 @@ class KasirController extends Controller
     /**
      * API Internal untuk AJAX Polling: Mengambil pesanan yang masih aktif
      */
-    public function getPesananAktif()
+    public function getPesananAktif(Request $request)
     {
         // Hanya ambil pesanan yang belum Selesai dan belum Dibatalkan
-        $pesanan = Transaksi::with(['detailTransaksi.produk', 'meja', 'kasir'])
+        $query = Transaksi::with(['detailTransaksi.produk', 'meja', 'kasir'])
             ->whereNotIn('status_pesanan', ['selesai', 'dibatalkan'])
-            ->orderBy('created_at', 'asc')
-            ->get();
+            ->orderBy('created_at', 'asc');
+
+        if ($request->filled('search')) {
+            $search = trim($request->input('search'));
+            $query->where(function ($q) use ($search) {
+                $q->where('kode_transaksi', 'like', "%{$search}%")
+                  ->orWhere('nama_pemesan', 'like', "%{$search}%")
+                  ->orWhereHas('meja', function ($qm) use ($search) {
+                      $qm->where('nomor_meja', 'like', "%{$search}%");
+                  })
+                  ->orWhereHas('detailTransaksi.produk', function ($qp) use ($search) {
+                      $qp->where('nama_produk', 'like', "%{$search}%");
+                  });
+            });
+        }
+
+        $pesanan = $query->get();
 
         return response()->json($pesanan);
     }

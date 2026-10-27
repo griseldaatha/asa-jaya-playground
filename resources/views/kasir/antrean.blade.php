@@ -274,11 +274,40 @@
         }
     </style>
 
-    <!-- Header Badge Section -->
-    <div class="d-flex justify-content-end align-items-center mb-4">
-        <span id="order-count-badge" class="badge bg-primary rounded-pill px-3 py-2 fs-6 shadow-sm fw-bold">
-            0 Pesanan
-        </span>
+    <!-- Search & Filter Bar Section -->
+    <div class="card border-0 shadow-sm rounded-4 mb-4 bg-white">
+        <div class="card-body p-3">
+            <div class="row g-3 align-items-center">
+                <!-- Kolom Search Input -->
+                <div class="col-12 col-md-6 col-lg-5">
+                    <div class="input-group">
+                        <span class="input-group-text bg-light border-end-0 text-muted ps-3">
+                            <i class="fa-solid fa-magnifying-glass"></i>
+                        </span>
+                        <input type="text" id="searchAntrean" class="form-control bg-light border-start-0 border-end-0 ps-1" placeholder="Cari nama, #kode, meja, atau menu..." autocomplete="off" oninput="onSearchAntreanChange(this.value)">
+                        <button class="btn btn-light border border-start-0 text-muted" type="button" id="btnClearSearch" style="display: none;" onclick="clearSearchAntrean()" title="Hapus Pencarian">
+                            <i class="fa-solid fa-xmark"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Kolom Quick Filter Status -->
+                <div class="col-12 col-md-6 col-lg-4">
+                    <div class="d-flex gap-2 overflow-auto pb-1 pb-md-0" id="filterStatusGroup">
+                        <button type="button" class="btn btn-sm btn-dark rounded-pill px-3 fw-bold filter-btn active" onclick="setStatusFilter('all', this)">Semua</button>
+                        <button type="button" class="btn btn-sm btn-outline-secondary rounded-pill px-3 fw-semibold filter-btn" onclick="setStatusFilter('pending', this)">Menunggu Bayar</button>
+                        <button type="button" class="btn btn-sm btn-outline-secondary rounded-pill px-3 fw-semibold filter-btn" onclick="setStatusFilter('lunas', this)">Siap / Diproses</button>
+                    </div>
+                </div>
+
+                <!-- Kolom Total Counter Badge -->
+                <div class="col-12 col-lg-3 text-lg-end d-flex align-items-center justify-content-between justify-content-lg-end gap-2">
+                    <span id="order-count-badge" class="badge bg-primary rounded-pill px-3 py-2 fs-6 shadow-sm fw-bold">
+                        0 Pesanan
+                    </span>
+                </div>
+            </div>
+        </div>
     </div>
 
     <!-- Cards Grid Container -->
@@ -548,6 +577,44 @@
     let modalSelesaiInstance = null;
     let bayarData = { id: null, kode: '', total: 0 };
     let activePesananList = [];
+    let currentSearchQuery = '';
+    let currentStatusFilter = 'all';
+
+    function onSearchAntreanChange(val) {
+        currentSearchQuery = val.trim();
+        const btnClear = document.getElementById('btnClearSearch');
+        if (btnClear) {
+            btnClear.style.display = currentSearchQuery.length > 0 ? 'inline-block' : 'none';
+        }
+        renderAntreanCards();
+    }
+
+    function clearSearchAntrean() {
+        const searchInput = document.getElementById('searchAntrean');
+        if (searchInput) {
+            searchInput.value = '';
+            searchInput.focus();
+        }
+        currentSearchQuery = '';
+        const btnClear = document.getElementById('btnClearSearch');
+        if (btnClear) {
+            btnClear.style.display = 'none';
+        }
+        renderAntreanCards();
+    }
+
+    function setStatusFilter(filterKey, btnEl) {
+        currentStatusFilter = filterKey;
+        document.querySelectorAll('#filterStatusGroup .filter-btn').forEach(btn => {
+            btn.classList.remove('btn-dark', 'active');
+            btn.classList.add('btn-outline-secondary');
+        });
+        if (btnEl) {
+            btnEl.classList.remove('btn-outline-secondary');
+            btnEl.classList.add('btn-dark', 'active');
+        }
+        renderAntreanCards();
+    }
 
     document.addEventListener('DOMContentLoaded', function() {
         const modalEl = document.getElementById('modalTerimaUang');
@@ -925,30 +992,106 @@
             .then(res => res.json())
             .then(data => {
                 activePesananList = data;
-                const container = document.getElementById('antrean-container');
-                const countBadge = document.getElementById('order-count-badge');
-                if (countBadge) {
-                    countBadge.textContent = `${data.length} Pesanan`;
-                }
+                renderAntreanCards();
+            })
+            .catch(err => {
+                console.error('Error fetch antrean:', err);
+            });
+    }
 
-                container.innerHTML = '';
-                if(data.length === 0) {
-                    container.innerHTML = `
-                        <div class="col-12 py-5">
-                            <div class="card border-0 shadow-sm text-center py-5 px-3 rounded-4 bg-white">
-                                <div class="card-body">
-                                    <div class="empty-state-icon mx-auto mb-3 text-success bg-success-subtle rounded-circle d-flex align-items-center justify-content-center" style="width: 76px; height: 76px;">
-                                        <i class="fa-solid fa-mug-hot fs-2"></i>
-                                    </div>
-                                    <h5 class="fw-bold text-dark mb-1">Tidak Ada Pesanan Aktif</h5>
-                                    <p class="text-muted small mb-0">Semua pesanan telah diproses atau belum ada pesanan baru yang masuk.</p>
-                                </div>
+    function renderAntreanCards() {
+        const container = document.getElementById('antrean-container');
+        const countBadge = document.getElementById('order-count-badge');
+        if (!container) return;
+
+        const totalSemua = activePesananList.length;
+
+        // Filter data berdasarkan search query dan status
+        let filtered = activePesananList.filter(p => {
+            // Filter status
+            if (currentStatusFilter === 'pending' && p.status_pembayaran !== 'pending') return false;
+            if (currentStatusFilter === 'lunas' && p.status_pembayaran !== 'lunas') return false;
+
+            // Filter search query
+            if (currentSearchQuery) {
+                const q = currentSearchQuery.toLowerCase();
+                const nama = (p.nama_pemesan || '').toLowerCase();
+                const kode = (p.kode_transaksi || '').toLowerCase();
+                const mejaNo = (p.meja && p.meja.nomor_meja ? String(p.meja.nomor_meja) : (p.meja_id ? String(p.meja_id) : '')).toLowerCase();
+                const mejaText = `meja #${mejaNo} meja ${mejaNo}`;
+                const metode = (p.metode_pembayaran || '').toLowerCase();
+                const labelMetode = (p.metode_label || '').toLowerCase();
+
+                // Cari apakah ada nama produk dalam detail pesanan yang cocok
+                const matchProduk = p.detail_transaksi && p.detail_transaksi.some(dt => 
+                    dt.produk && dt.produk.nama_produk && dt.produk.nama_produk.toLowerCase().includes(q)
+                );
+
+                const match = nama.includes(q) ||
+                              kode.includes(q) ||
+                              mejaNo.includes(q) ||
+                              mejaText.includes(q) ||
+                              metode.includes(q) ||
+                              labelMetode.includes(q) ||
+                              matchProduk;
+
+                if (!match) return false;
+            }
+
+            return true;
+        });
+
+        // Update badge total
+        if (countBadge) {
+            if (currentSearchQuery || currentStatusFilter !== 'all') {
+                countBadge.textContent = `${filtered.length} dari ${totalSemua} Pesanan`;
+            } else {
+                countBadge.textContent = `${totalSemua} Pesanan`;
+            }
+        }
+
+        container.innerHTML = '';
+
+        // Kasus 1: Tidak ada pesanan aktif sama sekali
+        if (totalSemua === 0) {
+            container.innerHTML = `
+                <div class="col-12 py-5">
+                    <div class="card border-0 shadow-sm text-center py-5 px-3 rounded-4 bg-white">
+                        <div class="card-body">
+                            <div class="empty-state-icon mx-auto mb-3 text-success bg-success-subtle rounded-circle d-flex align-items-center justify-content-center" style="width: 76px; height: 76px;">
+                                <i class="fa-solid fa-mug-hot fs-2"></i>
                             </div>
+                            <h5 class="fw-bold text-dark mb-1">Tidak Ada Pesanan Aktif</h5>
+                            <p class="text-muted small mb-0">Semua pesanan telah diproses atau belum ada pesanan baru yang masuk.</p>
                         </div>
-                    `;
-                    return;
-                }
-                data.forEach(p => {
+                    </div>
+                </div>
+            `;
+            return;
+        }
+
+        // Kasus 2: Ada pesanan tapi tidak cocok dengan pencarian / filter
+        if (filtered.length === 0) {
+            container.innerHTML = `
+                <div class="col-12 py-5">
+                    <div class="card border-0 shadow-sm text-center py-5 px-3 rounded-4 bg-white">
+                        <div class="card-body">
+                            <div class="empty-state-icon mx-auto mb-3 text-warning bg-warning-subtle rounded-circle d-flex align-items-center justify-content-center" style="width: 76px; height: 76px;">
+                                <i class="fa-solid fa-magnifying-glass fs-2"></i>
+                            </div>
+                            <h5 class="fw-bold text-dark mb-1">Pesanan Tidak Ditemukan</h5>
+                            <p class="text-muted small mb-3">Tidak ada antrean pesanan yang cocok dengan kata kunci pencarian atau filter status saat ini.</p>
+                            <button type="button" class="btn btn-sm btn-outline-primary rounded-pill px-3 fw-bold" onclick="clearSearchAntrean()">
+                                <i class="fa-solid fa-rotate-left me-1"></i> Reset Pencarian
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `;
+            return;
+        }
+
+        filtered.forEach(p => {
                     let isNonTunai = (p.metode_pembayaran === 'payment_gateway');
                     let labelMetode = p.metode_label || (isNonTunai ? 'Non-Tunai' : 'Tunai');
                     let badgeMetode = isNonTunai 
@@ -1148,7 +1291,6 @@
                     `;
                     container.innerHTML += html;
                 });
-            });
     }
 
     function updateStatus(id, action, val, uangDiterima = null) {
