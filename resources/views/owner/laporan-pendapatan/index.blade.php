@@ -154,7 +154,12 @@
                     <div class="icon-box bg-soft-green"><i class="fa-solid fa-wallet"></i></div>
                 </div>
                 <h3 class="fw-bold mb-1 text-success">Rp {{ number_format($totalPendapatan, 0, ',', '.') }}</h3>
-                <small class="text-muted"><i class="fa-solid fa-circle-check text-success me-1"></i>Dari {{ number_format($countTransaksi) }} pesanan lunas</small>
+                <small class="text-muted d-block">
+                    <i class="fa-solid fa-users text-primary me-1"></i><strong>{{ number_format($countTransaksi) }}</strong> Pengunjung / Pesanan
+                </small>
+                <small class="text-muted d-block">
+                    Rata-rata: <strong>Rp {{ number_format($rataRataPerTransaksi, 0, ',', '.') }}</strong> / orang
+                </small>
             </div>
         </div>
 
@@ -195,8 +200,8 @@
         <div class="col-12 col-sm-6 col-xl-3">
             <div class="stat-card-pro">
                 <div class="d-flex justify-content-between align-items-center mb-2">
-                    <span class="text-uppercase fw-bold text-muted small">Metode Pembayaran</span>
-                    <div class="icon-box bg-icy"><i class="fa-solid fa-credit-card"></i></div>
+                    <span class="text-uppercase fw-bold text-muted small">Penerimaan Pembayaran</span>
+                    <div class="icon-box bg-icy"><i class="fa-solid fa-cash-register"></i></div>
                 </div>
                 <div class="small">
                     <div class="d-flex justify-content-between align-items-center mb-1">
@@ -216,14 +221,14 @@
         </div>
     </div>
 
-    <!-- TABEL 1: Rekap Per Hari (Laba Rugi Harian) -->
+    <!-- TABEL 1: Rekap Finansial & Pengunjung Harian -->
     <div class="report-card">
         <div class="report-card-header d-flex justify-content-between align-items-center">
             <div>
                 <h6 class="fw-bold mb-0 text-dark">
-                    <i class="fa-solid fa-calendar-day text-primary me-2"></i>Rekap Finansial Harian (Laba Rugi)
+                    <i class="fa-solid fa-calendar-day text-primary me-2"></i>Rekap Finansial & Pengunjung Harian
                 </h6>
-                <small class="text-muted">Rincian pendapatan kotor, beban pengeluaran, serta laba bersih harian</small>
+                <small class="text-muted">Rincian jumlah pengunjung/pesanan, pendapatan kotor, beban pengeluaran, serta laba bersih harian</small>
             </div>
             <span class="badge bg-light text-muted border">{{ count($rekapHarian) }} Hari Aktif</span>
         </div>
@@ -231,21 +236,27 @@
             <table class="table table-hover table-laporan mb-0 align-middle">
                 <thead>
                     <tr>
-                        <th style="width: 130px;">Tanggal</th>
-                        <th class="text-center" style="width: 100px;">Pesanan</th>
-                        <th class="text-end" style="width: 130px;">Tunai</th>
-                        <th class="text-end" style="width: 130px;">Transfer</th>
-                        <th class="text-end" style="width: 130px;">E-Wallet</th>
-                        <th class="text-end" style="width: 150px;">Pendapatan Kotor</th>
-                        <th class="text-end" style="width: 140px;">Pengeluaran</th>
-                        <th class="text-end" style="width: 150px;">Laba Bersih</th>
+                        <th style="width: 120px;">Tanggal</th>
+                        <th class="text-center" style="width: 130px;">
+                            <i class="fa-solid fa-users text-primary me-1"></i>Pengunjung
+                        </th>
+                        <th class="text-end" style="width: 120px;">Tunai</th>
+                        <th class="text-end" style="width: 120px;">Transfer</th>
+                        <th class="text-end" style="width: 120px;">E-Wallet</th>
+                        <th class="text-end" style="width: 140px;">Pendapatan Kotor</th>
+                        <th class="text-end" style="width: 130px;">Pengeluaran</th>
+                        <th class="text-end" style="width: 140px;">Laba Bersih</th>
                     </tr>
                 </thead>
                 <tbody>
                     @forelse($rekapHarian as $row)
                         <tr>
                             <td class="fw-semibold text-dark">{{ $row['tanggal'] }}</td>
-                            <td class="text-center">{{ number_format($row['jml_transaksi']) }}</td>
+                            <td class="text-center">
+                                <span class="badge bg-light text-dark border px-2 py-1 fw-semibold">
+                                    {{ number_format($row['jml_transaksi']) }} orang
+                                </span>
+                            </td>
                             <td class="text-end text-dark">Rp {{ number_format($row['total_tunai'], 0, ',', '.') }}</td>
                             <td class="text-end text-dark">Rp {{ number_format($row['total_transfer'], 0, ',', '.') }}</td>
                             <td class="text-end text-dark">Rp {{ number_format($row['total_ewallet'], 0, ',', '.') }}</td>
@@ -277,7 +288,7 @@
                     <tfoot>
                         <tr>
                             <th>TOTAL</th>
-                            <th class="text-center">{{ number_format($countTransaksi) }}</th>
+                            <th class="text-center fw-bold">{{ number_format($countTransaksi) }} Pengunjung</th>
                             <th class="text-end">Rp {{ number_format($totalTunai, 0, ',', '.') }}</th>
                             <th class="text-end">Rp {{ number_format($totalTransfer, 0, ',', '.') }}</th>
                             <th class="text-end">Rp {{ number_format($totalEwallet, 0, ',', '.') }}</th>
@@ -293,36 +304,37 @@
         </div>
     </div>
 
-    <!-- TABEL 2: Rincian Pendapatan (Transaksi Lunas) -->
+    <!-- TABEL 2: Rincian Transaksi Penerimaan Uang -->
     <div class="report-card">
         <div class="report-card-header d-flex justify-content-between align-items-center">
             <div>
                 <h6 class="fw-bold mb-0 text-dark">
-                    <i class="fa-solid fa-list-check text-primary me-2"></i>Rincian Transaksi Pendapatan
+                    <i class="fa-solid fa-cash-register text-primary me-2"></i>Rincian Transaksi Penerimaan Uang
                 </h6>
-                <small class="text-muted">Daftar transaksi berstatus lunas pada periode terpilih</small>
+                <small class="text-muted">Daftar transaksi penerimaan uang kas & non-tunai berstatus lunas pada periode terpilih</small>
             </div>
-            <span class="badge bg-light text-muted border">Total: {{ number_format($countTransaksi) }} Transaksi</span>
+            <span class="badge bg-light text-muted border">Total: {{ number_format($countTransaksi) }} Penerimaan</span>
         </div>
         <div class="table-responsive">
             <table class="table table-hover table-laporan mb-0 align-middle">
                 <thead>
                     <tr>
-                        <th style="width: 60px;">No</th>
-                        <th style="width: 150px;">Tanggal & Jam</th>
-                        <th style="width: 170px;">Kode Transaksi</th>
-                        <th style="width: 160px;">Meja / Tipe</th>
-                        <th style="width: 130px;">Metode</th>
-                        <th>Kasir</th>
-                        <th class="text-end" style="width: 160px;">Total</th>
+                        <th style="width: 50px;" class="text-center">#</th>
+                        <th style="width: 140px;">Tanggal & Jam</th>
+                        <th style="width: 160px;">Kode Transaksi</th>
+                        <th>Pelanggan & Meja</th>
+                        <th style="width: 160px;">Metode Penerimaan</th>
+                        <th style="width: 130px;">Kasir</th>
+                        <th class="text-end" style="width: 150px;">Uang Masuk</th>
                     </tr>
                 </thead>
                 <tbody>
                     @forelse($rincianPendapatan as $index => $trx)
                         <tr>
-                            <td>{{ $rincianPendapatan->firstItem() + $index }}</td>
+                            <td class="text-center text-muted small">{{ $rincianPendapatan->firstItem() + $index }}</td>
                             <td>
-                                {{ \Carbon\Carbon::parse($trx->waktu_transaksi ?? $trx->created_at)->format('d/m/Y H:i') }}
+                                <div class="fw-semibold text-dark">{{ \Carbon\Carbon::parse($trx->waktu_transaksi ?? $trx->created_at)->format('d/m/Y') }}</div>
+                                <small class="text-muted">{{ \Carbon\Carbon::parse($trx->waktu_transaksi ?? $trx->created_at)->format('H:i') }} WIB</small>
                             </td>
                             <td>
                                 @if(Route::has('admin.transaksi.show'))
@@ -334,13 +346,14 @@
                                 @endif
                             </td>
                             <td>
-                                @if($trx->meja)
-                                    <span class="badge bg-light text-dark border">
-                                        <i class="fa-solid fa-chair text-muted me-1"></i>Meja #{{ $trx->meja->nomor_meja ?? $trx->meja->id }}
-                                    </span>
-                                @else
-                                    <span class="badge bg-light text-muted border">Kasir / Langsung</span>
-                                @endif
+                                <div class="fw-semibold text-dark">{{ $trx->nama_pemesan ?: 'Pelanggan Kasir' }}</div>
+                                <small class="text-muted">
+                                    @if($trx->meja)
+                                        <i class="fa-solid fa-chair me-1 text-primary"></i>Meja #{{ $trx->meja->nomor_meja ?? $trx->meja->id }}
+                                    @else
+                                        <i class="fa-solid fa-store me-1 text-muted"></i>Kasir Langsung
+                                    @endif
+                                </small>
                             </td>
                             <td>
                                 @if($trx->metode_pembayaran === 'tunai')
@@ -355,8 +368,12 @@
                                     <span class="badge bg-secondary">{{ ucfirst($trx->metode_pembayaran ?? '-') }}</span>
                                 @endif
                             </td>
-                            <td>{{ $trx->kasir->nama ?? $trx->kasir->username ?? '-' }}</td>
-                            <td class="text-end fw-semibold text-dark">Rp {{ number_format($trx->total_harga, 0, ',', '.') }}</td>
+                            <td>
+                                <span class="text-dark small">{{ $trx->kasir->nama ?? $trx->kasir->username ?? '-' }}</span>
+                            </td>
+                            <td class="text-end fw-bold text-success">
+                                Rp {{ number_format($trx->total_harga, 0, ',', '.') }}
+                            </td>
                         </tr>
                     @empty
                         <tr>
@@ -364,8 +381,8 @@
                                 <div class="empty-state-icon mb-2">
                                     <i class="fa-solid fa-receipt text-muted"></i>
                                 </div>
-                                <h6 class="text-dark fw-bold mb-1">Tidak Ada Transaksi Pendapatan</h6>
-                                <p class="text-muted small mb-0">Belum ada transaksi berstatus lunas pada periode tanggal ini.</p>
+                                <h6 class="text-dark fw-bold mb-1">Tidak Ada Transaksi Penerimaan Uang</h6>
+                                <p class="text-muted small mb-0">Belum ada transaksi penerimaan kas atau non-tunai pada periode tanggal ini.</p>
                             </td>
                         </tr>
                     @endforelse
@@ -373,7 +390,7 @@
                 @if($countTransaksi > 0)
                     <tfoot>
                         <tr>
-                            <th colspan="6" class="text-end">TOTAL (Seluruh Periode: {{ number_format($countTransaksi) }} Transaksi)</th>
+                            <th colspan="6" class="text-end">TOTAL PENERIMAAN UANG ({{ number_format($countTransaksi) }} Transaksi)</th>
                             <th class="text-end text-success">Rp {{ number_format($totalPendapatan, 0, ',', '.') }}</th>
                         </tr>
                     </tfoot>

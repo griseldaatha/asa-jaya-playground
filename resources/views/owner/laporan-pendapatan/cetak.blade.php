@@ -278,21 +278,21 @@
         <!-- 1. RINGKASAN EKSEKUTIF -->
         <div class="section-title">
             <i class="fa-solid fa-calculator"></i>
-            <span>1. Ringkasan Pendapatan & Laba Bersih</span>
+            <span>1. Ringkasan Pendapatan & Pengunjung</span>
         </div>
         <table class="table-summary">
             <tbody>
                 <tr>
                     <th>Total Pendapatan Kotor</th>
                     <td class="fw-bold text-success">Rp {{ number_format($totalPendapatan, 0, ',', '.') }}</td>
-                    <th>Jumlah Transaksi Lunas</th>
-                    <td class="fw-semibold">{{ number_format($countTransaksi) }} Pesanan</td>
+                    <th>Total Pengunjung / Pesanan</th>
+                    <td class="fw-semibold">{{ number_format($countTransaksi) }} Orang</td>
                 </tr>
                 <tr>
                     <th>Beban Pengeluaran</th>
                     <td class="fw-bold text-danger">Rp {{ number_format($totalPengeluaran, 0, ',', '.') }}</td>
-                    <th>Rata-rata per Transaksi</th>
-                    <td class="fw-semibold">Rp {{ number_format($rataRataPerTransaksi, 0, ',', '.') }}</td>
+                    <th>Rata-rata per Pengunjung</th>
+                    <td class="fw-semibold">Rp {{ number_format($rataRataPerTransaksi, 0, ',', '.') }} / orang</td>
                 </tr>
                 <tr>
                     <th>Laba Bersih (Net Profit)</th>
@@ -315,14 +315,14 @@
         <!-- 2. REKAP PER HARI -->
         <div class="section-title">
             <i class="fa-solid fa-calendar-day"></i>
-            <span>2. Rekap Per Hari (Laba Rugi)</span>
+            <span>2. Rekap Finansial & Pengunjung Harian</span>
         </div>
         <table>
             <thead>
                 <tr>
                     <th style="width: 25px;" class="text-center">No</th>
                     <th style="width: 75px;">Tanggal</th>
-                    <th class="text-center" style="width: 60px;">Pesanan</th>
+                    <th class="text-center" style="width: 75px;">Pengunjung</th>
                     <th class="text-end" style="width: 80px;">Tunai</th>
                     <th class="text-end" style="width: 80px;">Transfer</th>
                     <th class="text-end" style="width: 80px;">E-Wallet</th>
@@ -336,7 +336,7 @@
                     <tr>
                         <td class="text-center">{{ $index + 1 }}</td>
                         <td class="fw-semibold">{{ $row['tanggal'] }}</td>
-                        <td class="text-center">{{ number_format($row['jml_transaksi']) }}</td>
+                        <td class="text-center">{{ number_format($row['jml_transaksi']) }} orang</td>
                         <td class="text-end">Rp {{ number_format($row['total_tunai'], 0, ',', '.') }}</td>
                         <td class="text-end">Rp {{ number_format($row['total_transfer'], 0, ',', '.') }}</td>
                         <td class="text-end">Rp {{ number_format($row['total_ewallet'], 0, ',', '.') }}</td>
@@ -357,7 +357,7 @@
             <tfoot>
                 <tr>
                     <th colspan="2" class="text-center">TOTAL</th>
-                    <th class="text-center">{{ number_format($countTransaksi) }}</th>
+                    <th class="text-center">{{ number_format($countTransaksi) }} Pengunjung</th>
                     <th class="text-end">Rp {{ number_format($totalTunai, 0, ',', '.') }}</th>
                     <th class="text-end">Rp {{ number_format($totalTransfer, 0, ',', '.') }}</th>
                     <th class="text-end">Rp {{ number_format($totalEwallet, 0, ',', '.') }}</th>
@@ -370,21 +370,21 @@
             </tfoot>
         </table>
 
-        <!-- 3. RINCIAN PENDAPATAN -->
+        <!-- 3. RINCIAN TRANSAKSI PENERIMAAN UANG -->
         <div class="section-title">
-            <i class="fa-solid fa-list-check"></i>
-            <span>3. Rincian Pendapatan (Transaksi Lunas)</span>
+            <i class="fa-solid fa-cash-register"></i>
+            <span>3. Rincian Transaksi Penerimaan Uang (Lunas)</span>
         </div>
         <table>
             <thead>
                 <tr>
-                    <th style="width: 30px;" class="text-center">No</th>
-                    <th style="width: 85px;">Tanggal & Jam</th>
-                    <th style="width: 110px;">Kode Transaksi</th>
-                    <th style="width: 90px;">Meja / Tipe</th>
-                    <th style="width: 70px;" class="text-center">Metode</th>
-                    <th>Kasir</th>
-                    <th class="text-end" style="width: 100px;">Total</th>
+                    <th style="width: 25px;" class="text-center">No</th>
+                    <th style="width: 80px;">Tanggal & Jam</th>
+                    <th style="width: 105px;">Kode Transaksi</th>
+                    <th>Pelanggan & Meja</th>
+                    <th style="width: 85px;" class="text-center">Metode</th>
+                    <th style="width: 75px;">Kasir</th>
+                    <th class="text-end" style="width: 95px;">Uang Masuk</th>
                 </tr>
             </thead>
             <tbody>
@@ -394,11 +394,10 @@
                         <td>{{ \Carbon\Carbon::parse($trx->waktu_transaksi ?? $trx->created_at)->format('d/m/Y H:i') }}</td>
                         <td class="fw-semibold">{{ $trx->kode_transaksi }}</td>
                         <td>
-                            @if($trx->meja)
-                                Meja #{{ $trx->meja->nomor_meja ?? $trx->meja->id }}
-                            @else
-                                Kasir / Langsung
-                            @endif
+                            <strong>{{ $trx->nama_pemesan ?: 'Pelanggan Kasir' }}</strong>
+                            <span class="text-muted" style="font-size: 9px;">
+                                ({{ $trx->meja ? 'Meja #' . ($trx->meja->nomor_meja ?? $trx->meja->id) : 'Kasir Langsung' }})
+                            </span>
                         </td>
                         <td class="text-center">
                             {{ $trx->metode_label }}
@@ -409,14 +408,14 @@
                 @empty
                     <tr>
                         <td colspan="7" class="text-center text-muted" style="padding: 10px;">
-                            Tidak ada data transaksi pendapatan lunas pada periode ini.
+                            Tidak ada data transaksi penerimaan uang pada periode ini.
                         </td>
                     </tr>
                 @endforelse
             </tbody>
             <tfoot>
                 <tr>
-                    <th colspan="6" class="text-end">TOTAL PENDAPATAN</th>
+                    <th colspan="6" class="text-end">TOTAL PENERIMAAN UANG</th>
                     <th class="text-end text-success">Rp {{ number_format($totalPendapatan, 0, ',', '.') }}</th>
                 </tr>
             </tfoot>
