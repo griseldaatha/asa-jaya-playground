@@ -251,6 +251,7 @@
                     <a href="{{ route('owner.meja.index') }}" class="{{ request()->routeIs('owner.meja.*') ? 'active' : '' }}"><i class="fa-solid fa-qrcode"></i> Data Meja / QR</a>
                     <a href="{{ route('owner.pendapatan.index') }}" class="{{ request()->routeIs('owner.pendapatan.*') ? 'active' : '' }}"><i class="fa-solid fa-wallet"></i> Pendapatan</a>
                     <a href="{{ route('owner.pengeluaran.index') }}" class="{{ request()->routeIs('owner.pengeluaran.*') ? 'active' : '' }}"><i class="fa-solid fa-money-bill-wave"></i> Pengeluaran</a>
+                    <a href="{{ route('owner.produk-laporan.index') }}" class="{{ request()->routeIs('owner.produk-laporan.*') ? 'active' : '' }}"><i class="fa-solid fa-boxes-stacked"></i> Penjualan Produk</a>
                 @elseif(Auth::user()->role === 'kasir')
                     <a href="{{ route('kasir.dashboard') }}" class="{{ request()->routeIs('kasir.dashboard') ? 'active' : '' }}"><i class="fa-solid fa-chart-line"></i> Dashboard</a>
                     <a href="{{ route('kasir.antrean') }}" class="{{ request()->routeIs('kasir.antrean') ? 'active' : '' }}"><i class="fa-solid fa-bell-concierge"></i> Antrean Aktif (Live)</a>

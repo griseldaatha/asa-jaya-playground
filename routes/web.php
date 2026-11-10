@@ -60,6 +60,7 @@ use App\Http\Controllers\Owner\PendapatanController;
 use App\Http\Controllers\Owner\PengeluaranController;
 use App\Http\Controllers\Owner\PengeluaranLaporanController;
 use App\Http\Controllers\Owner\ProdukController;
+use App\Http\Controllers\Owner\ProdukLaporanController;
 
 Route::middleware(['auth', 'role:owner'])->prefix('owner')->name('owner.')->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
@@ -88,6 +89,10 @@ Route::middleware(['auth', 'role:owner'])->prefix('owner')->name('owner.')->grou
     // Laporan Pengeluaran
     Route::get('/pengeluaran', [PengeluaranLaporanController::class, 'index'])->name('pengeluaran.index');
     Route::get('/pengeluaran/cetak', [PengeluaranLaporanController::class, 'cetak'])->name('pengeluaran.cetak');
+
+    // Laporan Penjualan Per Produk
+    Route::get('/penjualan-produk', [ProdukLaporanController::class, 'index'])->name('produk-laporan.index');
+    Route::get('/penjualan-produk/cetak', [ProdukLaporanController::class, 'cetak'])->name('produk-laporan.cetak');
 });
 
 // ==========================================
