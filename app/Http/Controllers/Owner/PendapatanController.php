@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Owner;
 
 use App\Http\Controllers\Controller;
+use App\Models\Pengeluaran;
 use App\Models\Transaksi;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -63,9 +64,9 @@ class PendapatanController extends Controller
     }
 
     /**
-     * Mengambil ringkasan & rekap harian pendapatan
+     * Mengambil ringkasan & rekap harian pendapatan serta perbandingan pengeluaran / laba bersih
      */
-    private function getReportData(Carbon $start, Carbon $end): array
+    private function getReportData(Carbon $start, Carbon $end, string $dari, string $sampai): array
     {
         // Query Dasar: Transaksi Lunas dalam rentang tanggal
         $baseTransaksiQuery = Transaksi::where('status_pembayaran', 'lunas')
@@ -74,7 +75,7 @@ class PendapatanController extends Controller
                 $end->toDateTimeString(),
             ]);
 
-        // Ringkasan
+        // Ringkasan Pendapatan
         $totalPendapatan = (int) (clone $baseTransaksiQuery)->sum('total_harga');
         $countTransaksi = (int) (clone $baseTransaksiQuery)->count();
         $rataRataPerTransaksi = $countTransaksi > 0 ? (int) round($totalPendapatan / $countTransaksi) : 0;
@@ -106,8 +107,14 @@ class PendapatanController extends Controller
             ->whereIn('payment_channel', ['gopay', 'shopeepay'])
             ->count();
 
-        // Rekap Per Hari (Tanggal | Jumlah Transaksi | Tunai | Transfer | E-Wallet | Total Pendapatan)
-        $dailyData = Transaksi::where('status_pembayaran', 'lunas')
+        // Ringkasan Pengeluaran & Laba Bersih di Periode yang Sama
+        $totalPengeluaran = (int) Pengeluaran::whereBetween('tanggal_pengeluaran', [$dari, $sampai])->sum('nominal');
+        $countPengeluaran = (int) Pengeluaran::whereBetween('tanggal_pengeluaran', [$dari, $sampai])->count();
+        $labaBersih = $totalPendapatan - $totalPengeluaran;
+        $marginLaba = $totalPendapatan > 0 ? round(($labaBersih / $totalPendapatan) * 100, 1) : 0;
+
+        // Rekap Pendapatan Per Hari
+        $pendapatanHarian = Transaksi::where('status_pembayaran', 'lunas')
             ->whereRaw('COALESCE(waktu_transaksi, created_at) BETWEEN ? AND ?', [
                 $start->toDateTimeString(),
                 $end->toDateTimeString(),
@@ -121,20 +128,49 @@ class PendapatanController extends Controller
                 SUM(total_harga) as total_pendapatan
             ")
             ->groupByRaw('DATE(COALESCE(waktu_transaksi, created_at))')
-            ->orderByRaw('DATE(COALESCE(waktu_transaksi, created_at)) ASC')
-            ->get();
+            ->get()
+            ->keyBy('tgl');
 
-        $rekapHarian = $dailyData->map(function ($row) {
+        // Rekap Pengeluaran Per Hari
+        $pengeluaranHarian = Pengeluaran::whereBetween('tanggal_pengeluaran', [$dari, $sampai])
+            ->selectRaw('tanggal_pengeluaran as tgl, SUM(nominal) as total_pengeluaran, COUNT(*) as jml_pengeluaran')
+            ->groupBy('tanggal_pengeluaran')
+            ->get()
+            ->keyBy('tgl');
+
+        // Gabungan Tanggal Aktif (Pendapatan & Pengeluaran)
+        $allDates = $pendapatanHarian->keys()
+            ->merge($pengeluaranHarian->keys())
+            ->unique()
+            ->sort()
+            ->values();
+
+        $rekapHarian = $allDates->map(function ($dateKey) use ($pendapatanHarian, $pengeluaranHarian) {
+            $pen = $pendapatanHarian->get($dateKey);
+            $peng = $pengeluaranHarian->get($dateKey);
+
+            $totPen = $pen ? (int) $pen->total_pendapatan : 0;
+            $totPeng = $peng ? (int) $peng->total_pengeluaran : 0;
+
             return [
-                'tanggal' => Carbon::parse($row->tgl)->format('d/m/Y'),
-                'raw_date' => $row->tgl,
-                'jml_transaksi' => (int) $row->jml_transaksi,
-                'total_tunai' => (int) $row->total_tunai,
-                'total_transfer' => (int) $row->total_transfer,
-                'total_ewallet' => (int) $row->total_ewallet,
-                'total_pendapatan' => (int) $row->total_pendapatan,
+                'tanggal' => Carbon::parse($dateKey)->format('d/m/Y'),
+                'tanggal_singkat' => Carbon::parse($dateKey)->format('d M'),
+                'raw_date' => $dateKey,
+                'jml_transaksi' => $pen ? (int) $pen->jml_transaksi : 0,
+                'total_tunai' => $pen ? (int) $pen->total_tunai : 0,
+                'total_transfer' => $pen ? (int) $pen->total_transfer : 0,
+                'total_ewallet' => $pen ? (int) $pen->total_ewallet : 0,
+                'total_pendapatan' => $totPen,
+                'total_pengeluaran' => $totPeng,
+                'laba_bersih' => $totPen - $totPeng,
             ];
         });
+
+        // Data Siap Pakai untuk Chart.js
+        $chartDates = $rekapHarian->pluck('tanggal_singkat')->values()->all();
+        $chartPendapatan = $rekapHarian->pluck('total_pendapatan')->values()->all();
+        $chartPengeluaran = $rekapHarian->pluck('total_pengeluaran')->values()->all();
+        $chartLaba = $rekapHarian->pluck('laba_bersih')->values()->all();
 
         return [
             'baseTransaksiQuery' => $baseTransaksiQuery,
@@ -147,10 +183,17 @@ class PendapatanController extends Controller
             'countTransfer' => $countTransfer,
             'totalEwallet' => $totalEwallet,
             'countEwallet' => $countEwallet,
+            'totalPengeluaran' => $totalPengeluaran,
+            'countPengeluaran' => $countPengeluaran,
+            'labaBersih' => $labaBersih,
+            'marginLaba' => $marginLaba,
             'rekapHarian' => $rekapHarian,
+            'chartDates' => $chartDates,
+            'chartPendapatan' => $chartPendapatan,
+            'chartPengeluaran' => $chartPengeluaran,
+            'chartLaba' => $chartLaba,
         ];
     }
-
 
     /**
      * Halaman layar pendapatan (dengan pagination 15 baris)
@@ -167,7 +210,7 @@ class PendapatanController extends Controller
         $start = $resolved['start'];
         $end = $resolved['end'];
 
-        $data = $this->getReportData($start, $end);
+        $data = $this->getReportData($start, $end, $dari, $sampai);
 
         // Pagination untuk tabel layar (15 baris per halaman)
         $rincianPendapatan = (clone $data['baseTransaksiQuery'])
@@ -198,7 +241,7 @@ class PendapatanController extends Controller
         $start = $resolved['start'];
         $end = $resolved['end'];
 
-        $data = $this->getReportData($start, $end);
+        $data = $this->getReportData($start, $end, $dari, $sampai);
 
         // Tanpa pagination: seluruh baris ditampilkan untuk cetak
         $rincianPendapatan = (clone $data['baseTransaksiQuery'])

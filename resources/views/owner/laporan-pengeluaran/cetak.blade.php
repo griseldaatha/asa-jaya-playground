@@ -281,7 +281,7 @@
         <!-- 1. RINGKASAN EKSEKUTIF -->
         <div class="section-title">
             <i class="fa-solid fa-calculator"></i>
-            <span>1. Ringkasan Pengeluaran</span>
+            <span>1. Ringkasan Pengeluaran & Rasio Beban</span>
         </div>
         <table class="table-summary">
             <tbody>
@@ -290,6 +290,15 @@
                     <td class="fw-bold text-danger">Rp {{ number_format($totalPengeluaran, 0, ',', '.') }}</td>
                     <th>Jumlah Catatan</th>
                     <td class="fw-semibold">{{ number_format($countPengeluaran) }} Catatan</td>
+                </tr>
+                <tr>
+                    <th>Rasio Terhadap Omzet</th>
+                    <td class="fw-bold {{ $rasioPengeluaran > 70 ? 'text-danger' : 'text-success' }}">
+                        {{ $rasioPengeluaran }}%
+                        <span class="text-muted" style="font-size: 8.5px;">(Omzet: Rp {{ number_format($totalPendapatan, 0, ',', '.') }})</span>
+                    </td>
+                    <th>Rata-rata per Item</th>
+                    <td class="fw-semibold">Rp {{ number_format($rataRataPengeluaran, 0, ',', '.') }}</td>
                 </tr>
                 <tr>
                     <th>Pengeluaran Terbesar</th>

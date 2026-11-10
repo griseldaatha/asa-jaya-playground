@@ -27,7 +27,10 @@
         }
         .bg-soft-red { background-color: #fee2e2; color: #dc2626; }
         .bg-soft-orange { background-color: #ffedd5; color: #ea580c; }
+        .bg-soft-green { background-color: #d1fae5; color: #059669; }
+        .bg-soft-blue { background-color: #dbeafe; color: #2563eb; }
         .bg-icy { background-color: #D5E3E6; color: #5B6D92; }
+        
         .report-card {
             border-radius: 14px;
             border: 1px solid #e2e8f0;
@@ -69,14 +72,33 @@
             padding: 5px 12px;
             border-radius: 8px;
         }
+        .chart-container-wrapper {
+            position: relative;
+            height: 300px;
+            width: 100%;
+        }
     </style>
 
     <!-- Header Action Button -->
-    <div class="d-flex justify-content-end align-items-center mb-4">
-        <a href="{{ route('owner.pengeluaran.cetak', array_filter(['dari' => $dari, 'sampai' => $sampai, 'kategori_id' => $kategori_id])) }}" target="_blank" class="btn btn-primary d-inline-flex align-items-center gap-2 shadow-sm">
-            <i class="fa-solid fa-print"></i>
-            <span>Cetak / Simpan PDF</span>
-        </a>
+    <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-2">
+        <div>
+            <h4 class="fw-bold text-dark mb-1">
+                <i class="fa-solid fa-money-bill-wave text-danger me-2"></i>Laporan Pengeluaran Operasional
+            </h4>
+            <span class="text-muted small">Analisis pos pengeluaran, distribusi biaya kategori, serta rasio terhadap pendapatan usaha.</span>
+        </div>
+        <div class="d-flex gap-2">
+            @if(Route::has('admin.pengeluaran.index'))
+                <a href="{{ route('admin.pengeluaran.index') }}" class="btn btn-outline-secondary d-inline-flex align-items-center gap-2 shadow-sm">
+                    <i class="fa-solid fa-plus"></i>
+                    <span>Catat Pengeluaran</span>
+                </a>
+            @endif
+            <a href="{{ route('owner.pengeluaran.cetak', array_filter(['dari' => $dari, 'sampai' => $sampai, 'kategori_id' => $kategori_id])) }}" target="_blank" class="btn btn-primary d-inline-flex align-items-center gap-2 shadow-sm">
+                <i class="fa-solid fa-print"></i>
+                <span>Cetak / Simpan PDF</span>
+            </a>
+        </div>
     </div>
 
     <!-- Alert Flash Error -->
@@ -158,37 +180,55 @@
         </div>
     </div>
 
-    <!-- Ringkasan Pengeluaran (3 Cards) -->
+    <!-- 4 Ringkasan Finansial Pengeluaran -->
     <div class="row g-3 mb-4">
         <!-- Card 1: Total Pengeluaran -->
-        <div class="col-12 col-md-4">
+        <div class="col-12 col-sm-6 col-xl-3">
             <div class="stat-card-pro">
                 <div class="d-flex justify-content-between align-items-center mb-2">
                     <span class="text-uppercase fw-bold text-muted small">Total Pengeluaran</span>
                     <div class="icon-box bg-soft-red"><i class="fa-solid fa-money-bill-wave"></i></div>
                 </div>
                 <h3 class="fw-bold mb-1 text-danger">Rp {{ number_format($totalPengeluaran, 0, ',', '.') }}</h3>
-                <small class="text-muted"><i class="fa-solid fa-circle-minus text-danger me-1"></i>Total Nominal Biaya</small>
+                <small class="text-muted"><i class="fa-solid fa-circle-minus text-danger me-1"></i>Akumulasi Seluruh Biaya</small>
             </div>
         </div>
 
-        <!-- Card 2: Jumlah Catatan -->
-        <div class="col-12 col-md-4">
+        <!-- Card 2: Rasio Terhadap Pendapatan -->
+        <div class="col-12 col-sm-6 col-xl-3">
             <div class="stat-card-pro">
                 <div class="d-flex justify-content-between align-items-center mb-2">
-                    <span class="text-uppercase fw-bold text-muted small">Jumlah Catatan</span>
+                    <span class="text-uppercase fw-bold text-muted small">Rasio Beban / Omzet</span>
+                    <div class="icon-box {{ $rasioPengeluaran > 70 ? 'bg-soft-red' : ($rasioPengeluaran > 40 ? 'bg-soft-orange' : 'bg-soft-green') }}">
+                        <i class="fa-solid fa-scale-balanced"></i>
+                    </div>
+                </div>
+                <h3 class="fw-bold mb-1 {{ $rasioPengeluaran > 70 ? 'text-danger' : ($rasioPengeluaran > 40 ? 'text-warning' : 'text-success') }}">
+                    {{ $rasioPengeluaran }}%
+                </h3>
+                <small class="text-muted text-truncate d-block">
+                    Dari Pendapatan: <strong>Rp {{ number_format($totalPendapatan, 0, ',', '.') }}</strong>
+                </small>
+            </div>
+        </div>
+
+        <!-- Card 3: Jumlah Catatan & Rata-rata -->
+        <div class="col-12 col-sm-6 col-xl-3">
+            <div class="stat-card-pro">
+                <div class="d-flex justify-content-between align-items-center mb-2">
+                    <span class="text-uppercase fw-bold text-muted small">Frekuensi Catatan</span>
                     <div class="icon-box bg-icy"><i class="fa-solid fa-file-invoice"></i></div>
                 </div>
                 <h3 class="fw-bold mb-1 text-dark">{{ number_format($countPengeluaran) }} <span class="fs-6 text-muted fw-normal">Item</span></h3>
-                <small class="text-muted"><i class="fa-solid fa-list-check text-primary me-1"></i>Transaksi Pengeluaran</small>
+                <small class="text-muted">Rata-rata: <strong>Rp {{ number_format($rataRataPengeluaran, 0, ',', '.') }}</strong> / item</small>
             </div>
         </div>
 
-        <!-- Card 3: Pengeluaran Terbesar -->
-        <div class="col-12 col-md-4">
+        <!-- Card 4: Pengeluaran Terbesar -->
+        <div class="col-12 col-sm-6 col-xl-3">
             <div class="stat-card-pro">
                 <div class="d-flex justify-content-between align-items-center mb-2">
-                    <span class="text-uppercase fw-bold text-muted small">Pengeluaran Terbesar</span>
+                    <span class="text-uppercase fw-bold text-muted small">Biaya Terbesar</span>
                     <div class="icon-box bg-soft-orange"><i class="fa-solid fa-arrow-trend-up"></i></div>
                 </div>
                 <h3 class="fw-bold mb-1 text-danger">
@@ -198,7 +238,7 @@
                         Rp 0
                     @endif
                 </h3>
-                <small class="text-muted text-truncate d-block">
+                <small class="text-muted text-truncate d-block" title="{{ $pengeluaranTerbesar['nama'] }}">
                     @if($pengeluaranTerbesar['nominal'] > 0)
                         <span class="badge bg-light text-dark border me-1">{{ $pengeluaranTerbesar['kategori'] }}</span>
                         {{ $pengeluaranTerbesar['nama'] }}
@@ -206,6 +246,59 @@
                         Tidak ada data
                     @endif
                 </small>
+            </div>
+        </div>
+    </div>
+
+    <!-- SECTION GRAFIK VISUAL (Chart.js) -->
+    <div class="row g-4 mb-4">
+        <!-- Grafik 1: Tren Harian Pengeluaran -->
+        <div class="col-12 col-lg-7">
+            <div class="report-card mb-0 h-100">
+                <div class="report-card-header d-flex justify-content-between align-items-center">
+                    <div>
+                        <h6 class="fw-bold mb-0 text-dark">
+                            <i class="fa-solid fa-chart-line text-primary me-2"></i>Tren Pengeluaran Harian
+                        </h6>
+                        <small class="text-muted">Fluktuasi beban pengeluaran berdasarkan tanggal pencatatan</small>
+                    </div>
+                    <span class="badge bg-light text-primary border px-2.5 py-1 rounded-pill fw-semibold" style="font-size: 0.72rem;">
+                        Grafik Interaktif
+                    </span>
+                </div>
+                <div class="p-3 p-md-4">
+                    <div class="chart-container-wrapper">
+                        <canvas id="chartTrenPengeluaran"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Grafik 2: Komposisi Per Kategori Biaya -->
+        <div class="col-12 col-lg-5">
+            <div class="report-card mb-0 h-100">
+                <div class="report-card-header d-flex justify-content-between align-items-center">
+                    <div>
+                        <h6 class="fw-bold mb-0 text-dark">
+                            <i class="fa-solid fa-chart-pie text-primary me-2"></i>Distribusi Kategori Biaya
+                        </h6>
+                        <small class="text-muted">Proporsi alokasi pengeluaran</small>
+                    </div>
+                    <span class="badge bg-light text-muted border">{{ count($rekapKategori) }} Kategori</span>
+                </div>
+                <div class="p-3 p-md-4 d-flex flex-column justify-content-between">
+                    <div class="chart-container-wrapper" style="height: 230px;">
+                        <canvas id="chartKategoriPengeluaran"></canvas>
+                    </div>
+                    @if(count($rekapKategori) > 0)
+                        <div class="mt-3 pt-3 border-top small">
+                            <div class="d-flex justify-content-between align-items-center text-muted mb-1" style="font-size: 0.75rem;">
+                                <span>Pos Terbesar:</span>
+                                <strong class="text-danger">{{ $rekapKategori->first()['kategori'] }} ({{ $rekapKategori->first()['persentase'] }}%)</strong>
+                            </div>
+                        </div>
+                    @endif
+                </div>
             </div>
         </div>
     </div>
@@ -272,7 +365,7 @@
         <div class="report-card-header d-flex justify-content-between align-items-center">
             <div>
                 <h6 class="fw-bold mb-0 text-dark">
-                    <i class="fa-solid fa-list-ul text-primary me-2"></i>Rincian Pengeluaran
+                    <i class="fa-solid fa-list-ul text-primary me-2"></i>Rincian Catatan Pengeluaran
                 </h6>
                 <small class="text-muted">Daftar pencatatan pengeluaran operasional pada periode terpilih</small>
             </div>
@@ -343,4 +436,119 @@
         @endif
     </div>
 </div>
+@endsection
+
+@section('scripts')
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const formatRupiah = (val) => 'Rp ' + new Intl.NumberFormat('id-ID').format(val);
+
+        // 1. Chart Tren Harian Pengeluaran (Bar / Area Chart)
+        const ctxTren = document.getElementById('chartTrenPengeluaran');
+        if (ctxTren) {
+            const labelsHarian = @json($chartHarianDates);
+            const dataHarian = @json($chartHarianData);
+
+            new Chart(ctxTren, {
+                type: 'bar',
+                data: {
+                    labels: labelsHarian.length > 0 ? labelsHarian : ['Tidak Ada Data'],
+                    datasets: [{
+                        label: 'Pengeluaran Harian',
+                        data: dataHarian.length > 0 ? dataHarian : [0],
+                        backgroundColor: 'rgba(239, 68, 68, 0.85)',
+                        hoverBackgroundColor: '#ef4444',
+                        borderRadius: 6,
+                        borderWidth: 0
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { display: false },
+                        tooltip: {
+                            callbacks: {
+                                label: function (context) {
+                                    return 'Pengeluaran: ' + formatRupiah(context.raw);
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            ticks: {
+                                callback: function (value) {
+                                    if (value >= 1000000) return (value / 1000000) + ' Jt';
+                                    if (value >= 1000) return (value / 1000) + ' Rb';
+                                    return value;
+                                },
+                                font: { size: 11 }
+                            },
+                            grid: { color: '#f1f5f9' }
+                        },
+                        x: {
+                            grid: { display: false },
+                            ticks: { font: { size: 11 } }
+                        }
+                    }
+                }
+            });
+        }
+
+        // 2. Chart Distribusi Kategori (Doughnut)
+        const ctxKat = document.getElementById('chartKategoriPengeluaran');
+        if (ctxKat) {
+            const labelsKat = @json($chartKategoriLabels);
+            const dataKat = @json($chartKategoriData);
+            const hasData = dataKat.length > 0;
+
+            const paletteColors = [
+                '#ef4444', '#f59e0b', '#3b82f6', '#10b981', 
+                '#8b5cf6', '#06b6d4', '#ec4899', '#64748b'
+            ];
+
+            new Chart(ctxKat, {
+                type: 'doughnut',
+                data: {
+                    labels: hasData ? labelsKat : ['Tidak Ada Data'],
+                    datasets: [{
+                        data: hasData ? dataKat : [1],
+                        backgroundColor: hasData 
+                            ? paletteColors.slice(0, dataKat.length)
+                            : ['#e2e8f0'],
+                        borderWidth: 2,
+                        borderColor: '#ffffff',
+                        hoverOffset: 4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'bottom',
+                            labels: {
+                                usePointStyle: true,
+                                boxWidth: 8,
+                                font: { size: 11, weight: 600 }
+                            }
+                        },
+                        tooltip: {
+                            enabled: hasData,
+                            callbacks: {
+                                label: function (context) {
+                                    return context.label + ': ' + formatRupiah(context.raw);
+                                }
+                            }
+                        }
+                    },
+                    cutout: '68%'
+                }
+            });
+        }
+    });
+</script>
 @endsection

@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Owner;
 use App\Http\Controllers\Controller;
 use App\Models\KategoriPengeluaran;
 use App\Models\Pengeluaran;
+use App\Models\Transaksi;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 
@@ -64,7 +65,7 @@ class PengeluaranLaporanController extends Controller
     }
 
     /**
-     * Mengambil ringkasan & rekap per kategori pengeluaran
+     * Mengambil ringkasan & rekap per kategori pengeluaran serta tren harian & konteks pendapatan
      */
     private function getReportData(string $dari, string $sampai, ?int $kategoriId): array
     {
@@ -76,6 +77,14 @@ class PengeluaranLaporanController extends Controller
 
         $totalPengeluaran = (int) (clone $baseQuery)->sum('nominal');
         $countPengeluaran = (int) (clone $baseQuery)->count();
+        $rataRataPengeluaran = $countPengeluaran > 0 ? (int) round($totalPengeluaran / $countPengeluaran) : 0;
+
+        // Pendapatan pada periode yang sama untuk rasio beban operasional
+        $totalPendapatan = (int) Transaksi::where('status_pembayaran', 'lunas')
+            ->whereRaw('DATE(COALESCE(waktu_transaksi, created_at)) BETWEEN ? AND ?', [$dari, $sampai])
+            ->sum('total_harga');
+
+        $rasioPengeluaran = $totalPendapatan > 0 ? round(($totalPengeluaran / $totalPendapatan) * 100, 1) : 0;
 
         // Pengeluaran Terbesar
         $terbesarRow = (clone $baseQuery)->with('kategori')->orderBy('nominal', 'desc')->first();
@@ -106,6 +115,29 @@ class PengeluaranLaporanController extends Controller
             ];
         });
 
+        // Rekap Harian Pengeluaran untuk Grafik Tren
+        $harianRaw = (clone $baseQuery)
+            ->selectRaw('tanggal_pengeluaran as tgl, COUNT(*) as jml_catatan, SUM(nominal) as total_nominal')
+            ->groupBy('tanggal_pengeluaran')
+            ->orderBy('tanggal_pengeluaran', 'asc')
+            ->get();
+
+        $rekapHarian = $harianRaw->map(function ($row) {
+            return [
+                'tanggal' => Carbon::parse($row->tgl)->format('d/m/Y'),
+                'tanggal_singkat' => Carbon::parse($row->tgl)->format('d M'),
+                'raw_date' => $row->tgl,
+                'jml_catatan' => (int) $row->jml_catatan,
+                'total_nominal' => (int) $row->total_nominal,
+            ];
+        });
+
+        // Data Siap Pakai untuk Chart.js
+        $chartKategoriLabels = $rekapKategori->pluck('kategori')->values()->all();
+        $chartKategoriData = $rekapKategori->pluck('total_nominal')->values()->all();
+        $chartHarianDates = $rekapHarian->pluck('tanggal_singkat')->values()->all();
+        $chartHarianData = $rekapHarian->pluck('total_nominal')->values()->all();
+
         // Nama kategori terpilih jika ada filter kategori
         $namaKategoriAktif = null;
         if ($kategoriId) {
@@ -119,8 +151,16 @@ class PengeluaranLaporanController extends Controller
             'baseQuery' => $baseQuery,
             'totalPengeluaran' => $totalPengeluaran,
             'countPengeluaran' => $countPengeluaran,
+            'rataRataPengeluaran' => $rataRataPengeluaran,
+            'totalPendapatan' => $totalPendapatan,
+            'rasioPengeluaran' => $rasioPengeluaran,
             'pengeluaranTerbesar' => $pengeluaranTerbesar,
             'rekapKategori' => $rekapKategori,
+            'rekapHarian' => $rekapHarian,
+            'chartKategoriLabels' => $chartKategoriLabels,
+            'chartKategoriData' => $chartKategoriData,
+            'chartHarianDates' => $chartHarianDates,
+            'chartHarianData' => $chartHarianData,
             'semuaKategori' => $semuaKategori,
             'namaKategoriAktif' => $namaKategoriAktif,
         ];

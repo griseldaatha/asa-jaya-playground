@@ -278,31 +278,36 @@
         <!-- 1. RINGKASAN EKSEKUTIF -->
         <div class="section-title">
             <i class="fa-solid fa-calculator"></i>
-            <span>1. Ringkasan Pendapatan</span>
+            <span>1. Ringkasan Pendapatan & Laba Bersih</span>
         </div>
         <table class="table-summary">
             <tbody>
                 <tr>
-                    <th>Total Pendapatan</th>
+                    <th>Total Pendapatan Kotor</th>
                     <td class="fw-bold text-success">Rp {{ number_format($totalPendapatan, 0, ',', '.') }}</td>
                     <th>Jumlah Transaksi Lunas</th>
                     <td class="fw-semibold">{{ number_format($countTransaksi) }} Pesanan</td>
                 </tr>
                 <tr>
-                    <th>Rincian Tunai</th>
-                    <td>Rp {{ number_format($totalTunai, 0, ',', '.') }} ({{ $countTunai }} trx)</td>
+                    <th>Beban Pengeluaran</th>
+                    <td class="fw-bold text-danger">Rp {{ number_format($totalPengeluaran, 0, ',', '.') }}</td>
                     <th>Rata-rata per Transaksi</th>
                     <td class="fw-semibold">Rp {{ number_format($rataRataPerTransaksi, 0, ',', '.') }}</td>
                 </tr>
                 <tr>
-                    <th>Rincian Transfer</th>
-                    <td>Rp {{ number_format($totalTransfer, 0, ',', '.') }} ({{ $countTransfer }} trx)</td>
-                    <th>Rincian E-Wallet</th>
-                    <td>Rp {{ number_format($totalEwallet, 0, ',', '.') }} ({{ $countEwallet }} trx)</td>
+                    <th>Laba Bersih (Net Profit)</th>
+                    <td class="fw-bold {{ $labaBersih >= 0 ? 'text-success' : 'text-danger' }}">
+                        Rp {{ number_format($labaBersih, 0, ',', '.') }}
+                        <span class="text-muted" style="font-size: 8.5px;">({{ $marginLaba }}% margin)</span>
+                    </td>
+                    <th>Metode Tunai</th>
+                    <td>Rp {{ number_format($totalTunai, 0, ',', '.') }} ({{ $countTunai }} trx)</td>
                 </tr>
                 <tr>
-                    <th>Status Pembayaran</th>
-                    <td class="fw-semibold text-success" colspan="3">Lunas (100%)</td>
+                    <th>Metode Transfer</th>
+                    <td>Rp {{ number_format($totalTransfer, 0, ',', '.') }} ({{ $countTransfer }} trx)</td>
+                    <th>Metode E-Wallet</th>
+                    <td>Rp {{ number_format($totalEwallet, 0, ',', '.') }} ({{ $countEwallet }} trx)</td>
                 </tr>
             </tbody>
         </table>
@@ -310,18 +315,20 @@
         <!-- 2. REKAP PER HARI -->
         <div class="section-title">
             <i class="fa-solid fa-calendar-day"></i>
-            <span>2. Rekap Per Hari</span>
+            <span>2. Rekap Per Hari (Laba Rugi)</span>
         </div>
         <table>
             <thead>
                 <tr>
-                    <th style="width: 35px;" class="text-center">No</th>
-                    <th style="width: 90px;">Tanggal</th>
-                    <th class="text-center" style="width: 100px;">Jumlah Transaksi</th>
-                    <th class="text-end" style="width: 110px;">Tunai</th>
-                    <th class="text-end" style="width: 110px;">Transfer</th>
-                    <th class="text-end" style="width: 110px;">E-Wallet</th>
-                    <th class="text-end" style="width: 125px;">Total Pendapatan</th>
+                    <th style="width: 25px;" class="text-center">No</th>
+                    <th style="width: 75px;">Tanggal</th>
+                    <th class="text-center" style="width: 60px;">Pesanan</th>
+                    <th class="text-end" style="width: 80px;">Tunai</th>
+                    <th class="text-end" style="width: 80px;">Transfer</th>
+                    <th class="text-end" style="width: 80px;">E-Wallet</th>
+                    <th class="text-end" style="width: 95px;">Pendapatan</th>
+                    <th class="text-end" style="width: 90px;">Pengeluaran</th>
+                    <th class="text-end" style="width: 95px;">Laba Bersih</th>
                 </tr>
             </thead>
             <tbody>
@@ -334,10 +341,14 @@
                         <td class="text-end">Rp {{ number_format($row['total_transfer'], 0, ',', '.') }}</td>
                         <td class="text-end">Rp {{ number_format($row['total_ewallet'], 0, ',', '.') }}</td>
                         <td class="text-end fw-bold text-success">Rp {{ number_format($row['total_pendapatan'], 0, ',', '.') }}</td>
+                        <td class="text-end text-danger">{{ $row['total_pengeluaran'] > 0 ? 'Rp ' . number_format($row['total_pengeluaran'], 0, ',', '.') : '-' }}</td>
+                        <td class="text-end fw-bold {{ $row['laba_bersih'] >= 0 ? 'text-success' : 'text-danger' }}">
+                            Rp {{ number_format($row['laba_bersih'], 0, ',', '.') }}
+                        </td>
                     </tr>
                 @empty
                     <tr>
-                        <td colspan="7" class="text-center text-muted" style="padding: 10px;">
+                        <td colspan="9" class="text-center text-muted" style="padding: 10px;">
                              Tidak ada transaksi pendapatan lunas pada periode ini.
                         </td>
                     </tr>
@@ -351,6 +362,10 @@
                     <th class="text-end">Rp {{ number_format($totalTransfer, 0, ',', '.') }}</th>
                     <th class="text-end">Rp {{ number_format($totalEwallet, 0, ',', '.') }}</th>
                     <th class="text-end text-success">Rp {{ number_format($totalPendapatan, 0, ',', '.') }}</th>
+                    <th class="text-end text-danger">Rp {{ number_format($totalPengeluaran, 0, ',', '.') }}</th>
+                    <th class="text-end {{ $labaBersih >= 0 ? 'text-success' : 'text-danger' }}">
+                        Rp {{ number_format($labaBersih, 0, ',', '.') }}
+                    </th>
                 </tr>
             </tfoot>
         </table>
