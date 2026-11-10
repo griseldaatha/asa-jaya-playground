@@ -196,13 +196,21 @@ class PendapatanController extends Controller
     }
 
     /**
-     * Halaman layar pendapatan (dengan pagination 15 baris)
+     * Redirect default /owner/pendapatan ke sub bagian pertama (Pengunjung Harian)
      */
     public function index(Request $request)
     {
+        return redirect()->route('owner.pendapatan.pengunjung', $request->query());
+    }
+
+    /**
+     * Sub Bagian 1: Laporan Pengunjung Harian
+     */
+    public function pengunjung(Request $request)
+    {
         $resolved = $this->resolveDates($request);
         if ($resolved['error']) {
-            return redirect()->route('owner.pendapatan.index')->with('error', $resolved['error']);
+            return redirect()->route('owner.pendapatan.pengunjung')->with('error', $resolved['error']);
         }
 
         $dari = $resolved['dari'];
@@ -212,47 +220,133 @@ class PendapatanController extends Controller
 
         $data = $this->getReportData($start, $end, $dari, $sampai);
 
-        // Pagination untuk tabel layar (15 baris per halaman)
-        $rincianPendapatan = (clone $data['baseTransaksiQuery'])
-            ->with(['meja', 'kasir'])
-            ->orderByRaw('COALESCE(waktu_transaksi, created_at) DESC')
-            ->paginate(15, ['*'], 'page_pendapatan')
-            ->withQueryString();
-
-        return view('owner.laporan-pendapatan.index', array_merge($data, [
+        return view('owner.laporan-pendapatan.pengunjung', array_merge($data, [
             'dari' => $dari,
             'sampai' => $sampai,
+        ]));
+    }
+
+    /**
+     * Cetak Sub Bagian 1: Laporan Pengunjung Harian
+     */
+    public function cetakPengunjung(Request $request)
+    {
+        $resolved = $this->resolveDates($request);
+        if ($resolved['error']) {
+            return redirect()->route('owner.pendapatan.pengunjung')->with('error', $resolved['error']);
+        }
+
+        $dari = $resolved['dari'];
+        $sampai = $resolved['sampai'];
+        $start = $resolved['start'];
+        $end = $resolved['end'];
+
+        $data = $this->getReportData($start, $end, $dari, $sampai);
+
+        return view('owner.laporan-pendapatan.cetak_pengunjung', array_merge($data, [
+            'dari' => $dari,
+            'sampai' => $sampai,
+        ]));
+    }
+
+    /**
+     * Sub Bagian 2: Laporan Transaksi Penerimaan Uang
+     */
+    public function transaksi(Request $request)
+    {
+        $resolved = $this->resolveDates($request);
+        if ($resolved['error']) {
+            return redirect()->route('owner.pendapatan.transaksi')->with('error', $resolved['error']);
+        }
+
+        $dari = $resolved['dari'];
+        $sampai = $resolved['sampai'];
+        $start = $resolved['start'];
+        $end = $resolved['end'];
+        $metode = $request->query('metode', 'semua');
+
+        $data = $this->getReportData($start, $end, $dari, $sampai);
+
+        $query = clone $data['baseTransaksiQuery'];
+
+        if ($metode === 'tunai') {
+            $query->where('metode_pembayaran', 'tunai');
+        } elseif ($metode === 'transfer') {
+            $query->where('metode_pembayaran', 'payment_gateway')
+                ->where(function ($q) {
+                    $q->where('payment_channel', 'like', '%va%')
+                      ->orWhereNull('payment_channel');
+                });
+        } elseif ($metode === 'ewallet') {
+            $query->where('metode_pembayaran', 'payment_gateway')
+                ->whereIn('payment_channel', ['gopay', 'shopeepay']);
+        }
+
+        $rincianPendapatan = $query
+            ->with(['meja', 'kasir'])
+            ->orderByRaw('COALESCE(waktu_transaksi, created_at) DESC')
+            ->paginate(15, ['*'], 'page_transaksi')
+            ->withQueryString();
+
+        return view('owner.laporan-pendapatan.transaksi', array_merge($data, [
+            'dari' => $dari,
+            'sampai' => $sampai,
+            'metode' => $metode,
             'rincianPendapatan' => $rincianPendapatan,
         ]));
     }
 
     /**
-     * Halaman cetak pendapatan (A4 standalone, tanpa pagination)
+     * Cetak Sub Bagian 2: Laporan Transaksi Penerimaan Uang
      */
-    public function cetak(Request $request)
+    public function cetakTransaksi(Request $request)
     {
         $resolved = $this->resolveDates($request);
         if ($resolved['error']) {
-            return redirect()->route('owner.pendapatan.index')->with('error', $resolved['error']);
+            return redirect()->route('owner.pendapatan.transaksi')->with('error', $resolved['error']);
         }
 
         $dari = $resolved['dari'];
         $sampai = $resolved['sampai'];
         $start = $resolved['start'];
         $end = $resolved['end'];
+        $metode = $request->query('metode', 'semua');
 
         $data = $this->getReportData($start, $end, $dari, $sampai);
 
-        // Tanpa pagination: seluruh baris ditampilkan untuk cetak
-        $rincianPendapatan = (clone $data['baseTransaksiQuery'])
+        $query = clone $data['baseTransaksiQuery'];
+
+        if ($metode === 'tunai') {
+            $query->where('metode_pembayaran', 'tunai');
+        } elseif ($metode === 'transfer') {
+            $query->where('metode_pembayaran', 'payment_gateway')
+                ->where(function ($q) {
+                    $q->where('payment_channel', 'like', '%va%')
+                      ->orWhereNull('payment_channel');
+                });
+        } elseif ($metode === 'ewallet') {
+            $query->where('metode_pembayaran', 'payment_gateway')
+                ->whereIn('payment_channel', ['gopay', 'shopeepay']);
+        }
+
+        $rincianPendapatan = $query
             ->with(['meja', 'kasir'])
             ->orderByRaw('COALESCE(waktu_transaksi, created_at) ASC')
             ->get();
 
-        return view('owner.laporan-pendapatan.cetak', array_merge($data, [
+        return view('owner.laporan-pendapatan.cetak_transaksi', array_merge($data, [
             'dari' => $dari,
             'sampai' => $sampai,
+            'metode' => $metode,
             'rincianPendapatan' => $rincianPendapatan,
         ]));
+    }
+
+    /**
+     * Backward-compatible cetak alias
+     */
+    public function cetak(Request $request)
+    {
+        return $this->cetakPengunjung($request);
     }
 }

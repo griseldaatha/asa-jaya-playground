@@ -77,13 +77,17 @@ Route::middleware(['auth', 'role:owner'])->prefix('owner')->name('owner.')->grou
     Route::put('/karyawan/{id}', [KaryawanController::class, 'update'])->name('karyawan.update');
     Route::delete('/karyawan/{id}', [KaryawanController::class, 'destroy'])->name('karyawan.destroy');
 
-    // Redirect /owner/laporan lama ke /owner/pendapatan
+    // Redirect /owner/laporan lama ke /owner/pendapatan/pengunjung
     Route::get('/laporan', function () {
-        return redirect()->route('owner.pendapatan.index');
+        return redirect()->route('owner.pendapatan.pengunjung');
     });
 
-    // Laporan Pendapatan
+    // Laporan Pendapatan (Sub Bagian: Pengunjung Harian & Transaksi Penerimaan Uang)
     Route::get('/pendapatan', [PendapatanController::class, 'index'])->name('pendapatan.index');
+    Route::get('/pendapatan/pengunjung', [PendapatanController::class, 'pengunjung'])->name('pendapatan.pengunjung');
+    Route::get('/pendapatan/pengunjung/cetak', [PendapatanController::class, 'cetakPengunjung'])->name('pendapatan.pengunjung.cetak');
+    Route::get('/pendapatan/transaksi', [PendapatanController::class, 'transaksi'])->name('pendapatan.transaksi');
+    Route::get('/pendapatan/transaksi/cetak', [PendapatanController::class, 'cetakTransaksi'])->name('pendapatan.transaksi.cetak');
     Route::get('/pendapatan/cetak', [PendapatanController::class, 'cetak'])->name('pendapatan.cetak');
 
     // Laporan Pengeluaran

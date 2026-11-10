@@ -213,6 +213,26 @@
             color: #5B6D92 !important;
             border-left: 4px solid #F0E2D2 !important;
         }
+        
+        /* Sidebar Submenu */
+        .sidebar-submenu-item {
+            padding-left: 38px !important;
+            font-size: 0.88rem !important;
+            background: rgba(0, 0, 0, 0.12) !important;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.03) !important;
+        }
+        .sidebar-submenu-item:hover, .sidebar-submenu-item.active {
+            background: #D5E3E6 !important;
+            color: #5B6D92 !important;
+            border-left: 4px solid #F0E2D2 !important;
+            font-weight: 600;
+        }
+        .sidebar-dropdown-toggle[aria-expanded="true"] .sidebar-chevron {
+            transform: rotate(180deg);
+        }
+        .sidebar-chevron {
+            transition: transform 0.2s ease;
+        }
 
         /* Enforce White Backgrounds on Tables and Forms */
         .table { background-color: #ffffff !important; border-collapse: collapse; }
@@ -249,7 +269,27 @@
                     <a href="{{ route('owner.dashboard') }}" class="{{ request()->routeIs('owner.dashboard') ? 'active' : '' }}"><i class="fa-solid fa-chart-line"></i> Dashboard Owner</a>
                     <a href="{{ route('owner.karyawan.index') }}" class="{{ request()->routeIs('owner.karyawan.*') ? 'active' : '' }}"><i class="fa-solid fa-users-gear"></i> Kelola Kasir & User</a>
                     <a href="{{ route('owner.meja.index') }}" class="{{ request()->routeIs('owner.meja.*') ? 'active' : '' }}"><i class="fa-solid fa-qrcode"></i> Data Meja / QR</a>
-                    <a href="{{ route('owner.pendapatan.index') }}" class="{{ request()->routeIs('owner.pendapatan.*') ? 'active' : '' }}"><i class="fa-solid fa-wallet"></i> Pendapatan</a>
+                    
+                    <!-- Dropdown Sub Menu Pendapatan -->
+                    <div class="sidebar-dropdown">
+                        <a class="sidebar-dropdown-toggle d-flex justify-content-between align-items-center {{ request()->routeIs('owner.pendapatan.*') ? 'active' : '' }}" 
+                           data-bs-toggle="collapse" 
+                           href="#submenuPendapatan" 
+                           role="button" 
+                           aria-expanded="{{ request()->routeIs('owner.pendapatan.*') ? 'true' : 'false' }}">
+                            <span><i class="fa-solid fa-wallet"></i> Pendapatan</span>
+                            <i class="fa-solid fa-chevron-down sidebar-chevron small"></i>
+                        </a>
+                        <div class="collapse {{ request()->routeIs('owner.pendapatan.*') ? 'show' : '' }}" id="submenuPendapatan">
+                            <a href="{{ route('owner.pendapatan.pengunjung') }}" class="sidebar-submenu-item {{ request()->routeIs('owner.pendapatan.pengunjung*') ? 'active' : '' }}">
+                                <i class="fa-solid fa-users"></i> Pengunjung Harian
+                            </a>
+                            <a href="{{ route('owner.pendapatan.transaksi') }}" class="sidebar-submenu-item {{ request()->routeIs('owner.pendapatan.transaksi*') ? 'active' : '' }}">
+                                <i class="fa-solid fa-cash-register"></i> Transaksi Penerimaan Uang
+                            </a>
+                        </div>
+                    </div>
+
                     <a href="{{ route('owner.pengeluaran.index') }}" class="{{ request()->routeIs('owner.pengeluaran.*') ? 'active' : '' }}"><i class="fa-solid fa-money-bill-wave"></i> Pengeluaran</a>
                     <a href="{{ route('owner.produk-laporan.index') }}" class="{{ request()->routeIs('owner.produk-laporan.*') ? 'active' : '' }}"><i class="fa-solid fa-boxes-stacked"></i> Penjualan Produk</a>
                 @elseif(Auth::user()->role === 'kasir')
