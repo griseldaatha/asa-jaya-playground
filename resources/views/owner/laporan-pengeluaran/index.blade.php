@@ -80,25 +80,17 @@
     </style>
 
     <!-- Header Action Button -->
-    <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-2">
-        <div>
-            <h4 class="fw-bold text-dark mb-1">
-                <i class="fa-solid fa-money-bill-wave text-danger me-2"></i>Laporan Pengeluaran Operasional
-            </h4>
-            <span class="text-muted small">Analisis pos pengeluaran, distribusi biaya kategori, serta rasio terhadap pendapatan usaha.</span>
-        </div>
-        <div class="d-flex gap-2">
-            @if(Route::has('admin.pengeluaran.index'))
-                <a href="{{ route('admin.pengeluaran.index') }}" class="btn btn-outline-secondary d-inline-flex align-items-center gap-2 shadow-sm">
-                    <i class="fa-solid fa-plus"></i>
-                    <span>Catat Pengeluaran</span>
-                </a>
-            @endif
-            <a href="{{ route('owner.pengeluaran.cetak', array_filter(['dari' => $dari, 'sampai' => $sampai, 'kategori_id' => $kategori_id])) }}" target="_blank" class="btn btn-primary d-inline-flex align-items-center gap-2 shadow-sm">
-                <i class="fa-solid fa-print"></i>
-                <span>Cetak / Simpan PDF</span>
+    <div class="d-flex justify-content-end align-items-center mb-4 gap-2">
+        @if(Route::has('admin.pengeluaran.index'))
+            <a href="{{ route('admin.pengeluaran.index') }}" class="btn btn-outline-secondary d-inline-flex align-items-center gap-2 shadow-sm">
+                <i class="fa-solid fa-plus"></i>
+                <span>Catat Pengeluaran</span>
             </a>
-        </div>
+        @endif
+        <a href="{{ route('owner.pengeluaran.cetak', array_filter(['dari' => $dari, 'sampai' => $sampai, 'kategori_id' => $kategori_id])) }}" target="_blank" class="btn btn-primary d-inline-flex align-items-center gap-2 shadow-sm">
+            <i class="fa-solid fa-print"></i>
+            <span>Cetak / Simpan PDF</span>
+        </a>
     </div>
 
     <!-- Alert Flash Error -->

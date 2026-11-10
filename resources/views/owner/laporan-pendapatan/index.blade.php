@@ -80,19 +80,11 @@
     </style>
 
     <!-- Header Action Button -->
-    <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-2">
-        <div>
-            <h4 class="fw-bold text-dark mb-1">
-                <i class="fa-solid fa-wallet text-primary me-2"></i>Laporan Pendapatan & Profitabilitas
-            </h4>
-            <span class="text-muted small">Pantau pendapatan, pengeluaran operasional, serta laba bersih usaha.</span>
-        </div>
-        <div class="d-flex gap-2">
-            <a href="{{ route('owner.pendapatan.cetak', ['dari' => $dari, 'sampai' => $sampai]) }}" target="_blank" class="btn btn-primary d-inline-flex align-items-center gap-2 shadow-sm">
-                <i class="fa-solid fa-print"></i>
-                <span>Cetak / Simpan PDF</span>
-            </a>
-        </div>
+    <div class="d-flex justify-content-end align-items-center mb-4">
+        <a href="{{ route('owner.pendapatan.cetak', ['dari' => $dari, 'sampai' => $sampai]) }}" target="_blank" class="btn btn-primary d-inline-flex align-items-center gap-2 shadow-sm">
+            <i class="fa-solid fa-print"></i>
+            <span>Cetak / Simpan PDF</span>
+        </a>
     </div>
 
     <!-- Alert Notifikasi Flash Error -->
