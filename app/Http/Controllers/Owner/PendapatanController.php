@@ -196,11 +196,30 @@ class PendapatanController extends Controller
     }
 
     /**
-     * Redirect default /owner/pendapatan ke sub bagian pertama (Pengunjung Harian)
+     * Halaman Utama: Ikhtisar Laba Rugi & Finansial Usaha (Executive Overview)
      */
     public function index(Request $request)
     {
-        return redirect()->route('owner.pendapatan.pengunjung', $request->query());
+        $resolved = $this->resolveDates($request);
+        if ($resolved['error']) {
+            return redirect()->route('owner.pendapatan.index')->with('error', $resolved['error']);
+        }
+
+        $dari = $resolved['dari'];
+        $sampai = $resolved['sampai'];
+        $start = $resolved['start'];
+        $end = $resolved['end'];
+        $metode = $request->query('metode', 'semua');
+
+        $data = $this->getReportData($start, $end, $dari, $sampai);
+        $daysCount = $start->diffInDays($end) + 1;
+
+        return view('owner.laporan-pendapatan.index', array_merge($data, [
+            'dari' => $dari,
+            'sampai' => $sampai,
+            'metode' => $metode,
+            'daysCount' => $daysCount,
+        ]));
     }
 
     /**
@@ -219,10 +238,12 @@ class PendapatanController extends Controller
         $end = $resolved['end'];
 
         $data = $this->getReportData($start, $end, $dari, $sampai);
+        $daysCount = $start->diffInDays($end) + 1;
 
         return view('owner.laporan-pendapatan.pengunjung', array_merge($data, [
             'dari' => $dari,
             'sampai' => $sampai,
+            'daysCount' => $daysCount,
         ]));
     }
 
@@ -288,10 +309,13 @@ class PendapatanController extends Controller
             ->paginate(15, ['*'], 'page_transaksi')
             ->withQueryString();
 
+        $daysCount = $start->diffInDays($end) + 1;
+
         return view('owner.laporan-pendapatan.transaksi', array_merge($data, [
             'dari' => $dari,
             'sampai' => $sampai,
             'metode' => $metode,
+            'daysCount' => $daysCount,
             'rincianPendapatan' => $rincianPendapatan,
         ]));
     }

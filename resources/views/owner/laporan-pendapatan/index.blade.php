@@ -67,19 +67,238 @@
             background-color: #f8fafc !important;
             border-top: 2px solid #cbd5e1 !important;
         }
-        .quick-btn {
+
+        /* Sleek Filter Bar Pro (Image Matching) */
+        .filter-wrapper-pro {
+            margin-bottom: 24px;
+        }
+        .filter-bar-sleek {
+            background: #1e2433;
+            border-radius: 9999px;
+            padding: 8px 12px 8px 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+        @media (max-width: 991px) {
+            .filter-bar-sleek {
+                border-radius: 20px;
+                flex-direction: column;
+                align-items: stretch;
+                padding: 14px;
+                gap: 12px;
+            }
+        }
+        .filter-inputs-group {
+            display: flex;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+        .date-range-box {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            color: #ffffff;
+            font-size: 0.85rem;
+        }
+        .filter-icon {
+            color: #94a3b8;
+            font-size: 0.95rem;
+        }
+        .sleek-date-input {
+            background: transparent !important;
+            border: none !important;
+            color: #ffffff !important;
+            font-size: 0.85rem;
+            font-weight: 500;
+            padding: 2px 4px;
+            width: 125px;
+            outline: none !important;
+            box-shadow: none !important;
+            cursor: pointer;
+            color-scheme: dark;
+        }
+        .range-arrow {
+            color: #94a3b8;
+            font-weight: 600;
+            margin: 0 4px;
+            font-size: 0.95rem;
+        }
+        .filter-divider {
+            width: 1px;
+            height: 20px;
+            background: rgba(255, 255, 255, 0.2);
+            margin: 0 8px;
+        }
+        @media (max-width: 576px) {
+            .filter-divider { display: none; }
+        }
+        .method-select-box {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            position: relative;
+        }
+        .sleek-select {
+            background: transparent !important;
+            border: none !important;
+            color: #ffffff !important;
+            font-size: 0.85rem;
+            font-weight: 500;
+            padding: 2px 24px 2px 4px;
+            outline: none !important;
+            box-shadow: none !important;
+            cursor: pointer;
+            appearance: none;
+            -webkit-appearance: none;
+        }
+        .sleek-select option {
+            background-color: #1e2433;
+            color: #ffffff;
+        }
+        .select-chevron {
+            position: absolute;
+            right: 4px;
+            pointer-events: none;
+            color: #94a3b8;
+            font-size: 0.7rem;
+        }
+        .filter-actions-group {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+        .btn-quick-pill {
+            background: rgba(255, 255, 255, 0.08);
+            color: #e2e8f0;
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            border-radius: 9999px;
+            padding: 6px 14px;
             font-size: 0.8rem;
-            padding: 5px 12px;
-            border-radius: 8px;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.2s ease;
+            cursor: pointer;
+            white-space: nowrap;
+        }
+        .btn-quick-pill:hover {
+            background: rgba(255, 255, 255, 0.16);
+            color: #ffffff;
+            border-color: rgba(255, 255, 255, 0.24);
+        }
+        .btn-quick-pill.active {
+            background: #5B6D92;
+            color: #ffffff;
+            border-color: #7b8fae;
+        }
+        .btn-terapkan-pill {
+            background: #9ab4f5;
+            color: #0f172a;
+            border: none;
+            border-radius: 9999px;
+            padding: 6px 18px;
+            font-size: 0.825rem;
+            font-weight: 700;
+            transition: all 0.2s ease;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            white-space: nowrap;
+        }
+        .btn-terapkan-pill:hover {
+            background: #b5c7f8;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(154, 180, 245, 0.35);
+        }
+
+        /* Active Filter Tags Row */
+        .filter-active-bar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 10px;
+            padding: 10px 8px 4px 8px;
+        }
+        .active-tags-list {
+            display: flex;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+        .filter-label-text {
+            font-size: 0.72rem;
+            font-weight: 800;
+            letter-spacing: 0.8px;
+            color: #475569;
+            text-transform: uppercase;
+            margin-right: 2px;
+        }
+        .filter-tag-chip {
+            background: #242c3f;
+            border: 1px solid #384259;
+            color: #e2e8f0;
+            border-radius: 9999px;
+            padding: 4px 12px;
+            font-size: 0.78rem;
+            font-weight: 500;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            text-decoration: none;
+        }
+        .filter-tag-chip:hover {
+            background: #2d374e;
+            color: #ffffff;
+            border-color: #ef4444;
+        }
+        .tag-close-btn {
+            font-size: 0.95rem;
+            line-height: 1;
+            color: #94a3b8;
+            transition: color 0.2s ease;
+        }
+        .filter-tag-chip:hover .tag-close-btn {
+            color: #ef4444;
+        }
+        .period-days-count {
+            font-size: 0.825rem;
+            color: #475569;
+        }
+        .period-days-count strong {
+            color: #0f172a;
+            font-weight: 700;
+        }
+        .table-pl th, .table-pl td {
+            padding: 10px 16px;
         }
     </style>
 
     <!-- Header Action Button -->
-    <div class="d-flex justify-content-end align-items-center mb-4">
-        <a href="{{ route('owner.pendapatan.cetak', ['dari' => $dari, 'sampai' => $sampai]) }}" target="_blank" class="btn btn-primary d-inline-flex align-items-center gap-2 shadow-sm">
-            <i class="fa-solid fa-print"></i>
-            <span>Cetak / Simpan PDF</span>
-        </a>
+    <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-2">
+        <div class="d-flex align-items-center gap-2">
+            <span class="badge bg-primary px-3 py-2 rounded-pill fw-semibold">
+                <i class="fa-solid fa-briefcase me-1"></i> Executive Financial Statement
+            </span>
+        </div>
+        <div class="d-flex gap-2">
+            <a href="{{ route('owner.pendapatan.transaksi') }}" class="btn btn-sm btn-outline-secondary d-inline-flex align-items-center gap-2 shadow-sm">
+                <i class="fa-solid fa-cash-register"></i>
+                <span>Lihat Penerimaan Uang</span>
+            </a>
+            <a href="{{ route('owner.pendapatan.cetak', ['dari' => $dari, 'sampai' => $sampai]) }}" target="_blank" class="btn btn-sm btn-primary d-inline-flex align-items-center gap-2 shadow-sm">
+                <i class="fa-solid fa-print"></i>
+                <span>Cetak / Simpan PDF</span>
+            </a>
+        </div>
     </div>
 
     <!-- Alert Notifikasi Flash Error -->
@@ -90,63 +309,88 @@
         </div>
     @endif
 
-    <!-- Bar Filter -->
-    <div class="report-card p-3 p-md-4 mb-4">
-        <form method="GET" action="{{ route('owner.pendapatan.index') }}" class="row g-3 align-items-end" id="filterForm">
-            <div class="col-12 col-sm-6 col-md-3">
-                <label for="inputDari" class="form-label small fw-bold text-muted mb-1">
-                    <i class="fa-regular fa-calendar me-1"></i>Dari Tanggal
-                </label>
-                <input type="date" class="form-control form-control-sm" id="inputDari" name="dari" value="{{ $dari }}" required>
-            </div>
-            <div class="col-12 col-sm-6 col-md-3">
-                <label for="inputSampai" class="form-label small fw-bold text-muted mb-1">
-                    <i class="fa-regular fa-calendar me-1"></i>Sampai Tanggal
-                </label>
-                <input type="date" class="form-control form-control-sm" id="inputSampai" name="sampai" value="{{ $sampai }}" required>
-            </div>
-            <div class="col-12 col-md-2">
-                <button type="submit" class="btn btn-primary btn-sm w-100">
-                    <i class="fa-solid fa-filter me-1"></i>Terapkan
-                </button>
-            </div>
-            <div class="col-12 col-md-4">
-                <div class="d-flex flex-wrap gap-1 justify-content-md-end">
-                    @php
-                        $todayStr = now()->toDateString();
-                        $sevenDaysAgoStr = now()->subDays(6)->toDateString();
-                        $startThisMonthStr = now()->startOfMonth()->toDateString();
-                        $startLastMonthStr = now()->subMonthNoOverflow()->startOfMonth()->toDateString();
-                        $endLastMonthStr = now()->subMonthNoOverflow()->endOfMonth()->toDateString();
-                    @endphp
-                    <a href="{{ route('owner.pendapatan.index', ['dari' => $todayStr, 'sampai' => $todayStr]) }}"
-                       class="btn btn-sm quick-btn {{ ($dari === $todayStr && $sampai === $todayStr) ? 'btn-primary' : 'btn-outline-secondary' }}">
-                        Hari Ini
-                    </a>
-                    <a href="{{ route('owner.pendapatan.index', ['dari' => $sevenDaysAgoStr, 'sampai' => $todayStr]) }}"
-                       class="btn btn-sm quick-btn {{ ($dari === $sevenDaysAgoStr && $sampai === $todayStr) ? 'btn-primary' : 'btn-outline-secondary' }}">
-                        7 Hari
-                    </a>
-                    <a href="{{ route('owner.pendapatan.index', ['dari' => $startThisMonthStr, 'sampai' => $todayStr]) }}"
-                       class="btn btn-sm quick-btn {{ ($dari === $startThisMonthStr && $sampai === $todayStr) ? 'btn-primary' : 'btn-outline-secondary' }}">
-                        Bulan Ini
-                    </a>
-                    <a href="{{ route('owner.pendapatan.index', ['dari' => $startLastMonthStr, 'sampai' => $endLastMonthStr]) }}"
-                       class="btn btn-sm quick-btn {{ ($dari === $startLastMonthStr && $sampai === $endLastMonthStr) ? 'btn-primary' : 'btn-outline-secondary' }}">
-                        Bulan Lalu
-                    </a>
+    <!-- Bar Filter Ramping Modern (Format Pill Sesuai Mockup) -->
+    <div class="filter-wrapper-pro">
+        <form method="GET" action="{{ route('owner.pendapatan.index') }}" class="filter-bar-sleek" id="filterForm">
+            <div class="filter-inputs-group">
+                <div class="date-range-box">
+                    <i class="fa-regular fa-calendar filter-icon"></i>
+                    <input type="date" class="sleek-date-input" id="inputDari" name="dari" value="{{ $dari }}" required title="Dari Tanggal">
+                    <span class="range-arrow">&rarr;</span>
+                    <input type="date" class="sleek-date-input" id="inputSampai" name="sampai" value="{{ $sampai }}" required title="Sampai Tanggal">
+                </div>
+
+                <div class="filter-divider"></div>
+
+                <div class="method-select-box">
+                    <i class="fa-solid fa-credit-card filter-icon"></i>
+                    <select name="metode" id="inputMetode" class="sleek-select" title="Pilih Metode Pembayaran" onchange="document.getElementById('filterForm').submit()">
+                        <option value="semua" {{ ($metode ?? 'semua') === 'semua' ? 'selected' : '' }}>Semua Metode</option>
+                        <option value="tunai" {{ ($metode ?? '') === 'tunai' ? 'selected' : '' }}>Tunai</option>
+                        <option value="transfer" {{ ($metode ?? '') === 'transfer' ? 'selected' : '' }}>Transfer Bank (VA)</option>
+                        <option value="ewallet" {{ ($metode ?? '') === 'ewallet' ? 'selected' : '' }}>E-Wallet (GoPay/Shopee)</option>
+                    </select>
+                    <i class="fa-solid fa-chevron-down select-chevron"></i>
                 </div>
             </div>
+
+            <div class="filter-actions-group">
+                @php
+                    $todayStr = now()->toDateString();
+                    $startThisMonthStr = now()->startOfMonth()->toDateString();
+                @endphp
+                <button type="button" 
+                        class="btn-quick-pill {{ ($dari === $todayStr && $sampai === $todayStr) ? 'active' : '' }}" 
+                        onclick="setQuickDate('{{ $todayStr }}', '{{ $todayStr }}')">
+                    Hari Ini
+                </button>
+                <button type="button" 
+                        class="btn-quick-pill {{ ($dari === $startThisMonthStr && $sampai === $todayStr) ? 'active' : '' }}" 
+                        onclick="setQuickDate('{{ $startThisMonthStr }}', '{{ $todayStr }}')">
+                    Bulan Ini
+                </button>
+                <button type="submit" class="btn-terapkan-pill">
+                    <i class="fa-solid fa-check me-1"></i> Terapkan
+                </button>
+            </div>
         </form>
-        <div class="mt-2 text-muted small">
-            <i class="fa-solid fa-circle-info text-primary me-1"></i>
-            Menampilkan periode: <strong>{{ \Carbon\Carbon::parse($dari)->format('d/m/Y') }}</strong> s.d. <strong>{{ \Carbon\Carbon::parse($sampai)->format('d/m/Y') }}</strong>
+
+        <!-- Baris Bawah: FILTER AKTIF & Tag Chips (Bisa Dihapus Satu Per Satu) -->
+        <div class="filter-active-bar">
+            <div class="active-tags-list">
+                <span class="filter-label-text">FILTER AKTIF</span>
+                
+                <!-- Tag Periode Tanggal -->
+                <div class="filter-tag-chip" title="Hapus filter tanggal (kembali ke bulan ini)" onclick="resetDateFilter()">
+                    <span>Periode: {{ \Carbon\Carbon::parse($dari)->format('d/m/Y') }} &ndash; {{ \Carbon\Carbon::parse($sampai)->format('d/m/Y') }}</span>
+                    <span class="tag-close-btn">&times;</span>
+                </div>
+
+                <!-- Tag Metode Pembayaran -->
+                @php
+                    $metodeLabels = [
+                        'semua' => 'Semua Metode',
+                        'tunai' => 'Tunai',
+                        'transfer' => 'Transfer Bank (VA)',
+                        'ewallet' => 'E-Wallet',
+                    ];
+                    $currentMetode = $metode ?? 'semua';
+                @endphp
+                <div class="filter-tag-chip" title="Hapus filter metode (kembali ke Semua Metode)" onclick="resetMetodeFilter()">
+                    <span>Metode: {{ $metodeLabels[$currentMetode] ?? ucfirst($currentMetode) }}</span>
+                    <span class="tag-close-btn">&times;</span>
+                </div>
+            </div>
+
+            <div class="period-days-count">
+                <strong>{{ $daysCount ?? (\Carbon\Carbon::parse($dari)->diffInDays(\Carbon\Carbon::parse($sampai)) + 1) }}</strong> hari dalam periode
+            </div>
         </div>
     </div>
 
-    <!-- 4 Kartu Finansial Utama (Termasuk Laba Bersih Gabungan) -->
+    <!-- 4 Kartu Metrik Laba Rugi & Finansial Eksekutif -->
     <div class="row g-3 mb-4">
-        <!-- Card 1: Total Pendapatan Kotor -->
+        <!-- Card 1: Pendapatan Kotor -->
         <div class="col-12 col-sm-6 col-xl-3">
             <div class="stat-card-pro">
                 <div class="d-flex justify-content-between align-items-center mb-2">
@@ -155,31 +399,30 @@
                 </div>
                 <h3 class="fw-bold mb-1 text-success">Rp {{ number_format($totalPendapatan, 0, ',', '.') }}</h3>
                 <small class="text-muted d-block">
-                    <i class="fa-solid fa-users text-primary me-1"></i><strong>{{ number_format($countTransaksi) }}</strong> Pengunjung / Pesanan
-                </small>
-                <small class="text-muted d-block">
-                    Rata-rata: <strong>Rp {{ number_format($rataRataPerTransaksi, 0, ',', '.') }}</strong> / orang
+                    Dari <strong>{{ number_format($countTransaksi) }}</strong> transaksi lunas
                 </small>
             </div>
         </div>
 
-        <!-- Card 2: Total Pengeluaran Operasional -->
+        <!-- Card 2: Beban Pengeluaran -->
         <div class="col-12 col-sm-6 col-xl-3">
             <div class="stat-card-pro">
                 <div class="d-flex justify-content-between align-items-center mb-2">
-                    <span class="text-uppercase fw-bold text-muted small">Beban Pengeluaran</span>
+                    <span class="text-uppercase fw-bold text-muted small">Beban Operasional</span>
                     <div class="icon-box bg-soft-red"><i class="fa-solid fa-money-bill-wave"></i></div>
                 </div>
                 <h3 class="fw-bold mb-1 text-danger">Rp {{ number_format($totalPengeluaran, 0, ',', '.') }}</h3>
-                <small class="text-muted"><i class="fa-solid fa-circle-minus text-danger me-1"></i>Dari {{ number_format($countPengeluaran) }} pos pengeluaran</small>
+                <small class="text-muted d-block">
+                    Dari <strong>{{ number_format($countPengeluaran) }}</strong> pos pengeluaran
+                </small>
             </div>
         </div>
 
-        <!-- Card 3: Laba Bersih (Net Profit) -->
+        <!-- Card 3: Laba Bersih Usaha -->
         <div class="col-12 col-sm-6 col-xl-3">
             <div class="stat-card-pro" style="border-left: 4px solid {{ $labaBersih >= 0 ? '#10b981' : '#ef4444' }};">
                 <div class="d-flex justify-content-between align-items-center mb-2">
-                    <span class="text-uppercase fw-bold text-muted small">Laba Bersih (Profit)</span>
+                    <span class="text-uppercase fw-bold text-muted small">Laba Bersih (Net Profit)</span>
                     <div class="icon-box {{ $labaBersih >= 0 ? 'bg-soft-blue' : 'bg-soft-red' }}">
                         <i class="fa-solid fa-sack-dollar"></i>
                     </div>
@@ -189,46 +432,107 @@
                 </h3>
                 <div class="d-flex align-items-center gap-1">
                     <span class="badge {{ $labaBersih >= 0 ? 'bg-success-subtle text-success' : 'bg-danger-subtle text-danger' }} fw-bold" style="font-size: 0.72rem;">
-                        {{ $marginLaba >= 0 ? '+' : '' }}{{ $marginLaba }}% Margin
+                        {{ $marginLaba >= 0 ? '+' : '' }}{{ $marginLaba }}% Margin Profit
                     </span>
-                    <small class="text-muted" style="font-size: 0.72rem;">(Pendapatan - Beban)</small>
                 </div>
             </div>
         </div>
 
-        <!-- Card 4: Ringkasan & Metode Bayar -->
+        <!-- Card 4: Rasio Biaya terhadap Pendapatan -->
+        @php
+            $expenseRatio = $totalPendapatan > 0 ? round(($totalPengeluaran / $totalPendapatan) * 100, 1) : 0;
+        @endphp
         <div class="col-12 col-sm-6 col-xl-3">
             <div class="stat-card-pro">
                 <div class="d-flex justify-content-between align-items-center mb-2">
-                    <span class="text-uppercase fw-bold text-muted small">Penerimaan Pembayaran</span>
-                    <div class="icon-box bg-icy"><i class="fa-solid fa-cash-register"></i></div>
+                    <span class="text-uppercase fw-bold text-muted small">Rasio Beban Usaha</span>
+                    <div class="icon-box bg-icy"><i class="fa-solid fa-chart-pie"></i></div>
                 </div>
-                <div class="small">
-                    <div class="d-flex justify-content-between align-items-center mb-1">
-                        <span><i class="fa-solid fa-money-bill text-success me-1"></i>Tunai:</span>
-                        <strong class="text-dark">Rp {{ number_format($totalTunai, 0, ',', '.') }}</strong>
-                    </div>
-                    <div class="d-flex justify-content-between align-items-center mb-1">
-                        <span><i class="fa-solid fa-building-columns text-primary me-1"></i>Transfer:</span>
-                        <strong class="text-dark">Rp {{ number_format($totalTransfer, 0, ',', '.') }}</strong>
-                    </div>
-                    <div class="d-flex justify-content-between align-items-center">
-                        <span><i class="fa-solid fa-wallet text-warning me-1"></i>E-Wallet:</span>
-                        <strong class="text-dark">Rp {{ number_format($totalEwallet, 0, ',', '.') }}</strong>
-                    </div>
-                </div>
+                <h3 class="fw-bold mb-1 text-dark">{{ $expenseRatio }}%</h3>
+                <small class="text-muted d-block">
+                    Beban menghabiskan {{ $expenseRatio }}% dari total omzet
+                </small>
             </div>
         </div>
     </div>
 
-    <!-- TABEL 1: Rekap Finansial & Pengunjung Harian -->
+    <!-- TABEL 1: FORMAT LAPORAN LABA RUGI RESMI (PROFIT & LOSS STATEMENT) -->
+    <div class="report-card mb-4">
+        <div class="report-card-header d-flex justify-content-between align-items-center">
+            <div>
+                <h6 class="fw-bold mb-0 text-dark">
+                    <i class="fa-solid fa-file-invoice-dollar text-primary me-2"></i>Laporan Laba Rugi Usaha (Profit & Loss Statement)
+                </h6>
+                <small class="text-muted">Format ikhtisar keuangan standar pendapatan kotor dikurangi beban operasional</small>
+            </div>
+            <span class="badge bg-light text-muted border">Periode: {{ \Carbon\Carbon::parse($dari)->format('d/m/Y') }} &ndash; {{ \Carbon\Carbon::parse($sampai)->format('d/m/Y') }}</span>
+        </div>
+        <div class="table-responsive">
+            <table class="table table-bordered table-pl mb-0 align-middle">
+                <tbody>
+                    <tr class="table-light">
+                        <th colspan="2" class="fw-bold text-uppercase text-secondary" style="font-size: 0.8rem;">
+                            1. PENDAPATAN USAHA (REVENUE)
+                        </th>
+                        <th style="width: 200px;" class="text-end fw-bold text-secondary" style="font-size: 0.8rem;">NOMINAL</th>
+                    </tr>
+                    <tr>
+                        <td style="width: 30px;" class="text-center text-muted">a.</td>
+                        <td>Penerimaan Pembayaran Tunai (Cash di Kasir)</td>
+                        <td class="text-end fw-semibold text-dark">Rp {{ number_format($totalTunai, 0, ',', '.') }}</td>
+                    </tr>
+                    <tr>
+                        <td class="text-center text-muted">b.</td>
+                        <td>Penerimaan Non-Tunai Transfer Bank (Virtual Account)</td>
+                        <td class="text-end fw-semibold text-dark">Rp {{ number_format($totalTransfer, 0, ',', '.') }}</td>
+                    </tr>
+                    <tr>
+                        <td class="text-center text-muted">c.</td>
+                        <td>Penerimaan Digital E-Wallet (GoPay / ShopeePay QRIS)</td>
+                        <td class="text-end fw-semibold text-dark">Rp {{ number_format($totalEwallet, 0, ',', '.') }}</td>
+                    </tr>
+                    <tr class="bg-light fw-bold">
+                        <td colspan="2" class="text-success ps-4">TOTAL PENDAPATAN KOTOR (A)</td>
+                        <td class="text-end text-success fs-6">Rp {{ number_format($totalPendapatan, 0, ',', '.') }}</td>
+                    </tr>
+
+                    <tr class="table-light">
+                        <th colspan="2" class="fw-bold text-uppercase text-secondary pt-3" style="font-size: 0.8rem;">
+                            2. BEBAN BIAYA OPERASIONAL (EXPENSES)
+                        </th>
+                        <th class="text-end fw-bold text-secondary pt-3" style="font-size: 0.8rem;">NOMINAL</th>
+                    </tr>
+                    <tr>
+                        <td class="text-center text-muted">a.</td>
+                        <td>Total Biaya & Pos Pengeluaran Toko ({{ number_format($countPengeluaran) }} Catatan)</td>
+                        <td class="text-end fw-semibold text-danger">(Rp {{ number_format($totalPengeluaran, 0, ',', '.') }})</td>
+                    </tr>
+                    <tr class="bg-light fw-bold">
+                        <td colspan="2" class="text-danger ps-4">TOTAL BEBAN OPERASIONAL (B)</td>
+                        <td class="text-end text-danger fs-6">(Rp {{ number_format($totalPengeluaran, 0, ',', '.') }})</td>
+                    </tr>
+
+                    <tr class="{{ $labaBersih >= 0 ? 'table-success' : 'table-danger' }} fw-bold" style="border-top: 3px solid #cbd5e1;">
+                        <td colspan="2" class="fs-6 py-3 ps-3">
+                            <i class="fa-solid fa-scale-balanced me-2"></i>LABA BERSIH USAHA (NET PROFIT = A &minus; B)
+                        </td>
+                        <td class="text-end fs-5 py-3 {{ $labaBersih >= 0 ? 'text-success' : 'text-danger' }}">
+                            Rp {{ number_format($labaBersih, 0, ',', '.') }}
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- TABEL 2: REKAPITULASI KOMPARATIF HARIAN (LABA RUGI PER TANGGAL) -->
     <div class="report-card">
         <div class="report-card-header d-flex justify-content-between align-items-center">
             <div>
                 <h6 class="fw-bold mb-0 text-dark">
-                    <i class="fa-solid fa-calendar-day text-primary me-2"></i>Rekap Finansial & Pengunjung Harian
+                    <i class="fa-solid fa-calendar-day text-primary me-2"></i>Rekapitulasi Finansial Harian (Pendapatan vs Pengeluaran & Laba)
                 </h6>
-                <small class="text-muted">Rincian jumlah pengunjung/pesanan, pendapatan kotor, beban pengeluaran, serta laba bersih harian</small>
+                <small class="text-muted">Performa finansial harian menyandingkan pendapatan, beban, dan profitabilitas per tanggal</small>
             </div>
             <span class="badge bg-light text-muted border">{{ count($rekapHarian) }} Hari Aktif</span>
         </div>
@@ -236,50 +540,57 @@
             <table class="table table-hover table-laporan mb-0 align-middle">
                 <thead>
                     <tr>
-                        <th style="width: 120px;">Tanggal</th>
-                        <th class="text-center" style="width: 130px;">
-                            <i class="fa-solid fa-users text-primary me-1"></i>Pengunjung
-                        </th>
-                        <th class="text-end" style="width: 120px;">Tunai</th>
-                        <th class="text-end" style="width: 120px;">Transfer</th>
-                        <th class="text-end" style="width: 120px;">E-Wallet</th>
-                        <th class="text-end" style="width: 140px;">Pendapatan Kotor</th>
-                        <th class="text-end" style="width: 130px;">Pengeluaran</th>
-                        <th class="text-end" style="width: 140px;">Laba Bersih</th>
+                        <th style="width: 50px;" class="text-center">#</th>
+                        <th style="width: 130px;">Tanggal</th>
+                        <th class="text-end" style="width: 160px;">Pendapatan Kotor</th>
+                        <th class="text-end" style="width: 150px;">Beban Pengeluaran</th>
+                        <th class="text-end" style="width: 160px;">Laba Bersih</th>
+                        <th class="text-center" style="width: 120px;">Margin Laba</th>
+                        <th class="text-center" style="width: 120px;">Status</th>
                     </tr>
                 </thead>
                 <tbody>
-                    @forelse($rekapHarian as $row)
+                    @forelse($rekapHarian as $index => $row)
+                        @php
+                            $rowMargin = $row['total_pendapatan'] > 0 ? round(($row['laba_bersih'] / $row['total_pendapatan']) * 100) : ($row['laba_bersih'] < 0 ? -100 : 0);
+                        @endphp
                         <tr>
+                            <td class="text-center text-muted small">{{ $loop->iteration }}</td>
                             <td class="fw-semibold text-dark">{{ $row['tanggal'] }}</td>
-                            <td class="text-center">
-                                <span class="badge bg-light text-dark border px-2 py-1 fw-semibold">
-                                    {{ number_format($row['jml_transaksi']) }} orang
-                                </span>
-                            </td>
-                            <td class="text-end text-dark">Rp {{ number_format($row['total_tunai'], 0, ',', '.') }}</td>
-                            <td class="text-end text-dark">Rp {{ number_format($row['total_transfer'], 0, ',', '.') }}</td>
-                            <td class="text-end text-dark">Rp {{ number_format($row['total_ewallet'], 0, ',', '.') }}</td>
                             <td class="text-end text-success fw-bold">Rp {{ number_format($row['total_pendapatan'], 0, ',', '.') }}</td>
                             <td class="text-end text-danger fw-semibold">
                                 @if($row['total_pengeluaran'] > 0)
                                     Rp {{ number_format($row['total_pengeluaran'], 0, ',', '.') }}
                                 @else
-                                    <span class="text-muted">-</span>
+                                    <span class="text-muted">&ndash;</span>
                                 @endif
                             </td>
                             <td class="text-end fw-bold {{ $row['laba_bersih'] >= 0 ? 'text-primary' : 'text-danger' }}">
                                 Rp {{ number_format($row['laba_bersih'], 0, ',', '.') }}
                             </td>
+                            <td class="text-center">
+                                <span class="badge {{ $row['laba_bersih'] >= 0 ? 'bg-success-subtle text-success' : 'bg-danger-subtle text-danger' }} fw-bold">
+                                    {{ $rowMargin >= 0 ? '+' : '' }}{{ $rowMargin }}%
+                                </span>
+                            </td>
+                            <td class="text-center">
+                                @if($row['laba_bersih'] > 0)
+                                    <span class="badge bg-soft-green text-success px-2 py-1"><i class="fa-solid fa-arrow-trend-up me-1"></i>Profit</span>
+                                @elseif($row['laba_bersih'] < 0)
+                                    <span class="badge bg-soft-red text-danger px-2 py-1"><i class="fa-solid fa-arrow-trend-down me-1"></i>Defisit</span>
+                                @else
+                                    <span class="badge bg-light text-muted border px-2 py-1">Impas</span>
+                                @endif
+                            </td>
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="8" class="text-center py-5">
+                            <td colspan="7" class="text-center py-5">
                                 <div class="empty-state-icon mb-2">
                                     <i class="fa-solid fa-calendar-xmark text-muted"></i>
                                 </div>
-                                <h6 class="text-dark fw-bold mb-1">Tidak Ada Transaksi Finansial</h6>
-                                <p class="text-muted small mb-0">Belum ada pendapatan atau pengeluaran tercatat pada periode tanggal ini.</p>
+                                <h6 class="text-dark fw-bold mb-1">Tidak Ada Data Finansial</h6>
+                                <p class="text-muted small mb-0">Belum ada catatan pendapatan atau pengeluaran pada periode tanggal ini.</p>
                             </td>
                         </tr>
                     @endforelse
@@ -287,15 +598,17 @@
                 @if(count($rekapHarian) > 0)
                     <tfoot>
                         <tr>
-                            <th>TOTAL</th>
-                            <th class="text-center fw-bold">{{ number_format($countTransaksi) }} Pengunjung</th>
-                            <th class="text-end">Rp {{ number_format($totalTunai, 0, ',', '.') }}</th>
-                            <th class="text-end">Rp {{ number_format($totalTransfer, 0, ',', '.') }}</th>
-                            <th class="text-end">Rp {{ number_format($totalEwallet, 0, ',', '.') }}</th>
+                            <th colspan="2" class="text-center">TOTAL PERIODE</th>
                             <th class="text-end text-success">Rp {{ number_format($totalPendapatan, 0, ',', '.') }}</th>
                             <th class="text-end text-danger">Rp {{ number_format($totalPengeluaran, 0, ',', '.') }}</th>
                             <th class="text-end {{ $labaBersih >= 0 ? 'text-primary' : 'text-danger' }}">
                                 Rp {{ number_format($labaBersih, 0, ',', '.') }}
+                            </th>
+                            <th class="text-center {{ $labaBersih >= 0 ? 'text-success' : 'text-danger' }}">{{ $marginLaba }}%</th>
+                            <th class="text-center">
+                                <span class="badge {{ $labaBersih >= 0 ? 'bg-success text-white' : 'bg-danger text-white' }} px-2 py-1">
+                                    {{ $labaBersih >= 0 ? 'PROFIT' : 'DEFISIT' }}
+                                </span>
                             </th>
                         </tr>
                     </tfoot>
@@ -303,110 +616,28 @@
             </table>
         </div>
     </div>
-
-    <!-- TABEL 2: Rincian Transaksi Penerimaan Uang -->
-    <div class="report-card">
-        <div class="report-card-header d-flex justify-content-between align-items-center">
-            <div>
-                <h6 class="fw-bold mb-0 text-dark">
-                    <i class="fa-solid fa-cash-register text-primary me-2"></i>Rincian Transaksi Penerimaan Uang
-                </h6>
-                <small class="text-muted">Daftar transaksi penerimaan uang kas & non-tunai berstatus lunas pada periode terpilih</small>
-            </div>
-            <span class="badge bg-light text-muted border">Total: {{ number_format($countTransaksi) }} Penerimaan</span>
-        </div>
-        <div class="table-responsive">
-            <table class="table table-hover table-laporan mb-0 align-middle">
-                <thead>
-                    <tr>
-                        <th style="width: 50px;" class="text-center">#</th>
-                        <th style="width: 140px;">Tanggal & Jam</th>
-                        <th style="width: 160px;">Kode Transaksi</th>
-                        <th>Pelanggan & Meja</th>
-                        <th style="width: 160px;">Metode Penerimaan</th>
-                        <th style="width: 130px;">Kasir</th>
-                        <th class="text-end" style="width: 150px;">Uang Masuk</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @forelse($rincianPendapatan as $index => $trx)
-                        <tr>
-                            <td class="text-center text-muted small">{{ $rincianPendapatan->firstItem() + $index }}</td>
-                            <td>
-                                <div class="fw-semibold text-dark">{{ \Carbon\Carbon::parse($trx->waktu_transaksi ?? $trx->created_at)->format('d/m/Y') }}</div>
-                                <small class="text-muted">{{ \Carbon\Carbon::parse($trx->waktu_transaksi ?? $trx->created_at)->format('H:i') }} WIB</small>
-                            </td>
-                            <td>
-                                @if(Route::has('admin.transaksi.show'))
-                                    <a href="{{ route('admin.transaksi.show', $trx->id) }}" class="fw-bold text-decoration-none text-primary">
-                                        {{ $trx->kode_transaksi }}
-                                    </a>
-                                @else
-                                    <span class="fw-bold text-dark">{{ $trx->kode_transaksi }}</span>
-                                @endif
-                            </td>
-                            <td>
-                                <div class="fw-semibold text-dark">{{ $trx->nama_pemesan ?: 'Pelanggan Kasir' }}</div>
-                                <small class="text-muted">
-                                    @if($trx->meja)
-                                        <i class="fa-solid fa-chair me-1 text-primary"></i>Meja #{{ $trx->meja->nomor_meja ?? $trx->meja->id }}
-                                    @else
-                                        <i class="fa-solid fa-store me-1 text-muted"></i>Kasir Langsung
-                                    @endif
-                                </small>
-                            </td>
-                            <td>
-                                @if($trx->metode_pembayaran === 'tunai')
-                                    <span class="badge bg-soft-green text-success">
-                                        <i class="fa-solid fa-money-bill me-1"></i>Tunai
-                                    </span>
-                                @elseif($trx->metode_pembayaran === 'payment_gateway')
-                                    <span class="badge bg-icy text-primary">
-                                        <i class="fa-solid fa-credit-card me-1"></i>{{ $trx->metode_label }}
-                                    </span>
-                                @else
-                                    <span class="badge bg-secondary">{{ ucfirst($trx->metode_pembayaran ?? '-') }}</span>
-                                @endif
-                            </td>
-                            <td>
-                                <span class="text-dark small">{{ $trx->kasir->nama ?? $trx->kasir->username ?? '-' }}</span>
-                            </td>
-                            <td class="text-end fw-bold text-success">
-                                Rp {{ number_format($trx->total_harga, 0, ',', '.') }}
-                            </td>
-                        </tr>
-                    @empty
-                        <tr>
-                            <td colspan="7" class="text-center py-5">
-                                <div class="empty-state-icon mb-2">
-                                    <i class="fa-solid fa-receipt text-muted"></i>
-                                </div>
-                                <h6 class="text-dark fw-bold mb-1">Tidak Ada Transaksi Penerimaan Uang</h6>
-                                <p class="text-muted small mb-0">Belum ada transaksi penerimaan kas atau non-tunai pada periode tanggal ini.</p>
-                            </td>
-                        </tr>
-                    @endforelse
-                </tbody>
-                @if($countTransaksi > 0)
-                    <tfoot>
-                        <tr>
-                            <th colspan="6" class="text-end">TOTAL PENERIMAAN UANG ({{ number_format($countTransaksi) }} Transaksi)</th>
-                            <th class="text-end text-success">Rp {{ number_format($totalPendapatan, 0, ',', '.') }}</th>
-                        </tr>
-                    </tfoot>
-                @endif
-            </table>
-        </div>
-        @if($rincianPendapatan->hasPages())
-            <div class="p-3 border-top d-flex justify-content-between align-items-center flex-wrap gap-2">
-                <small class="text-muted">
-                    Menampilkan {{ $rincianPendapatan->firstItem() }} - {{ $rincianPendapatan->lastItem() }} dari {{ $rincianPendapatan->total() }} baris
-                </small>
-                <div>
-                    {{ $rincianPendapatan->links('pagination::bootstrap-5') }}
-                </div>
-            </div>
-        @endif
-    </div>
 </div>
+@endsection
+
+@section('scripts')
+<script>
+    function setQuickDate(dari, sampai) {
+        document.getElementById('inputDari').value = dari;
+        document.getElementById('inputSampai').value = sampai;
+        document.getElementById('filterForm').submit();
+    }
+
+    function resetDateFilter() {
+        const startMonth = '{{ now()->startOfMonth()->toDateString() }}';
+        const today = '{{ now()->toDateString() }}';
+        document.getElementById('inputDari').value = startMonth;
+        document.getElementById('inputSampai').value = today;
+        document.getElementById('filterForm').submit();
+    }
+
+    function resetMetodeFilter() {
+        document.getElementById('inputMetode').value = 'semua';
+        document.getElementById('filterForm').submit();
+    }
+</script>
 @endsection

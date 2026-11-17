@@ -72,6 +72,216 @@
             padding: 5px 12px;
             border-radius: 8px;
         }
+
+        /* Sleek Filter Bar Pro (Image Matching) */
+        .filter-wrapper-pro {
+            margin-bottom: 24px;
+        }
+        .filter-bar-sleek {
+            background: #1e2433;
+            border-radius: 9999px;
+            padding: 8px 12px 8px 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+        @media (max-width: 991px) {
+            .filter-bar-sleek {
+                border-radius: 20px;
+                flex-direction: column;
+                align-items: stretch;
+                padding: 14px;
+                gap: 12px;
+            }
+        }
+        .filter-inputs-group {
+            display: flex;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+        .date-range-box {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            color: #ffffff;
+            font-size: 0.85rem;
+        }
+        .filter-icon {
+            color: #94a3b8;
+            font-size: 0.95rem;
+        }
+        .sleek-date-input {
+            background: transparent !important;
+            border: none !important;
+            color: #ffffff !important;
+            font-size: 0.85rem;
+            font-weight: 500;
+            padding: 2px 4px;
+            width: 125px;
+            outline: none !important;
+            box-shadow: none !important;
+            cursor: pointer;
+            color-scheme: dark;
+        }
+        .range-arrow {
+            color: #94a3b8;
+            font-weight: 600;
+            margin: 0 4px;
+            font-size: 0.95rem;
+        }
+        .filter-divider {
+            width: 1px;
+            height: 20px;
+            background: rgba(255, 255, 255, 0.2);
+            margin: 0 8px;
+        }
+        @media (max-width: 576px) {
+            .filter-divider { display: none; }
+        }
+        .method-select-box {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            position: relative;
+        }
+        .sleek-select {
+            background: transparent !important;
+            border: none !important;
+            color: #ffffff !important;
+            font-size: 0.85rem;
+            font-weight: 500;
+            padding: 2px 24px 2px 4px;
+            outline: none !important;
+            box-shadow: none !important;
+            cursor: pointer;
+            appearance: none;
+            -webkit-appearance: none;
+        }
+        .sleek-select option {
+            background-color: #1e2433;
+            color: #ffffff;
+        }
+        .select-chevron {
+            position: absolute;
+            right: 4px;
+            pointer-events: none;
+            color: #94a3b8;
+            font-size: 0.7rem;
+        }
+        .filter-actions-group {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+        .btn-quick-pill {
+            background: rgba(255, 255, 255, 0.08);
+            color: #e2e8f0;
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            border-radius: 9999px;
+            padding: 6px 14px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.2s ease;
+            cursor: pointer;
+            white-space: nowrap;
+        }
+        .btn-quick-pill:hover {
+            background: rgba(255, 255, 255, 0.16);
+            color: #ffffff;
+            border-color: rgba(255, 255, 255, 0.24);
+        }
+        .btn-quick-pill.active {
+            background: #5B6D92;
+            color: #ffffff;
+            border-color: #7b8fae;
+        }
+        .btn-terapkan-pill {
+            background: #9ab4f5;
+            color: #0f172a;
+            border: none;
+            border-radius: 9999px;
+            padding: 6px 18px;
+            font-size: 0.825rem;
+            font-weight: 700;
+            transition: all 0.2s ease;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            white-space: nowrap;
+        }
+        .btn-terapkan-pill:hover {
+            background: #b5c7f8;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(154, 180, 245, 0.35);
+        }
+
+        /* Active Filter Tags Row */
+        .filter-active-bar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 10px;
+            padding: 10px 8px 4px 8px;
+        }
+        .active-tags-list {
+            display: flex;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+        .filter-label-text {
+            font-size: 0.72rem;
+            font-weight: 800;
+            letter-spacing: 0.8px;
+            color: #475569;
+            text-transform: uppercase;
+            margin-right: 2px;
+        }
+        .filter-tag-chip {
+            background: #242c3f;
+            border: 1px solid #384259;
+            color: #e2e8f0;
+            border-radius: 9999px;
+            padding: 4px 12px;
+            font-size: 0.78rem;
+            font-weight: 500;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            text-decoration: none;
+        }
+        .filter-tag-chip:hover {
+            background: #2d374e;
+            color: #ffffff;
+            border-color: #ef4444;
+        }
+        .tag-close-btn {
+            font-size: 0.95rem;
+            line-height: 1;
+            color: #94a3b8;
+            transition: color 0.2s ease;
+        }
+        .filter-tag-chip:hover .tag-close-btn {
+            color: #ef4444;
+        }
+        .period-days-count {
+            font-size: 0.825rem;
+            color: #475569;
+        }
+        .period-days-count strong {
+            color: #0f172a;
+            font-weight: 700;
+        }
     </style>
 
     <!-- Header Action Button -->
@@ -90,60 +300,81 @@
         </div>
     @endif
 
-    <!-- Bar Filter -->
-    <div class="report-card p-3 p-md-4 mb-4">
-        <form method="GET" action="{{ route('owner.pendapatan.transaksi') }}" class="row g-3 align-items-end" id="filterForm">
-            <div class="col-12 col-sm-6 col-md-3">
-                <label for="inputDari" class="form-label small fw-bold text-muted mb-1">
-                    <i class="fa-regular fa-calendar me-1"></i>Dari Tanggal
-                </label>
-                <input type="date" class="form-control form-control-sm" id="inputDari" name="dari" value="{{ $dari }}" required>
+    <!-- Bar Filter Ramping Modern (Format Pill Sesuai Mockup) -->
+    <div class="filter-wrapper-pro">
+        <form method="GET" action="{{ route('owner.pendapatan.transaksi') }}" class="filter-bar-sleek" id="filterForm">
+            <div class="filter-inputs-group">
+                <div class="date-range-box">
+                    <i class="fa-regular fa-calendar filter-icon"></i>
+                    <input type="date" class="sleek-date-input" id="inputDari" name="dari" value="{{ $dari }}" required title="Dari Tanggal">
+                    <span class="range-arrow">&rarr;</span>
+                    <input type="date" class="sleek-date-input" id="inputSampai" name="sampai" value="{{ $sampai }}" required title="Sampai Tanggal">
+                </div>
+
+                <div class="filter-divider"></div>
+
+                <div class="method-select-box">
+                    <i class="fa-solid fa-credit-card filter-icon"></i>
+                    <select name="metode" id="inputMetode" class="sleek-select" title="Pilih Metode Pembayaran" onchange="document.getElementById('filterForm').submit()">
+                        <option value="semua" {{ $metode === 'semua' ? 'selected' : '' }}>Semua Metode</option>
+                        <option value="tunai" {{ $metode === 'tunai' ? 'selected' : '' }}>Tunai</option>
+                        <option value="transfer" {{ $metode === 'transfer' ? 'selected' : '' }}>Transfer Bank (VA)</option>
+                        <option value="ewallet" {{ $metode === 'ewallet' ? 'selected' : '' }}>E-Wallet (GoPay/Shopee)</option>
+                    </select>
+                    <i class="fa-solid fa-chevron-down select-chevron"></i>
+                </div>
             </div>
-            <div class="col-12 col-sm-6 col-md-3">
-                <label for="inputSampai" class="form-label small fw-bold text-muted mb-1">
-                    <i class="fa-regular fa-calendar me-1"></i>Sampai Tanggal
-                </label>
-                <input type="date" class="form-control form-control-sm" id="inputSampai" name="sampai" value="{{ $sampai }}" required>
-            </div>
-            <div class="col-12 col-sm-6 col-md-2">
-                <label for="inputMetode" class="form-label small fw-bold text-muted mb-1">
-                    <i class="fa-solid fa-credit-card me-1"></i>Metode Bayar
-                </label>
-                <select name="metode" id="inputMetode" class="form-select form-select-sm">
-                    <option value="semua" {{ $metode === 'semua' ? 'selected' : '' }}>Semua Metode</option>
-                    <option value="tunai" {{ $metode === 'tunai' ? 'selected' : '' }}>Tunai</option>
-                    <option value="transfer" {{ $metode === 'transfer' ? 'selected' : '' }}>Transfer Bank (VA)</option>
-                    <option value="ewallet" {{ $metode === 'ewallet' ? 'selected' : '' }}>E-Wallet (GoPay/Shopee)</option>
-                </select>
-            </div>
-            <div class="col-12 col-sm-6 col-md-2">
-                <button type="submit" class="btn btn-primary btn-sm w-100">
-                    <i class="fa-solid fa-filter me-1"></i>Terapkan
-                </button>
-            </div>
-            <div class="col-12 col-md-2">
+
+            <div class="filter-actions-group">
                 @php
                     $todayStr = now()->toDateString();
                     $startThisMonthStr = now()->startOfMonth()->toDateString();
                 @endphp
-                <div class="d-flex gap-1 justify-content-md-end">
-                    <a href="{{ route('owner.pendapatan.transaksi', ['dari' => $todayStr, 'sampai' => $todayStr, 'metode' => $metode]) }}"
-                       class="btn btn-sm quick-btn w-50 text-center {{ ($dari === $todayStr && $sampai === $todayStr) ? 'btn-primary' : 'btn-outline-secondary' }}">
-                        Hari Ini
-                    </a>
-                    <a href="{{ route('owner.pendapatan.transaksi', ['dari' => $startThisMonthStr, 'sampai' => $todayStr, 'metode' => $metode]) }}"
-                       class="btn btn-sm quick-btn w-50 text-center {{ ($dari === $startThisMonthStr && $sampai === $todayStr) ? 'btn-primary' : 'btn-outline-secondary' }}">
-                        Bulan Ini
-                    </a>
-                </div>
+                <button type="button" 
+                        class="btn-quick-pill {{ ($dari === $todayStr && $sampai === $todayStr) ? 'active' : '' }}" 
+                        onclick="setQuickDate('{{ $todayStr }}', '{{ $todayStr }}')">
+                    Hari Ini
+                </button>
+                <button type="button" 
+                        class="btn-quick-pill {{ ($dari === $startThisMonthStr && $sampai === $todayStr) ? 'active' : '' }}" 
+                        onclick="setQuickDate('{{ $startThisMonthStr }}', '{{ $todayStr }}')">
+                    Bulan Ini
+                </button>
+                <button type="submit" class="btn-terapkan-pill">
+                    <i class="fa-solid fa-check me-1"></i> Terapkan
+                </button>
             </div>
         </form>
-        <div class="mt-2 text-muted small">
-            <i class="fa-solid fa-circle-info text-primary me-1"></i>
-            Menampilkan periode: <strong>{{ \Carbon\Carbon::parse($dari)->format('d/m/Y') }}</strong> s.d. <strong>{{ \Carbon\Carbon::parse($sampai)->format('d/m/Y') }}</strong>
-            @if($metode !== 'semua')
-                | Filter Metode: <span class="badge bg-light text-primary border">{{ ucfirst($metode) }}</span>
-            @endif
+
+        <!-- Baris Bawah: FILTER AKTIF & Tag Chips (Bisa Dihapus Satu Per Satu) -->
+        <div class="filter-active-bar">
+            <div class="active-tags-list">
+                <span class="filter-label-text">FILTER AKTIF</span>
+                
+                <!-- Tag Periode Tanggal -->
+                <div class="filter-tag-chip" title="Hapus filter tanggal (kembali ke bulan ini)" onclick="resetDateFilter()">
+                    <span>Periode: {{ \Carbon\Carbon::parse($dari)->format('d/m/Y') }} &ndash; {{ \Carbon\Carbon::parse($sampai)->format('d/m/Y') }}</span>
+                    <span class="tag-close-btn">&times;</span>
+                </div>
+
+                <!-- Tag Metode Pembayaran -->
+                @php
+                    $metodeLabels = [
+                        'semua' => 'Semua Metode',
+                        'tunai' => 'Tunai',
+                        'transfer' => 'Transfer Bank (VA)',
+                        'ewallet' => 'E-Wallet',
+                    ];
+                @endphp
+                <div class="filter-tag-chip" title="Hapus filter metode (kembali ke Semua Metode)" onclick="resetMetodeFilter()">
+                    <span>Metode: {{ $metodeLabels[$metode] ?? ucfirst($metode) }}</span>
+                    <span class="tag-close-btn">&times;</span>
+                </div>
+            </div>
+
+            <div class="period-days-count">
+                <strong>{{ $daysCount ?? (\Carbon\Carbon::parse($dari)->diffInDays(\Carbon\Carbon::parse($sampai)) + 1) }}</strong> hari dalam periode
+            </div>
         </div>
     </div>
 
@@ -303,4 +534,27 @@
         @endif
     </div>
 </div>
+@endsection
+
+@section('scripts')
+<script>
+    function setQuickDate(dari, sampai) {
+        document.getElementById('inputDari').value = dari;
+        document.getElementById('inputSampai').value = sampai;
+        document.getElementById('filterForm').submit();
+    }
+
+    function resetDateFilter() {
+        const startMonth = '{{ now()->startOfMonth()->toDateString() }}';
+        const today = '{{ now()->toDateString() }}';
+        document.getElementById('inputDari').value = startMonth;
+        document.getElementById('inputSampai').value = today;
+        document.getElementById('filterForm').submit();
+    }
+
+    function resetMetodeFilter() {
+        document.getElementById('inputMetode').value = 'semua';
+        document.getElementById('filterForm').submit();
+    }
+</script>
 @endsection
