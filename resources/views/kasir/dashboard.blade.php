@@ -65,7 +65,7 @@
             <i class="fa-regular fa-calendar-check text-primary me-1.5"></i>{{ date('d/m/Y') }}
         </span>
         <a href="{{ route('kasir.antrean') }}" class="btn btn-sm btn-primary rounded-pill px-3 shadow-sm">
-            <i class="fa-solid fa-bell-concierge me-1"></i> Antrean Aktif (Live)
+            <i class="fa-solid fa-bell-concierge me-1"></i> Antrean Aktif
         </a>
     </div>
 
