@@ -305,10 +305,6 @@
                     <span class="tag-close-btn">&times;</span>
                 </div>
             </div>
-
-            <div class="period-days-count">
-                <strong>{{ $daysCount ?? (\Carbon\Carbon::parse($dari)->diffInDays(\Carbon\Carbon::parse($sampai)) + 1) }}</strong> hari dalam periode
-            </div>
         </div>
     </div>
 
