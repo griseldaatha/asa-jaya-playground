@@ -278,12 +278,9 @@
     <!-- TABEL UTAMA: Rekap Penjualan Per Produk -->
     <div class="report-card">
         <div class="report-card-header d-flex justify-content-between align-items-center flex-wrap gap-2">
-            <div>
-                <h6 class="fw-bold mb-0 text-dark">
-                    <i class="fa-solid fa-table-list text-primary me-2"></i>Daftar Penjualan Per Produk
-                </h6>
-                <small class="text-muted">Rincian kuantitas terjual, total omzet, serta kontribusi pendapatan tiap produk</small>
-            </div>
+            <h6 class="fw-bold mb-0 text-dark">
+                <i class="fa-solid fa-table-list text-primary me-2"></i>Daftar Penjualan Per Produk
+            </h6>
             <span class="badge bg-light text-muted border">Total: {{ $totalItemJenis }} Jenis Produk</span>
         </div>
         <div class="table-responsive">

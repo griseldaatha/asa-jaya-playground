@@ -454,13 +454,10 @@
 
     <!-- TABEL 1: FORMAT LAPORAN LABA RUGI RESMI (PROFIT & LOSS STATEMENT) -->
     <div class="report-card mb-4">
-        <div class="report-card-header d-flex justify-content-between align-items-center">
-            <div>
-                <h6 class="fw-bold mb-0 text-dark">
-                    <i class="fa-solid fa-file-invoice-dollar text-primary me-2"></i>Laporan Laba Rugi Usaha (Profit & Loss Statement)
-                </h6>
-                <small class="text-muted">Format ikhtisar keuangan standar pendapatan kotor dikurangi beban operasional</small>
-            </div>
+        <div class="report-card-header d-flex justify-content-between align-items-center flex-wrap gap-2">
+            <h6 class="fw-bold mb-0 text-dark">
+                <i class="fa-solid fa-file-invoice-dollar text-primary me-2"></i>Laporan Laba Rugi Usaha (Profit & Loss Statement)
+            </h6>
             <span class="badge bg-light text-muted border">Periode: {{ \Carbon\Carbon::parse($dari)->format('d/m/Y') }} &ndash; {{ \Carbon\Carbon::parse($sampai)->format('d/m/Y') }}</span>
         </div>
         <div class="table-responsive">
@@ -523,13 +520,10 @@
 
     <!-- TABEL 2: REKAPITULASI KOMPARATIF HARIAN (LABA RUGI PER TANGGAL) -->
     <div class="report-card">
-        <div class="report-card-header d-flex justify-content-between align-items-center">
-            <div>
-                <h6 class="fw-bold mb-0 text-dark">
-                    <i class="fa-solid fa-calendar-day text-primary me-2"></i>Rekapitulasi Finansial Harian (Pendapatan vs Pengeluaran & Laba)
-                </h6>
-                <small class="text-muted">Performa finansial harian menyandingkan pendapatan, beban, dan profitabilitas per tanggal</small>
-            </div>
+        <div class="report-card-header d-flex justify-content-between align-items-center flex-wrap gap-2">
+            <h6 class="fw-bold mb-0 text-dark">
+                <i class="fa-solid fa-calendar-day text-primary me-2"></i>Rekapitulasi Finansial Harian (Pendapatan vs Pengeluaran & Laba)
+            </h6>
             <span class="badge bg-light text-muted border">{{ count($rekapHarian) }} Hari Aktif</span>
         </div>
         <div class="table-responsive">

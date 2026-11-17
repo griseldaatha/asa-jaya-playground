@@ -239,13 +239,10 @@
 
     <!-- TABEL 1: Rekap Per Kategori -->
     <div class="report-card">
-        <div class="report-card-header d-flex justify-content-between align-items-center">
-            <div>
-                <h6 class="fw-bold mb-0 text-dark">
-                    <i class="fa-solid fa-chart-pie text-primary me-2"></i>Rekap Per Kategori
-                </h6>
-                <small class="text-muted">Distribusi pengeluaran berdasarkan pos kategori biaya</small>
-            </div>
+        <div class="report-card-header d-flex justify-content-between align-items-center flex-wrap gap-2">
+            <h6 class="fw-bold mb-0 text-dark">
+                <i class="fa-solid fa-chart-pie text-primary me-2"></i>Rekap Per Kategori
+            </h6>
             <span class="badge bg-light text-muted border">{{ count($rekapKategori) }} Kategori</span>
         </div>
         <div class="table-responsive">
@@ -296,13 +293,10 @@
 
     <!-- TABEL 2: Rincian Pengeluaran -->
     <div class="report-card">
-        <div class="report-card-header d-flex justify-content-between align-items-center">
-            <div>
-                <h6 class="fw-bold mb-0 text-dark">
-                    <i class="fa-solid fa-list-ul text-primary me-2"></i>Rincian Catatan Pengeluaran
-                </h6>
-                <small class="text-muted">Daftar pencatatan pengeluaran operasional pada periode terpilih</small>
-            </div>
+        <div class="report-card-header d-flex justify-content-between align-items-center flex-wrap gap-2">
+            <h6 class="fw-bold mb-0 text-dark">
+                <i class="fa-solid fa-list-ul text-primary me-2"></i>Rincian Catatan Pengeluaran
+            </h6>
             <span class="badge bg-light text-muted border">Total: {{ number_format($countPengeluaran) }} Catatan</span>
         </div>
         <div class="table-responsive">

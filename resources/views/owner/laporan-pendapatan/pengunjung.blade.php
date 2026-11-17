@@ -378,12 +378,9 @@
     <!-- TABEL UTAMA: Rekap Finansial & Pengunjung Harian -->
     <div class="report-card">
         <div class="report-card-header d-flex justify-content-between align-items-center">
-            <div>
-                <h6 class="fw-bold mb-0 text-dark">
-                    <i class="fa-solid fa-calendar-day text-primary me-2"></i>Rekap Finansial & Pengunjung Harian
-                </h6>
-                <small class="text-muted">Rincian jumlah pengunjung harian, omzet masuk, beban pengeluaran, serta laba bersih harian</small>
-            </div>
+            <h6 class="fw-bold mb-0 text-dark">
+                <i class="fa-solid fa-calendar-day text-primary me-2"></i>Rekap Finansial & Pengunjung Harian
+            </h6>
             <span class="badge bg-light text-muted border">{{ count($rekapHarian) }} Hari Aktif</span>
         </div>
         <div class="table-responsive">

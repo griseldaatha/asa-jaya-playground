@@ -231,12 +231,9 @@
             <!-- Kartu Daftar Produk Hampir Habis -->
             <div class="card border-0 shadow-sm rounded-4 overflow-hidden bg-white">
                 <div class="card-header bg-white py-3 border-bottom d-flex justify-content-between align-items-center">
-                    <div>
-                        <h6 class="fw-bold mb-0 text-dark">
-                            <i class="fa-solid fa-triangle-exclamation text-warning me-2"></i>Daftar Produk Hampir Habis
-                        </h6>
-                        <small class="text-muted">Stok ≤ {{ $lowStockThreshold }} unit (urut stok tersedikit)</small>
-                    </div>
+                    <h6 class="fw-bold mb-0 text-dark">
+                        <i class="fa-solid fa-triangle-exclamation text-warning me-2"></i>Daftar Produk Hampir Habis
+                    </h6>
                     <a href="{{ route('admin.produk.index') }}" class="btn btn-sm btn-outline-secondary rounded-pill px-2.5">
                         <i class="fa-solid fa-boxes-stacked me-1"></i> Kelola
                     </a>

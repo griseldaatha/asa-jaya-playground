@@ -428,12 +428,9 @@
     <!-- TABEL UTAMA: Rincian Transaksi Penerimaan Uang -->
     <div class="report-card">
         <div class="report-card-header d-flex justify-content-between align-items-center flex-wrap gap-2">
-            <div>
-                <h6 class="fw-bold mb-0 text-dark">
-                    <i class="fa-solid fa-cash-register text-primary me-2"></i>Rincian Transaksi Penerimaan Uang
-                </h6>
-                <small class="text-muted">Daftar transaksi penerimaan uang kas & non-tunai berstatus lunas pada periode terpilih</small>
-            </div>
+            <h6 class="fw-bold mb-0 text-dark">
+                <i class="fa-solid fa-cash-register text-primary me-2"></i>Rincian Transaksi Penerimaan Uang
+            </h6>
             <span class="badge bg-light text-muted border">Total: {{ number_format($rincianPendapatan->total()) }} Penerimaan</span>
         </div>
         <div class="table-responsive">
