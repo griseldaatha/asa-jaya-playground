@@ -55,7 +55,7 @@ return new class extends Migration
             [
                 'id' => 1,
                 'kategori_produk_id' => 1,
-                'nama_produk' => 'Tiket Mandi Bola (1 Jam)',
+                'nama_produk' => 'Tiket Mandi Bola',
                 'harga' => 10000,
                 'stok' => 20,
                 'foto_produk' => 'produk/GSTKWZP8tbuagea9YH7x01BKXfwW5nrrAXV9mM6s.jpg',
