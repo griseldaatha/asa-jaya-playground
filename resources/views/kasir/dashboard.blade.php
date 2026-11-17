@@ -60,20 +60,13 @@
     </style>
 
     <!-- Header Ringkasan & Waktu -->
-    <div class="d-flex flex-wrap justify-content-between align-items-center mb-4 gap-2">
-        <div>
-            <h4 class="fw-bold text-dark mb-0">
-                <i class="fa-solid fa-chart-pie text-primary me-2"></i>Dashboard Statistik Kasir
-            </h4>
-        </div>
-        <div class="d-flex align-items-center gap-2">
-            <span class="badge bg-white text-dark border px-3 py-2 rounded-pill shadow-sm">
-                <i class="fa-regular fa-calendar-check text-primary me-1.5"></i>{{ date('d/m/Y') }}
-            </span>
-            <a href="{{ route('kasir.antrean') }}" class="btn btn-sm btn-primary rounded-pill px-3 shadow-sm">
-                <i class="fa-solid fa-bell-concierge me-1"></i> Antrean Aktif (Live)
-            </a>
-        </div>
+    <div class="d-flex justify-content-end align-items-center mb-4 gap-2">
+        <span class="badge bg-white text-dark border px-3 py-2 rounded-pill shadow-sm">
+            <i class="fa-regular fa-calendar-check text-primary me-1.5"></i>{{ date('d/m/Y') }}
+        </span>
+        <a href="{{ route('kasir.antrean') }}" class="btn btn-sm btn-primary rounded-pill px-3 shadow-sm">
+            <i class="fa-solid fa-bell-concierge me-1"></i> Antrean Aktif (Live)
+        </a>
     </div>
 
     <!-- 1. Empat Kartu Statistik Berwarna -->
