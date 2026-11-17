@@ -62,10 +62,9 @@
     <!-- Header Ringkasan & Waktu -->
     <div class="d-flex flex-wrap justify-content-between align-items-center mb-4 gap-2">
         <div>
-            <h4 class="fw-bold text-dark mb-1">
+            <h4 class="fw-bold text-dark mb-0">
                 <i class="fa-solid fa-chart-pie text-primary me-2"></i>Dashboard Statistik Kasir
             </h4>
-            <p class="text-muted small mb-0">Pantau performa transaksi harian, antrean pelayanan, dan ketersediaan stok produk.</p>
         </div>
         <div class="d-flex align-items-center gap-2">
             <span class="badge bg-white text-dark border px-3 py-2 rounded-pill shadow-sm">
