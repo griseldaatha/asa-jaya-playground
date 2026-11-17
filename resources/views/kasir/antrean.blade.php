@@ -284,7 +284,7 @@
                         <span class="input-group-text bg-light border-end-0 text-muted ps-3">
                             <i class="fa-solid fa-magnifying-glass"></i>
                         </span>
-                        <input type="text" id="searchAntrean" class="form-control bg-light border-start-0 border-end-0 ps-1" placeholder="Cari nama, #kode, meja, atau menu..." autocomplete="off" oninput="onSearchAntreanChange(this.value)">
+                        <input type="text" id="searchAntrean" class="form-control bg-light border-start-0 border-end-0 ps-1" placeholder="Cari nama..." autocomplete="off" oninput="onSearchAntreanChange(this.value)">
                         <button class="btn btn-light border border-start-0 text-muted" type="button" id="btnClearSearch" style="display: none;" onclick="clearSearchAntrean()" title="Hapus Pencarian">
                             <i class="fa-solid fa-xmark"></i>
                         </button>
