@@ -74,76 +74,44 @@
         <!-- (a) Total Transaksi Hari Ini -->
         <div class="col-12 col-sm-6 col-xl-3">
             <div class="stat-card-kasir">
-                <div>
-                    <div class="d-flex justify-content-between align-items-start mb-2">
-                        <span class="text-uppercase fw-bold text-muted small">Transaksi Hari Ini</span>
-                        <div class="icon-box-kasir bg-card-blue"><i class="fa-solid fa-receipt"></i></div>
-                    </div>
-                    <h3 class="fw-bold mb-1 text-dark">{{ number_format($totalTransaksiHariIni) }} <span class="fs-6 text-muted fw-normal">Trx</span></h3>
+                <div class="d-flex justify-content-between align-items-start mb-2">
+                    <span class="text-uppercase fw-bold text-muted small">Transaksi Hari Ini</span>
+                    <div class="icon-box-kasir bg-card-blue"><i class="fa-solid fa-receipt"></i></div>
                 </div>
-                <div class="pt-2 border-top mt-2">
-                    <small class="text-muted" style="font-size: 0.78rem;">
-                        <i class="fa-solid fa-circle-info text-primary me-1"></i>Jumlah transaksi berstatus pembayaran lunas hari ini
-                    </small>
-                </div>
+                <h3 class="fw-bold mb-0 text-dark">{{ number_format($totalTransaksiHariIni) }} <span class="fs-6 text-muted fw-normal">Trx</span></h3>
             </div>
         </div>
 
         <!-- (b) Total Antrean -->
         <div class="col-12 col-sm-6 col-xl-3">
             <div class="stat-card-kasir">
-                <div>
-                    <div class="d-flex justify-content-between align-items-start mb-2">
-                        <span class="text-uppercase fw-bold text-muted small">Total Antrean</span>
-                        <div class="icon-box-kasir bg-card-amber"><i class="fa-solid fa-bell-concierge"></i></div>
-                    </div>
-                    <h3 class="fw-bold mb-1 text-warning">{{ number_format($totalAntrean) }} <span class="fs-6 text-muted fw-normal">Pesanan</span></h3>
+                <div class="d-flex justify-content-between align-items-start mb-2">
+                    <span class="text-uppercase fw-bold text-muted small">Total Antrean</span>
+                    <div class="icon-box-kasir bg-card-amber"><i class="fa-solid fa-bell-concierge"></i></div>
                 </div>
-                <div class="pt-2 border-top mt-2 d-flex flex-column gap-1">
-                    <small class="text-muted" style="font-size: 0.78rem;">
-                        <i class="fa-solid fa-circle-info text-warning me-1"></i>Pesanan aktif saat ini (status 'menunggu' atau 'diproses')
-                    </small>
-                    <a href="{{ route('kasir.antrean') }}" class="btn btn-sm btn-outline-warning py-1 mt-1 text-start d-flex justify-content-between align-items-center">
-                        <span style="font-size: 0.8rem;">Buka Antrean</span>
-                        <i class="fa-solid fa-arrow-right fs-xs"></i>
-                    </a>
-                </div>
+                <h3 class="fw-bold mb-0 text-warning">{{ number_format($totalAntrean) }} <span class="fs-6 text-muted fw-normal">Pesanan</span></h3>
             </div>
         </div>
 
         <!-- (c) Pesanan Diproses -->
         <div class="col-12 col-sm-6 col-xl-3">
             <div class="stat-card-kasir">
-                <div>
-                    <div class="d-flex justify-content-between align-items-start mb-2">
-                        <span class="text-uppercase fw-bold text-muted small">Pesanan Diproses</span>
-                        <div class="icon-box-kasir bg-card-purple"><i class="fa-solid fa-fire-burner"></i></div>
-                    </div>
-                    <h3 class="fw-bold mb-1" style="color: #7c3aed;">{{ number_format($pesananDiproses) }} <span class="fs-6 text-muted fw-normal">Pesanan</span></h3>
+                <div class="d-flex justify-content-between align-items-start mb-2">
+                    <span class="text-uppercase fw-bold text-muted small">Pesanan Diproses</span>
+                    <div class="icon-box-kasir bg-card-purple"><i class="fa-solid fa-fire-burner"></i></div>
                 </div>
-                <div class="pt-2 border-top mt-2">
-                    <small class="text-muted" style="font-size: 0.78rem;">
-                        <i class="fa-solid fa-circle-info text-purple me-1"></i>Jumlah pesanan yang sedang diproses kasir saat ini
-                    </small>
-                </div>
+                <h3 class="fw-bold mb-0" style="color: #7c3aed;">{{ number_format($pesananDiproses) }} <span class="fs-6 text-muted fw-normal">Pesanan</span></h3>
             </div>
         </div>
 
         <!-- (d) Pendapatan Hari Ini -->
         <div class="col-12 col-sm-6 col-xl-3">
             <div class="stat-card-kasir">
-                <div>
-                    <div class="d-flex justify-content-between align-items-start mb-2">
-                        <span class="text-uppercase fw-bold text-muted small">Pendapatan Hari Ini</span>
-                        <div class="icon-box-kasir bg-card-green"><i class="fa-solid fa-wallet"></i></div>
-                    </div>
-                    <h3 class="fw-bold mb-1 text-success">Rp {{ number_format($pendapatanHariIni, 0, ',', '.') }}</h3>
+                <div class="d-flex justify-content-between align-items-start mb-2">
+                    <span class="text-uppercase fw-bold text-muted small">Pendapatan Hari Ini</span>
+                    <div class="icon-box-kasir bg-card-green"><i class="fa-solid fa-wallet"></i></div>
                 </div>
-                <div class="pt-2 border-top mt-2">
-                    <small class="text-muted" style="font-size: 0.78rem;">
-                        <i class="fa-solid fa-circle-info text-success me-1"></i>Total akumulasi dari transaksi lunas hari ini
-                    </small>
-                </div>
+                <h3 class="fw-bold mb-0 text-success">Rp {{ number_format($pendapatanHariIni, 0, ',', '.') }}</h3>
             </div>
         </div>
     </div>
